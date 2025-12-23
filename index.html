@@ -151,12 +151,16 @@
     <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
     <div class="stats">
       <div class="stat"><h3>114</h3><span>بثوث سنة 2025</span></div>
-     <div class="stat" style="min-width: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-  <iframe src="https://livecounts.io/embed/youtube-live-subscriber-counter/UC-Vx0Qf0Rocogs3I9Nz7PDA" 
-          style="width: 100%; height: 80px; border: none; overflow: hidden; color-scheme: dark;" 
-          scrolling="no"></iframe>
-  <span style="display: block; margin-top: -5px;">مشترك باليوتيوب</span>
-</div>
+      
+      <div class="stat" style="min-width: 220px; position: relative; overflow: hidden;">
+        <iframe src="https://livecounts.io/embed/youtube-live-subscriber-counter/UC-Vx0Qf0Rocogs3I9Nz7PDA" 
+                style="width: 100%; height: 80px; border: none; filter: invert(0.9) hue-rotate(180deg) brightness(1.2); mix-blend-mode: screen;" 
+                scrolling="no"></iframe>
+        <span style="display: block; margin-top: -5px;">مشترك باليوتيوب</span>
+      </div>
+
+      <div class="stat"><h3 id="experience-counter">...</h3><span>سنوات الخبرة</span></div>
+    </div>
   </section>
 
  <section class="video-section reveal">
@@ -269,12 +273,21 @@
 
     function reveal() {
       document.querySelectorAll(".reveal").forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
+        // جعلنا الحساسية أعلى (20 بكسل) ليظهر المحتوى أسرع
+        if (el.getBoundingClientRect().top < window.innerHeight - 20) {
+          el.classList.add("active");
+        }
       });
     }
 
     window.addEventListener("scroll", reveal);
-    window.onload = () => { updateExp(); reveal(); checkKick(); };
-  </script>
+    window.onload = () => { 
+      updateExp(); 
+      checkKick();
+      // تشغيل دالة الظهور فور التحميل وبفارق بسيط لضمان عملها
+      reveal();
+      setTimeout(reveal, 200); 
+    };
+</script>
 </body>
 </html>
