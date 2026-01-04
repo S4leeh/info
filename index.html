@@ -74,11 +74,11 @@
       transition: 0.4s;
     }
     .video-card:hover { transform: scale(1.01); border-color: var(--gold); }
-    .video-banner { height: 250px; background: #1a1a1a url('https://i.ytimg.com/vi/S4leeh/maxresdefault.jpg') no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; }
+    .video-banner { height: 250px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; }
     .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     .play-btn::after { content: ""; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 4px; }
 
-    /* ===== Social Grid (إخفاء الشريط الرمادي) ===== */
+    /* ===== Social Grid ===== */
     .socials-section { width: 100%; max-width: 1200px; margin: 60px auto; padding: 0 20px; }
     .socials-section h2 { text-align: center; margin-bottom: 30px; color: var(--gold); }
     
@@ -89,12 +89,11 @@
       flex-wrap: nowrap; 
       overflow-x: auto;
       padding: 10px 0;
-      /* إخفاء الشريط للمتصفحات */
       scrollbar-width: none; 
       -ms-overflow-style: none;
     }
     
-    .socials-grid::-webkit-scrollbar { display: none; } /* إخفاء الشريط لكروم وسفاري */
+    .socials-grid::-webkit-scrollbar { display: none; }
     
     .social-card { 
       flex: 0 0 auto;
@@ -149,33 +148,27 @@
   <section class="hero reveal">
     <h1><span>صالح</span></h1>
     <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
-   <div class="stats" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
-  
-  <div class="stat" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; min-width: 180px;">
-    <h3 style="margin: 0; font-size: 32px; color: var(--gold);">114</h3>
-    <span style="margin-top: 8px;">بثوث سنة 2025</span>
-  </div>
-  
-  <div class="stat" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; min-width: 220px; overflow: hidden; background: var(--bg-soft);">
-    <div style="color: var(--gold); font-weight: 800; font-size: 14px; margin-bottom: 5px;">S4leeh - صالح</div>
     
-    <div style="width: 140px; height: 50px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center;">
-        <iframe src="https://subscribercounter.com/embed/UC-Vx0Qf0Rocogs3I9Nz7PDA" 
-                style="width: 400px; height: 300px; position: absolute; top: -142px; left: -130px; border: none; filter: invert(1) brightness(2) contrast(1.5); mix-blend-mode: screen;" 
-                scrolling="no"></iframe>
+    <div class="stats">
+      <div class="stat" style="min-width: 180px;">
+        <h3 style="font-size: 32px;">114</h3>
+        <span style="font-size: 14px;">بثوث سنة 2025</span>
+      </div>
+      
+      <div class="stat" style="min-width: 220px;">
+        <div style="color: var(--gold); font-weight: 800; font-size: 14px; margin-bottom: 5px;">S4leeh - صالح</div>
+        <h3 id="yt-subs" style="color: white; font-size: 36px;">1,500</h3>
+        <span style="font-size: 14px;">مشترك باليوتيوب</span>
+      </div>
+
+      <div class="stat" style="min-width: 180px;">
+        <h3 id="experience-counter" style="font-size: 20px;">...</h3>
+        <span>سنوات الخبرة</span>
+      </div>
     </div>
-    
-    <span style="display: block; margin-top: 5px;">مشترك باليوتيوب</span>
-  </div>
+  </section>
 
-  <div class="stat" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; min-width: 180px;">
-    <h3 id="experience-counter" style="margin: 0; font-size: 20px; color: var(--gold);">...</h3>
-    <span style="margin-top: 8px;">سنوات الخبرة</span>
-  </div>
-  
-</div>
-
-<section class="video-section reveal">
+  <section class="video-section reveal">
     <h2 style="margin-bottom: 15px; text-align: center; color: var(--gold);">آخر فيديو نزل 📺</h2>
     <a href="https://www.youtube.com/watch?v=43nQ8FCexIg" target="_blank" class="video-card">
       <div class="video-banner" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/hqdefault.jpg');">
@@ -201,10 +194,10 @@
         <div class="username">@iS4leeh</div>
         <div class="desc">آخر الأخبار</div>
       </a>
-     <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-card">
-  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg" alt="YouTube">
-  <div class="username">S4leeh (YouTube)</div>
-  <div class="desc">المقاطع</div>
+      <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-card">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg" alt="YouTube">
+        <div class="username">S4leeh (YouTube)</div>
+        <div class="desc">المقاطع</div>
       </a>
       <a href="https://kick.com/Saleeh" target="_blank" class="social-card">
         <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg" alt="Kick">
@@ -224,13 +217,14 @@
     </div>
   </section>
 
-<section class="reveal" style="max-width: 900px; margin: 60px auto; padding: 0 20px; text-align: center;">
+  <section class="reveal" style="max-width: 900px; margin: 60px auto; padding: 0 20px; text-align: center;">
     <h2 style="color: var(--gold); margin-bottom: 20px;">مكتبة ألعاب 2026 🎮</h2>
     <div style="background: var(--bg-soft); border: 1px dashed var(--gold-soft); border-radius: 20px; padding: 40px; color: var(--text-muted);">
       <p style="font-size: 18px; font-weight: 600;">القسم فارغ حالياً..</p>
       <p style="font-size: 14px; margin-top: 10px;">سيتم إضافة الألعاب في بداية السنة بإذن الله 🔥</p>
     </div>
   </section>
+
   <section class="form-section reveal">
     <h2>ارسل لي اقتراحك 💡</h2>
     <form action="https://formspree.io/f/mwvewwew" method="POST">
@@ -274,6 +268,17 @@
       } catch { liveText.innerText = "قناتي على Kick"; }
     }
 
+    // دالة تحديث المشتركين تلقائياً
+    async function updateSubs() {
+        try {
+            const response = await fetch('https://api.subscribercounter.com/api/youtube-subscriber-count/UC-Vx0Qf0Rocogs3I9Nz7PDA/live');
+            const data = await response.json();
+            if(data && data.subCount) {
+                document.getElementById('yt-subs').innerText = Number(data.subCount).toLocaleString();
+            }
+        } catch (e) { console.log("Error fetching subs"); }
+    }
+
     function updateExp() {
       const start = new Date('2022-06-02');
       const now = new Date();
@@ -285,7 +290,6 @@
 
     function reveal() {
       document.querySelectorAll(".reveal").forEach(el => {
-        // جعلنا الحساسية أعلى (20 بكسل) ليظهر المحتوى أسرع
         if (el.getBoundingClientRect().top < window.innerHeight - 20) {
           el.classList.add("active");
         }
@@ -296,10 +300,10 @@
     window.onload = () => { 
       updateExp(); 
       checkKick();
-      // تشغيل دالة الظهور فور التحميل وبفارق بسيط لضمان عملها
+      updateSubs();
       reveal();
-      setTimeout(reveal, 200); 
+      setInterval(updateSubs, 60000); // تحديث كل دقيقة
     };
-</script>
+  </script>
 </body>
 </html>
