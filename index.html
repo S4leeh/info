@@ -58,9 +58,23 @@
     .hero { text-align: center; padding: 20px; }
     .hero h1 { font-size: 50px; font-weight: 800; color: var(--gold); }
 
+    /* تحسين تناسق المربعات */
     .stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px; }
-    .stat { background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; min-width: 150px; text-align: center; }
-    .stat h3 { color: var(--gold); font-size: 24px; }
+    .stat { 
+        background: var(--bg-soft); 
+        border: 1px solid rgba(255,255,255,0.05); 
+        border-radius: 20px; 
+        padding: 25px 20px; 
+        width: 220px; /* توحيد العرض لجميع المربعات */
+        min-height: 160px; /* توحيد الطول لجميع المربعات */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center; 
+    }
+    .stat h3 { color: var(--gold); font-size: 32px; font-weight: 800; margin: 0; }
+    .stat span { margin-top: 10px; color: var(--text-main); font-size: 15px; }
 
     /* ===== Youtube Card ===== */
     .video-section { max-width: 800px; margin: 60px auto; padding: 0 20px; }
@@ -150,20 +164,20 @@
     <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
     
     <div class="stats">
-      <div class="stat" style="min-width: 180px;">
-        <h3 style="font-size: 32px;">114</h3>
-        <span style="font-size: 14px;">بثوث سنة 2025</span>
-      </div>
-      
-      <div class="stat" style="min-width: 220px;">
-        <div style="color: var(--gold); font-weight: 800; font-size: 14px; margin-bottom: 5px;">S4leeh - صالح</div>
-        <h3 id="yt-subs" style="color: white; font-size: 36px;">1,500</h3>
-        <span style="font-size: 14px;">مشترك باليوتيوب</span>
-      </div>
-
-      <div class="stat" style="min-width: 180px;">
+      <div class="stat">
         <h3 id="experience-counter" style="font-size: 20px;">...</h3>
         <span>سنوات الخبرة</span>
+      </div>
+      
+      <div class="stat">
+        <div style="color: var(--gold); font-weight: 800; font-size: 14px; margin-bottom: 5px;">S4leeh - صالح</div>
+        <h3 id="yt-subs" style="color: white;">1,500</h3>
+        <span>مشترك باليوتيوب</span>
+      </div>
+
+      <div class="stat">
+        <h3>114</h3>
+        <span>بثوث سنة 2025</span>
       </div>
     </div>
   </section>
@@ -252,6 +266,7 @@
   <footer>© جميع الحقوق محفوظة لـ <span>صالح</span> | 2025</footer>
 
   <script>
+    // دالة فحص البث من كيك
     async function checkKick() {
       const liveBar = document.getElementById('live-bar');
       const liveText = document.getElementById('live-text');
@@ -268,17 +283,22 @@
       } catch { liveText.innerText = "قناتي على Kick"; }
     }
 
-    // دالة تحديث المشتركين تلقائياً
+    // دالة تحديث المشتركين تلقائياً (عداد مباشر حقيقي)
     async function updateSubs() {
+        const subElement = document.getElementById('yt-subs');
         try {
             const response = await fetch('https://api.subscribercounter.com/api/youtube-subscriber-count/UC-Vx0Qf0Rocogs3I9Nz7PDA/live');
             const data = await response.json();
             if(data && data.subCount) {
-                document.getElementById('yt-subs').innerText = Number(data.subCount).toLocaleString();
+                subElement.innerText = Number(data.subCount).toLocaleString();
             }
-        } catch (e) { console.log("Error fetching subs"); }
+        } catch (e) { 
+            console.log("Error fetching subs");
+            // إذا فشل الـ API لا يغير الرقم الحالي
+        }
     }
 
+    // دالة سنوات الخبرة
     function updateExp() {
       const start = new Date('2022-06-02');
       const now = new Date();
@@ -300,9 +320,9 @@
     window.onload = () => { 
       updateExp(); 
       checkKick();
-      updateSubs();
+      updateSubs(); // تشغيل العداد فور التحميل
       reveal();
-      setInterval(updateSubs, 60000); // تحديث كل دقيقة
+      setInterval(updateSubs, 30000); // تحديث العداد كل 30 ثانية
     };
   </script>
 </body>
