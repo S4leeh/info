@@ -49,8 +49,8 @@
     @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
 
     /* ===== Animations ===== */
-    .reveal { opacity: 0; transform: translateX(80px); transition: all 0.6s ease-out; }
-    .reveal.active { opacity: 1; transform: translateX(0); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
     header { display: flex; justify-content: center; padding: 40px 0; }
     header img { width: 100px; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 0 15px var(--gold-soft)); }
@@ -58,23 +58,29 @@
     .hero { text-align: center; padding: 20px; }
     .hero h1 { font-size: 50px; font-weight: 800; color: var(--gold); }
 
-    /* تحسين تناسق المربعات */
+    /* تحسين المربعات وإضافة تأثير اللمعان */
     .stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px; }
     .stat { 
         background: var(--bg-soft); 
         border: 1px solid rgba(255,255,255,0.05); 
         border-radius: 20px; 
         padding: 25px 20px; 
-        width: 220px; /* توحيد العرض لجميع المربعات */
-        min-height: 160px; /* توحيد الطول لجميع المربعات */
+        width: 220px;
+        min-height: 160px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center; 
+        text-align: center;
+        transition: 0.3s ease;
+    }
+    .stat:hover { 
+        border-color: var(--gold); 
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        transform: translateY(-5px);
     }
     .stat h3 { color: var(--gold); font-size: 32px; font-weight: 800; margin: 0; }
-    .stat span { margin-top: 10px; color: var(--text-main); font-size: 15px; }
+    .stat span { margin-top: 10px; color: var(--text-main); font-size: 15px; font-weight: 600; }
 
     /* ===== Youtube Card ===== */
     .video-section { max-width: 800px; margin: 60px auto; padding: 0 20px; }
@@ -87,9 +93,10 @@
       border: 1px solid var(--gold-soft);
       transition: 0.4s;
     }
-    .video-card:hover { transform: scale(1.01); border-color: var(--gold); }
+    .video-card:hover { transform: scale(1.02); border-color: var(--gold); }
     .video-banner { height: 250px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; }
-    .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .video-card:hover .play-btn { transform: scale(1.1); background: #cc0000; }
     .play-btn::after { content: ""; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 4px; }
 
     /* ===== Social Grid ===== */
@@ -106,25 +113,15 @@
       scrollbar-width: none; 
       -ms-overflow-style: none;
     }
-    
     .socials-grid::-webkit-scrollbar { display: none; }
     
     .social-card { 
-      flex: 0 0 auto;
-      width: 180px; 
-      background: var(--card-bg); 
-      border: 1px solid rgba(255,255,255,0.08); 
-      border-radius: 24px; 
-      padding: 40px 10px; 
-      text-align: center; 
-      text-decoration: none; 
-      transition: 0.3s; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      gap: 8px; 
+      flex: 0 0 auto; width: 180px; background: var(--card-bg); 
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; 
+      padding: 40px 10px; text-align: center; text-decoration: none; 
+      transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; 
     }
-    .social-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-5px); }
+    .social-card:hover { border-color: white; transform: translateY(-5px); background: #161618; }
     .social-card img { width: 50px; height: 50px; filter: invert(1); margin-bottom: 10px; }
     .social-card .username { color: white; font-weight: 800; font-size: 16px; white-space: nowrap; }
     .social-card .desc { color: var(--text-muted); font-size: 12px; }
@@ -134,9 +131,11 @@
     .form-section h2 { margin-bottom: 20px; color: var(--gold); text-align: center; }
     .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
     .form-group input, .form-group select, .form-group textarea {
-      padding: 12px; background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 15px; outline: none;
+      padding: 12px; background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 15px; outline: none; transition: 0.3s;
     }
-    .submit-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: 800; cursor: pointer; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .submit-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .submit-btn:hover { background: #b8972f; transform: scale(1.02); }
 
     footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -165,19 +164,19 @@
     
     <div class="stats">
       <div class="stat">
-        <h3 id="experience-counter" style="font-size: 20px;">...</h3>
+        <h3 id="experience-counter">...</h3>
         <span>رحلة صناعة المحتوى</span>
       </div>
       
       <div class="stat">
         <div style="color: var(--gold); font-weight: 800; font-size: 14px; margin-bottom: 5px;">S4leeh - صالح</div>
-        <h3 id="yt-subs" style="color: white;">1,500</h3>
+        <h3 id="yt-subs" style="color: white; font-size: 36px;">1,500</h3>
         <span>مشترك باليوتيوب</span>
       </div>
 
       <div class="stat">
         <h3>114</h3>
-        <span>عدد بثوث سنة 2025</span>
+        <span>بثوث سنة 2025</span>
       </div>
     </div>
   </section>
@@ -189,7 +188,7 @@
         <div class="play-btn"></div>
       </div>
       <div style="padding: 15px; text-align: center;">
-        <h3 style="color: white; font-size: 18px;">ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h3>
+        <h3 style="color: white; font-size: 18px; font-weight: 800;">ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h3>
         <p style="color: var(--gold); font-size: 14px; margin-top: 8px; font-weight: bold;">انقر لمشاهدة المقطع الآن</p>
       </div>
     </a>
@@ -266,7 +265,6 @@
   <footer>© جميع الحقوق محفوظة لـ <span>صالح</span> | 2025</footer>
 
   <script>
-    // دالة فحص البث من كيك
     async function checkKick() {
       const liveBar = document.getElementById('live-bar');
       const liveText = document.getElementById('live-text');
@@ -283,7 +281,6 @@
       } catch { liveText.innerText = "قناتي على Kick"; }
     }
 
-    // دالة تحديث المشتركين تلقائياً (عداد مباشر حقيقي)
     async function updateSubs() {
         const subElement = document.getElementById('yt-subs');
         try {
@@ -292,13 +289,9 @@
             if(data && data.subCount) {
                 subElement.innerText = Number(data.subCount).toLocaleString();
             }
-        } catch (e) { 
-            console.log("Error fetching subs");
-            // إذا فشل الـ API لا يغير الرقم الحالي
-        }
+        } catch (e) { console.log("Error fetching subs"); }
     }
 
-    // دالة سنوات الخبرة
     function updateExp() {
       const start = new Date('2022-06-02');
       const now = new Date();
@@ -310,7 +303,7 @@
 
     function reveal() {
       document.querySelectorAll(".reveal").forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 20) {
+        if (el.getBoundingClientRect().top < window.innerHeight - 50) {
           el.classList.add("active");
         }
       });
@@ -320,9 +313,9 @@
     window.onload = () => { 
       updateExp(); 
       checkKick();
-      updateSubs(); // تشغيل العداد فور التحميل
+      updateSubs();
       reveal();
-      setInterval(updateSubs, 30000); // تحديث العداد كل 30 ثانية
+      setInterval(updateSubs, 30000);
     };
   </script>
 </body>
