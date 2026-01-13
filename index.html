@@ -58,7 +58,6 @@
     .hero { text-align: center; padding: 20px; }
     .hero h1 { font-size: 50px; font-weight: 800; color: var(--gold); }
 
-    /* تحسين المربعات وإضافة تأثير اللمعان */
     .stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px; }
     .stat { 
         background: var(--bg-soft); 
@@ -94,10 +93,10 @@
       transition: 0.4s;
     }
     .video-card:hover { transform: scale(1.02); border-color: var(--gold); }
-    .video-banner { height: 250px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; }
-    .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .video-banner { height: 350px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; position: relative; }
+    .play-btn { width: 70px; height: 70px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 2; }
     .video-card:hover .play-btn { transform: scale(1.1); background: #cc0000; }
-    .play-btn::after { content: ""; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 4px; }
+    .play-btn::after { content: ""; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
 
     /* ===== Social Grid ===== */
     .socials-section { width: 100%; max-width: 1200px; margin: 60px auto; padding: 0 20px; }
@@ -142,6 +141,7 @@
 
     @media (max-width: 1000px) {
       .socials-grid { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
+      .video-banner { height: 200px; }
     }
   </style>
 </head>
@@ -182,14 +182,14 @@
   </section>
 
   <section class="video-section reveal">
-    <h2 style="margin-bottom: 15px; text-align: center; color: var(--gold);">آخر فيديو نزل 📺</h2>
-    <a href="https://www.youtube.com/watch?v=43nQ8FCexIg" target="_blank" class="video-card">
-      <div class="video-banner" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/hqdefault.jpg');">
+    <h2 style="margin-bottom: 15px; text-align: center; color: var(--gold);">جديدنا على اليوتيوب 📺</h2>
+    <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="video-card">
+      <div class="video-banner" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');">
         <div class="play-btn"></div>
       </div>
-      <div style="padding: 15px; text-align: center;">
-        <h3 style="color: white; font-size: 18px; font-weight: 800;">ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h3>
-        <p style="color: var(--gold); font-size: 14px; margin-top: 8px; font-weight: bold;">انقر لمشاهدة المقطع الآن</p>
+      <div style="padding: 20px; text-align: center;">
+        <h3 style="color: white; font-size: 20px; font-weight: 800;">ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h3>
+        <p style="color: var(--gold); font-size: 14px; margin-top: 10px; font-weight: bold;">اضغط لمشاهدة التحدي الأقوى الآن 🔥</p>
       </div>
     </a>
   </section>
