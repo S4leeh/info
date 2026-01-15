@@ -311,37 +311,44 @@
 
   <script>
     // الدالة الجديدة والمحدثة لجلب المشتركين بدقة عالية
-    async function updateSubs() {
-      const subElement = document.getElementById('yt-subs');
-      const channelId = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
-      
-      try {
-        // نستخدم AllOrigins لجلب كود صفحة يوتيوب مباشرة وتجاوز الـ CORS
-        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/channel/' + channelId)}`);
-        const data = await response.json();
-        const html = data.contents;
-        
-        // نبحث عن النص الخاص بعدد المشتركين داخل كود الصفحة
-        const regex = /"subscriberCountText":\{"simpleText":"([\d,.]+).+?"\}/;
-        const match = html.match(regex);
-        
-        if (match && match[1]) {
-          let countStr = match[1].replace(/,/g, '');
-          let finalCount = countStr;
-          
-          // تحويل الرموز (K لـ ألف، M لـ مليون) إذا وجدت
-          if (countStr.includes('K')) finalCount = parseFloat(countStr) * 1000;
-          else if (countStr.includes('M')) finalCount = parseFloat(countStr) * 1000000;
-          
-          subElement.innerText = Number(finalCount).toLocaleString();
-        } else {
-          // إذا فشلت الطريقة الأولى، نستخدم المصدر الاحتياطي
-          const resAlt = await fetch('https://api.subscribercounter.com/api/youtube-subscriber-count/' + channelId + '/live');
-          const dataAlt = await resAlt.json();
-          if(dataAlt && dataAlt.subCount) {
-            subElement.innerText = Number(dataAlt.subCount).toLocaleString();
-          }
-        }
+   <script>
+  const channelId = "UC-Vx0Qf0Rocogs3I9Nz7PDA";
+
+  const invidiousInstances = [
+    "https://invidious.fdn.fr",
+    "https://vid.puffyan.us",
+    "https://invidious.jing.rocks",
+    "https://invidious.slipfox.xyz"
+  ];
+
+  let instanceIndex = 0;
+
+  async function updateSubs() {
+    const subElement = document.getElementById('yt-subs');
+
+    try {
+      const res = await fetch(
+        `${invidiousInstances[instanceIndex]}/api/v1/channels/${channelId}`
+      );
+
+      if (!res.ok) throw new Error("فشل الاتصال");
+
+      const data = await res.json();
+
+      if (data && data.subscriberCount) {
+        subElement.innerText = Number(data.subscriberCount)
+          .toLocaleString('ar-SA');
+      } else {
+        throw new Error("بيانات غير صالحة");
+      }
+
+    } catch (err) {
+      instanceIndex = (instanceIndex + 1) % invidiousInstances.length;
+      console.warn("تبديل سيرفر Invidious");
+    }
+  }
+</script>
+
       } catch (e) {
         console.error("خطأ في تحديث المشتركين");
       }
