@@ -179,7 +179,7 @@
       </div>
       <div class="stat">
         <div style="color: var(--gold); font-weight: 800; font-size: 12px; margin-bottom: 8px;">S4leeh - صالح</div>
-        <h3 id="yt-subs" style="color: white; font-size: 32px; font-weight: 800;">1,500</h3>
+        <h3 id="yt-subs" style="color: white; font-size: 32px; font-weight: 800;">جاري الجلب..</h3>
         <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">مشترك باليوتيوب</span>
       </div>
       <div class="stat">
@@ -310,6 +310,43 @@
   <footer>© جميع الحقوق محفوظة لـ <span>صالح</span> | 2025</footer>
 
   <script>
+    // الدالة الجديدة والمحدثة لجلب المشتركين بدقة عالية
+    async function updateSubs() {
+      const subElement = document.getElementById('yt-subs');
+      const channelId = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+      
+      try {
+        // نستخدم AllOrigins لجلب كود صفحة يوتيوب مباشرة وتجاوز الـ CORS
+        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/channel/' + channelId)}`);
+        const data = await response.json();
+        const html = data.contents;
+        
+        // نبحث عن النص الخاص بعدد المشتركين داخل كود الصفحة
+        const regex = /"subscriberCountText":\{"simpleText":"([\d,.]+).+?"\}/;
+        const match = html.match(regex);
+        
+        if (match && match[1]) {
+          let countStr = match[1].replace(/,/g, '');
+          let finalCount = countStr;
+          
+          // تحويل الرموز (K لـ ألف، M لـ مليون) إذا وجدت
+          if (countStr.includes('K')) finalCount = parseFloat(countStr) * 1000;
+          else if (countStr.includes('M')) finalCount = parseFloat(countStr) * 1000000;
+          
+          subElement.innerText = Number(finalCount).toLocaleString();
+        } else {
+          // إذا فشلت الطريقة الأولى، نستخدم المصدر الاحتياطي
+          const resAlt = await fetch('https://api.subscribercounter.com/api/youtube-subscriber-count/' + channelId + '/live');
+          const dataAlt = await resAlt.json();
+          if(dataAlt && dataAlt.subCount) {
+            subElement.innerText = Number(dataAlt.subCount).toLocaleString();
+          }
+        }
+      } catch (e) {
+        console.error("خطأ في تحديث المشتركين");
+      }
+    }
+
     async function checkKick() {
       const liveBar = document.getElementById('live-bar');
       const liveText = document.getElementById('live-text');
@@ -324,17 +361,6 @@
           liveText.innerText = "صالح غير متصل حالياً";
         }
       } catch { liveText.innerText = "قناتي على Kick"; }
-    }
-
-    async function updateSubs() {
-        const subElement = document.getElementById('yt-subs');
-        try {
-            const response = await fetch('https://api.subscribercounter.com/api/youtube-subscriber-count/UC-Vx0Qf0Rocogs3I9Nz7PDA/live');
-            const data = await response.json();
-            if(data && data.subCount) {
-                subElement.innerText = Number(data.subCount).toLocaleString();
-            }
-        } catch (e) { console.log("Error fetching subs"); }
     }
 
     function updateExp() {
@@ -358,7 +384,9 @@
       checkKick();
       updateSubs();
       reveal();
-      setInterval(updateSubs, 30000);
+      // تحديث كل 20 ثانية لضمان السرعة
+      setInterval(updateSubs, 20000);
+      setInterval(checkKick, 60000);
     };
   </script>
 </body>
