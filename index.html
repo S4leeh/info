@@ -30,7 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* ===== Live Status Bar ===== */
     .live-indicator {
       background: rgba(11, 11, 12, 0.95);
       border-bottom: 1px solid var(--gold-soft);
@@ -46,9 +45,12 @@
     .is-live .dot { background: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.5s infinite; }
     .is-offline .dot { background: var(--live-red); }
 
-    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
 
-    /* ===== Animations ===== */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -59,342 +61,144 @@
     .hero h1 { font-size: 50px; font-weight: 800; color: var(--gold); }
 
     .stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px; }
-    .stat { 
-        background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; 
-        padding: 25px 20px; width: 220px; min-height: 160px; display: flex; flex-direction: column; 
-        align-items: center; justify-content: center; text-align: center; transition: 0.3s ease;
-    }
-    .stat:hover { border-color: var(--gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); transform: translateY(-5px); }
-    .stat h3 { color: var(--gold); font-size: 32px; font-weight: 800; margin: 0; }
-    .stat span { margin-top: 10px; color: var(--text-main); font-size: 15px; font-weight: 600; }
-
-    /* ===== Youtube Card Section ===== */
-    .video-section { max-width: 800px; margin: 60px auto; padding: 0 20px; }
-    .video-card {
-      display: block;
-      text-decoration: none;
+    .stat {
       background: var(--bg-soft);
+      border: 1px solid rgba(255,255,255,0.05);
       border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid var(--gold-soft);
-      transition: 0.4s;
+      padding: 25px 20px;
+      width: 220px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: 0.3s ease;
     }
-    .video-card:hover { transform: scale(1.02); border-color: var(--gold); }
-    .video-banner { height: 350px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; position: relative; }
-    .play-btn { width: 70px; height: 70px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 2; }
-    .video-card:hover .play-btn { transform: scale(1.1); background: #cc0000; }
-    .play-btn::after { content: ""; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
-
-    /* ===== Library Sections ===== */
-    .library-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
-    .library-section h2 { color: var(--gold); text-align: center; margin-bottom: 40px; font-size: 32px; }
-    .game-category { margin-bottom: 50px; }
-    .category-title { 
-      font-size: 20px; color: var(--text-main); margin-bottom: 20px; 
-      border-right: 4px solid var(--gold); padding-right: 15px; display: flex; align-items: center; gap: 10px;
+    .stat:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+      transform: translateY(-5px);
     }
-    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .game-card { background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; transition: 0.3s; }
-    .game-card:hover { transform: translateY(-5px); border-color: var(--gold-soft); }
-    .game-img { width: 100%; height: 160px; object-fit: cover; }
-    .game-info { padding: 15px; }
-    .game-name { font-weight: 800; font-size: 18px; color: var(--gold); margin-bottom: 10px; }
-    .rating-special { color: var(--gold); font-weight: 800; font-size: 15px; text-align: center; width: 100%; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
-
-    /* ===== Social Grid ===== */
-    .socials-section { width: 100%; max-width: 1200px; margin: 60px auto; padding: 0 20px; }
-    .socials-section h2 { text-align: center; margin-bottom: 30px; color: var(--gold); }
-    .socials-grid { 
-      display: flex; justify-content: center; gap: 15px; flex-wrap: nowrap; 
-      overflow-x: auto; padding: 10px 0; scrollbar-width: none; -ms-overflow-style: none;
-    }
-    .socials-grid::-webkit-scrollbar { display: none; }
-    .social-card { 
-      flex: 0 0 auto; width: 180px; background: var(--card-bg); 
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; 
-      padding: 40px 10px; text-align: center; text-decoration: none; 
-      transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; 
-    }
-    .social-card:hover { border-color: white; transform: translateY(-5px); background: #161618; }
-    .social-card img { width: 50px; height: 50px; filter: invert(1); margin-bottom: 10px; }
-    .social-card .username { color: white; font-weight: 800; font-size: 16px; white-space: nowrap; }
-    .social-card .desc { color: var(--text-muted); font-size: 12px; }
-
-    /* ===== Form Section ===== */
-    .form-section { 
-        max-width: 700px; 
-        margin: 60px auto; 
-        padding: 40px; 
-        background: var(--bg-soft); 
-        border-radius: 30px; 
-        border: 1px solid rgba(212, 175, 55, 0.1); 
-    }
-    .form-section h2 { margin-bottom: 30px; color: var(--gold); text-align: center; font-size: 28px; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: 600; font-size: 14px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; padding: 15px; background: #0b0b0c; border: 1px solid rgba(255,255,255,0.05); 
-      border-radius: 12px; color: white; font-size: 16px; outline: none; transition: 0.3s;
-    }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
-    .submit-btn { 
-        width: 100%; padding: 18px; background: var(--gold); border: none; 
-        border-radius: 12px; color: #000; font-weight: 800; font-size: 18px; 
-        cursor: pointer; transition: 0.3s; 
-    }
-    .submit-btn:hover { background: #b8962d; transform: scale(1.02); }
+    .stat h3 { color: var(--gold); font-size: 32px; font-weight: 800; margin: 0; }
+    .stat span { margin-top: 10px; color: var(--text-muted); font-size: 13px; font-weight: 600; }
 
     footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-    @media (max-width: 1000px) {
-      .socials-grid { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
-      .video-banner { height: 200px; }
-      .games-grid { grid-template-columns: 1fr; }
-      .form-section { padding: 25px; margin: 20px; }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
+
 <body>
 
-  <div id="live-bar" class="live-indicator is-offline">
-    <a href="https://kick.com/Saleeh" target="_blank" class="live-btn">
-      <span class="dot"></span>
-      <span id="live-text">جاري التحقق من البث...</span>
-    </a>
+<div id="live-bar" class="live-indicator is-offline">
+  <a href="https://kick.com/Saleeh" target="_blank" class="live-btn">
+    <span class="dot"></span>
+    <span id="live-text">جاري التحقق من البث...</span>
+  </a>
+</div>
+
+<header class="reveal">
+  <img src="logo.png" alt="صالح - S4leeh">
+</header>
+
+<section class="hero reveal">
+  <h1>صالح</h1>
+  <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
+
+  <div class="stats">
+    <div class="stat">
+      <h3 id="experience-counter" style="font-size:20px">...</h3>
+      <span>رحلة صناعة المحتوى</span>
+    </div>
+
+    <div class="stat">
+      <h3 id="yt-subs" style="color:white">جاري الجلب...</h3>
+      <span>مشترك باليوتيوب</span>
+    </div>
+
+    <div class="stat">
+      <h3>114</h3>
+      <span>بثوث سنة 2025</span>
+    </div>
   </div>
+</section>
 
-  <header class="reveal">
-    <img src="logo.png" alt="صالح - S4leeh ">
-  </header>
+<footer>© جميع الحقوق محفوظة لـ صالح | 2025</footer>
 
-  <section class="hero reveal">
-    <h1><span>صالح</span></h1>
-    <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
-    
-    <div class="stats">
-      <div class="stat">
-        <h3 id="experience-counter" style="font-size: 20px; font-weight: 800; color: var(--gold);">...</h3>
-        <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">رحلة صناعة المحتوى</span>
-      </div>
-      <div class="stat">
-        <div style="color: var(--gold); font-weight: 800; font-size: 12px; margin-bottom: 8px;">S4leeh - صالح</div>
-        <h3 id="yt-subs" style="color: white; font-size: 32px; font-weight: 800;">جاري الجلب..</h3>
-        <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">مشترك باليوتيوب</span>
-      </div>
-      <div class="stat">
-        <h3 style="font-size: 32px; font-weight: 800; color: var(--gold);">114</h3>
-        <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">بثوث سنة 2025</span>
-      </div>
-    </div>
-  </section>
+<script>
+/* ========= YouTube Subscribers (NO API) ========= */
+const channelId = "UC-Vx0Qf0Rocogs3I9Nz7PDA";
+const invidiousInstances = [
+  "https://invidious.fdn.fr",
+  "https://vid.puffyan.us",
+  "https://invidious.jing.rocks",
+  "https://invidious.slipfox.xyz"
+];
+let instanceIndex = 0;
 
-  <section class="video-section reveal">
-    <h2 style="margin-bottom: 15px; text-align: center; color: var(--gold);">جديدنا على اليوتيوب 📺</h2>
-    <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="video-card">
-      <div class="video-banner" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');">
-        <div class="play-btn"></div>
-      </div>
-      <div style="padding: 20px; text-align: center;">
-        <h3 style="color: white; font-size: 20px; font-weight: 800;">ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h3>
-        <p style="color: var(--gold); font-size: 14px; margin-top: 10px; font-weight: bold;">اضغط لمشاهدة التحدي الأقوى الآن 🔥</p>
-      </div>
-    </a>
-  </section>
-
-  <section class="library-section reveal">
-    <h2>مكتبة ألعاب 2026 🎮</h2>
-    
-    <div class="game-category">
-      <h3 class="category-title">🟢 العبها حالياً</h3>
-      <div class="games-grid">
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img" alt="Viewfinder">
-          <div class="game-info"><div class="game-name">Viewfinder</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="game-category">
-      <h3 class="category-title">⏳ مخطط لها مستقبلًا</h3>
-      <div class="games-grid">
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg?t=1703139699" class="game-img">
-          <div class="game-info"><div class="game-name">Candleman</div></div>
-        </div>
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg?t=1762269877" class="game-img">
-          <div class="game-info"><div class="game-name">Supraworld</div></div>
-        </div>
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg?t=1755294276" class="game-img">
-          <div class="game-info"><div class="game-name">Superliminal</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="game-category">
-      <h3 class="category-title">✅ ألعاب انتهينا منها</h3>
-      <div class="games-grid">
-        <div class="game-card">
-          <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-          <div class="game-info">
-            <div class="game-name">Minecraft</div>
-            <div class="rating-special">اللعبة فوق التقييم 🏆</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="socials-section reveal">
-    <h2>حساباتي الرسمية</h2>
-    <div class="socials-grid">
-      <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
-        <div class="username">S4leeh</div>
-        <div class="desc">المقاطع</div>
-      </a>
-      <a href="https://kick.com/Saleeh" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
-        <div class="username">Saleeh</div>
-        <div class="desc">البث المباشر</div>
-      </a>
-      <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
-        <div class="username">مجتمع صالح</div>
-        <div class="desc">سيرفر الديسكورد</div>
-      </a>
-      <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
-        <div class="username">@iS4leeh</div>
-        <div class="desc">اليوميّات والحصريّات</div>
-      </a>
-      <a href="https://www.tiktok.com/@KICK.Saleeh" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
-        <div class="username">@KICK.Saleeh</div>
-        <div class="desc">مقاطع سريعة</div>
-      </a>
-      <a href="https://x.com/iS4leeh" target="_blank" class="social-card">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
-        <div class="username">@iS4leeh</div>
-        <div class="desc">آخر الأخبار</div>
-      </a>
-    </div>
-  </section>
-
-  <section class="form-section reveal">
-    <h2>ارسل لي اقتراحك 💡</h2>
-    <form action="https://formspree.io/f/mwvewwew" method="POST">
-      <div class="form-group">
-        <label>اسمك</label>
-        <input type="text" name="name" placeholder="مثلاً: كليجة" required>
-      </div>
-      <div class="form-group">
-        <label>نوع الاقتراح</label>
-        <select name="type">
-          <option value="game">لعبة جديدة</option>
-          <option value="video">فكرة مقطع</option>
-          <option value="stream">فكرة بث</option>
-          <option value="other">شيء آخر</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>الاقتراح</label>
-        <textarea name="message" rows="4" placeholder="اكتب فكرتك هنا..." required></textarea>
-      </div>
-      <button type="submit" class="submit-btn">إرسال الاقتراح</button>
-    </form>
-  </section>
-
-  <footer>© جميع الحقوق محفوظة لـ <span>صالح</span> | 2025</footer>
-
-  <script>
-    // الدالة الجديدة والمحدثة لجلب المشتركين بدقة عالية
-   <script>
-  const channelId = "UC-Vx0Qf0Rocogs3I9Nz7PDA";
-
-  const invidiousInstances = [
-    "https://invidious.fdn.fr",
-    "https://vid.puffyan.us",
-    "https://invidious.jing.rocks",
-    "https://invidious.slipfox.xyz"
-  ];
-
-  let instanceIndex = 0;
-
-  async function updateSubs() {
-    const subElement = document.getElementById('yt-subs');
-
-    try {
-      const res = await fetch(
-        `${invidiousInstances[instanceIndex]}/api/v1/channels/${channelId}`
-      );
-
-      if (!res.ok) throw new Error("فشل الاتصال");
-
-      const data = await res.json();
-
-      if (data && data.subscriberCount) {
-        subElement.innerText = Number(data.subscriberCount)
-          .toLocaleString('ar-SA');
-      } else {
-        throw new Error("بيانات غير صالحة");
-      }
-
-    } catch (err) {
-      instanceIndex = (instanceIndex + 1) % invidiousInstances.length;
-      console.warn("تبديل سيرفر Invidious");
-    }
+async function updateSubs() {
+  const el = document.getElementById("yt-subs");
+  try {
+    const res = await fetch(`${invidiousInstances[instanceIndex]}/api/v1/channels/${channelId}`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (data.subscriberCount) {
+      el.innerText = Number(data.subscriberCount).toLocaleString("ar-SA");
+    } else throw new Error();
+  } catch {
+    instanceIndex = (instanceIndex + 1) % invidiousInstances.length;
   }
+}
+
+/* ========= Kick Live ========= */
+async function checkKick() {
+  const bar = document.getElementById("live-bar");
+  const text = document.getElementById("live-text");
+  try {
+    const res = await fetch("https://kick.com/api/v1/channels/Saleeh");
+    const data = await res.json();
+    if (data.livestream) {
+      bar.className = "live-indicator is-live";
+      text.innerText = "صالح فاتح بث مباشر الآن!";
+    } else {
+      text.innerText = "صالح غير متصل حالياً";
+    }
+  } catch {
+    text.innerText = "قناتي على Kick";
+  }
+}
+
+/* ========= Experience ========= */
+function updateExp() {
+  const start = new Date("2022-06-02");
+  const now = new Date();
+  let y = now.getFullYear() - start.getFullYear();
+  let m = now.getMonth() - start.getMonth();
+  if (m < 0) { y--; m += 12; }
+  document.getElementById("experience-counter").innerText = `${y} سنوات و ${m} أشهر`;
+}
+
+function reveal() {
+  document.querySelectorAll(".reveal").forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 50)
+      el.classList.add("active");
+  });
+}
+
+window.onload = () => {
+  updateExp();
+  checkKick();
+  updateSubs();
+  reveal();
+  setInterval(updateSubs, 20000);
+  setInterval(checkKick, 60000);
+};
+window.addEventListener("scroll", reveal);
 </script>
 
-      } catch (e) {
-        console.error("خطأ في تحديث المشتركين");
-      }
-    }
-
-    async function checkKick() {
-      const liveBar = document.getElementById('live-bar');
-      const liveText = document.getElementById('live-text');
-      try {
-        const res = await fetch('https://kick.com/api/v1/channels/Saleeh');
-        const data = await res.json();
-        if (data.livestream) {
-          liveBar.className = "live-indicator is-live";
-          liveText.innerText = "صالح فاتح بث مباشر الآن! اضغط للدخول";
-        } else {
-          liveBar.className = "live-indicator is-offline";
-          liveText.innerText = "صالح غير متصل حالياً";
-        }
-      } catch { liveText.innerText = "قناتي على Kick"; }
-    }
-
-    function updateExp() {
-      const start = new Date('2022-06-02');
-      const now = new Date();
-      let y = now.getFullYear() - start.getFullYear();
-      let m = now.getMonth() - start.getMonth();
-      if (m < 0) { y--; m += 12; }
-      document.getElementById('experience-counter').innerText = `${y} سنوات و ${m} أشهر`;
-    }
-
-    function reveal() {
-      document.querySelectorAll(".reveal").forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
-      });
-    }
-
-    window.addEventListener("scroll", reveal);
-    window.onload = () => { 
-      updateExp(); 
-      checkKick();
-      updateSubs();
-      reveal();
-      // تحديث كل 20 ثانية لضمان السرعة
-      setInterval(updateSubs, 20000);
-      setInterval(checkKick, 60000);
-    };
-  </script>
 </body>
 </html>
