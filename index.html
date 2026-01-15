@@ -98,19 +98,57 @@
     .video-card:hover .play-btn { transform: scale(1.1); background: #cc0000; }
     .play-btn::after { content: ""; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
 
+    /* ===== Game Library Sections ===== */
+    .library-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+    .library-section h2 { color: var(--gold); text-align: center; margin-bottom: 40px; font-size: 32px; }
+    
+    .game-category { margin-bottom: 50px; }
+    .category-title { 
+      font-size: 20px; 
+      color: var(--text-main); 
+      margin-bottom: 20px; 
+      border-right: 4px solid var(--gold); 
+      padding-right: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    
+    .game-card {
+      background: var(--bg-soft);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+    .game-card:hover { transform: translateY(-5px); border-color: var(--gold-soft); }
+    .game-img { width: 100%; height: 160px; object-fit: cover; }
+    .game-info { padding: 15px; }
+    .game-name { font-weight: 800; font-size: 18px; color: var(--gold); margin-bottom: 10px; }
+    
+    .ratings { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+    .rating-item { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+    .stars { color: #555; font-size: 16px; } /* لون رمادي لعدم وجود تقييم حالياً */
+    .stars.active { color: #f1c40f; }
+
+    .empty-msg { 
+      background: rgba(255,255,255,0.02); 
+      border: 1px dashed rgba(255,255,255,0.1); 
+      padding: 20px; 
+      border-radius: 10px; 
+      text-align: center; 
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
     /* ===== Social Grid ===== */
     .socials-section { width: 100%; max-width: 1200px; margin: 60px auto; padding: 0 20px; }
     .socials-section h2 { text-align: center; margin-bottom: 30px; color: var(--gold); }
     
     .socials-grid { 
-      display: flex; 
-      justify-content: center; 
-      gap: 15px; 
-      flex-wrap: nowrap; 
-      overflow-x: auto;
-      padding: 10px 0;
-      scrollbar-width: none; 
-      -ms-overflow-style: none;
+      display: flex; justify-content: center; gap: 15px; flex-wrap: nowrap; overflow-x: auto; padding: 10px 0; scrollbar-width: none; -ms-overflow-style: none;
     }
     .socials-grid::-webkit-scrollbar { display: none; }
     
@@ -125,7 +163,7 @@
     .social-card .username { color: white; font-weight: 800; font-size: 16px; white-space: nowrap; }
     .social-card .desc { color: var(--text-muted); font-size: 12px; }
 
-    /* ===== Suggestion Form ===== */
+    /* ===== Form ===== */
     .form-section { max-width: 700px; margin: 60px auto; padding: 30px 20px; background: var(--bg-soft); border-radius: 20px; border: 1px solid var(--gold-soft); }
     .form-section h2 { margin-bottom: 20px; color: var(--gold); text-align: center; }
     .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
@@ -134,7 +172,6 @@
     }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
     .submit-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: 800; cursor: pointer; transition: 0.3s; }
-    .submit-btn:hover { background: #b8972f; transform: scale(1.02); }
 
     footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -142,6 +179,7 @@
     @media (max-width: 1000px) {
       .socials-grid { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
       .video-banner { height: 200px; }
+      .games-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -167,13 +205,11 @@
         <h3 id="experience-counter" style="font-size: 20px; font-weight: 800; color: var(--gold); line-height: 1.4; min-height: 60px; display: flex; align-items: center;">...</h3>
         <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">رحلة صناعة المحتوى</span>
       </div>
-      
       <div class="stat">
         <div style="color: var(--gold); font-weight: 800; font-size: 12px; margin-bottom: 8px;">S4leeh - صالح</div>
         <h3 id="yt-subs" style="color: white; font-size: 32px; font-weight: 800;">1,500</h3>
         <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">مشترك باليوتيوب</span>
       </div>
-
       <div class="stat">
         <h3 style="font-size: 32px; font-weight: 800; color: var(--gold);">114</h3>
         <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 10px;">بثوث سنة 2025</span>
@@ -192,6 +228,42 @@
         <p style="color: var(--gold); font-size: 14px; margin-top: 10px; font-weight: bold;">اضغط لمشاهدة التحدي الأقوى الآن 🔥</p>
       </div>
     </a>
+  </section>
+
+  <section class="library-section reveal">
+    <h2>مكتبة ألعاب 2026 🎮</h2>
+
+    <div class="game-category">
+      <h3 class="category-title">🟢 العبها حالياً</h3>
+      <div class="games-grid">
+        <div class="game-card">
+          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img" alt="Viewfinder">
+          <div class="game-info">
+            <div class="game-name">Viewfinder</div>
+            <div class="ratings">
+              <div class="rating-item">
+                <span>تقييم صالح:</span>
+                <span class="stars">☆☆☆☆☆</span>
+              </div>
+              <div class="rating-item">
+                <span>تقييم الشات:</span>
+                <span class="stars">☆☆☆☆☆</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-category">
+      <h3 class="category-title">⏳ مخطط لها مستقبلًا</h3>
+      <div class="empty-msg">لم يتم إضافة ألعاب هنا بعد.. شاركنا اقتراحك بالأسفل!</div>
+    </div>
+
+    <div class="game-category">
+      <h3 class="category-title">✅ ألعاب انتهينا منها</h3>
+      <div class="empty-msg">في انتظار أول تختيمة لسنة 2026 🔥</div>
+    </div>
   </section>
 
   <section class="socials-section reveal">
@@ -227,14 +299,6 @@
         <div class="username">@KICK.Saleeh</div>
         <div class="desc">مقاطع سريعة</div>
       </a>
-    </div>
-  </section>
-
-  <section class="reveal" style="max-width: 900px; margin: 60px auto; padding: 0 20px; text-align: center;">
-    <h2 style="color: var(--gold); margin-bottom: 20px;">مكتبة ألعاب 2026 🎮</h2>
-    <div style="background: var(--bg-soft); border: 1px dashed var(--gold-soft); border-radius: 20px; padding: 40px; color: var(--text-muted);">
-      <p style="font-size: 18px; font-weight: 600;">القسم فارغ حالياً..</p>
-      <p style="font-size: 14px; margin-top: 10px;">سيتم إضافة الألعاب في بداية السنة بإذن الله 🔥</p>
     </div>
   </section>
 
