@@ -120,15 +120,29 @@
     .social-card .username { color: white; font-weight: 800; font-size: 16px; white-space: nowrap; }
     .social-card .desc { color: var(--text-muted); font-size: 12px; }
 
-    /* ===== Form Section ===== */
-    .form-section { max-width: 700px; margin: 60px auto; padding: 30px 20px; background: var(--bg-soft); border-radius: 20px; border: 1px solid var(--gold-soft); }
-    .form-section h2 { margin-bottom: 20px; color: var(--gold); text-align: center; }
-    .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 12px; background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 15px; outline: none; transition: 0.3s;
+    /* ===== Form Section (العودة للتصميم الأصلي) ===== */
+    .form-section { 
+        max-width: 700px; 
+        margin: 60px auto; 
+        padding: 40px; 
+        background: var(--bg-soft); 
+        border-radius: 30px; 
+        border: 1px solid rgba(212, 175, 55, 0.1); 
     }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
-    .submit-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .form-section h2 { margin-bottom: 30px; color: var(--gold); text-align: center; font-size: 28px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: 600; font-size: 14px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 15px; background: #0b0b0c; border: 1px solid rgba(255,255,255,0.05); 
+      border-radius: 12px; color: white; font-size: 16px; outline: none; transition: 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
+    .submit-btn { 
+        width: 100%; padding: 18px; background: var(--gold); border: none; 
+        border-radius: 12px; color: #000; font-weight: 800; font-size: 18px; 
+        cursor: pointer; transition: 0.3s; 
+    }
+    .submit-btn:hover { background: #b8962d; transform: scale(1.02); }
 
     footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -137,6 +151,7 @@
       .socials-grid { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
       .video-banner { height: 200px; }
       .games-grid { grid-template-columns: 1fr; }
+      .form-section { padding: 25px; margin: 20px; }
     }
   </style>
 </head>
@@ -273,8 +288,23 @@
   <section class="form-section reveal">
     <h2>ارسل لي اقتراحك 💡</h2>
     <form action="https://formspree.io/f/mwvewwew" method="POST">
-      <div class="form-group"><label>اسمك</label><input type="text" name="name" placeholder="مثلاً: كليجة"></div>
-      <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="3" required></textarea></div>
+      <div class="form-group">
+        <label>اسمك</label>
+        <input type="text" name="name" placeholder="مثلاً: كليجة" required>
+      </div>
+      <div class="form-group">
+        <label>نوع الاقتراح</label>
+        <select name="type">
+          <option value="game">لعبة جديدة</option>
+          <option value="video">فكرة مقطع</option>
+          <option value="stream">فكرة بث</option>
+          <option value="other">شيء آخر</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>الاقتراح</label>
+        <textarea name="message" rows="4" placeholder="اكتب فكرتك هنا..." required></textarea>
+      </div>
       <button type="submit" class="submit-btn">إرسال الاقتراح</button>
     </form>
   </section>
