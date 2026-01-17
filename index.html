@@ -14,21 +14,24 @@
 
     <style>
         :root {
-            --bg-body: #080808;
-            --bg-card: #111112;
+            --bg-body: #050505;
+            --bg-card: rgba(20, 20, 22, 0.7);
             --primary-gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.2);
             --text-white: #ffffff;
-            --text-gray: #a0a0a0;
+            --text-gray: #b0b0b0;
             --kick-green: #53fc18;
             --live-red: #ea1d2c;
-            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
         body {
             background-color: var(--bg-body);
-            background-image: radial-gradient(circle at 50% 0%, #1a1a1c 0%, transparent 50%);
+            background-image: 
+                radial-gradient(circle at 50% -10%, #1a1a1c 0%, transparent 40%),
+                radial-gradient(circle at 10% 90%, #0d0d0e 0%, transparent 20%);
             color: var(--text-white);
             line-height: 1.6;
             overflow-x: hidden;
@@ -37,10 +40,10 @@
         /* Live Status Bar */
         .live-status-bar {
             width: 100%;
-            background: rgba(8, 8, 8, 0.9);
-            backdrop-filter: blur(12px);
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            padding: 14px 20px;
+            padding: 12px 20px;
             position: sticky;
             top: 0;
             z-index: 9999;
@@ -49,17 +52,27 @@
         }
 
         .live-link { text-decoration: none; display: flex; align-items: center; gap: 12px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; position: relative; }
         .is-offline .status-dot { background-color: var(--live-red); }
-        .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 12px var(--kick-green); }
+        .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); }
         .status-text { color: var(--text-white); font-weight: 700; font-size: 14px; }
 
         /* Header */
-        header { padding: 60px 20px 30px; text-align: center; }
-        .logo-container img { width: 110px; animation: floating 3s ease-in-out infinite; }
-        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        header { padding: 50px 20px 20px; text-align: center; }
+        .logo-container img { width: 100px; animation: floating 4s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.15)); }
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
 
-        /* Stats Grid (Journey | Subs | Streams) */
+        /* Global Titles */
+        .main-title {
+            text-align: center;
+            font-size: 24px;
+            color: var(--primary-gold);
+            margin-bottom: 35px;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Stats Grid - Fixed Layout */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -71,83 +84,84 @@
 
         .stat-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            padding: 30px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 22px;
+            padding: 25px 15px;
             text-align: center;
             transition: var(--transition);
-            min-height: 180px;
+            min-height: 160px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            backdrop-filter: blur(5px);
         }
 
-        .stat-card:hover { transform: translateY(-8px); border-color: var(--primary-gold); }
-        .stat-value { color: var(--primary-gold); font-weight: 800; font-size: 38px; }
-        .stat-value.journey-text { font-size: 20px; }
-        .stat-label { color: var(--text-gray); font-size: 14px; font-weight: 600; margin-top: 5px; }
-        .stat-sub-label { color: var(--primary-gold); font-size: 12px; font-weight: 800; margin-bottom: 4px; }
-
-        /* Titles Styling */
-        .main-title {
-            text-align: center;
-            font-size: 28px;
-            color: var(--primary-gold);
-            margin-bottom: 35px;
-            font-weight: 800;
+        /* تأثير الـ Hover المطلب */
+        .stat-card:hover, .game-card:hover, .social-item:hover, .yt-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 25px var(--gold-glow);
+            background: rgba(25, 25, 27, 0.9);
         }
+
+        .stat-value { color: var(--primary-gold); font-weight: 900; font-size: 34px; letter-spacing: -1px; }
+        .stat-value.journey-text { font-size: 19px; }
+        .stat-label { color: var(--text-gray); font-size: 13px; font-weight: 600; margin-top: 4px; }
+        .stat-sub-label { color: var(--primary-gold); font-size: 11px; font-weight: 800; margin-bottom: 2px; }
 
         /* YouTube Section */
-        .content-section { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
+        .content-section { max-width: 850px; margin: 0 auto 80px; padding: 0 20px; }
         .yt-card {
             background: var(--bg-card);
-            border-radius: 28px;
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
             text-decoration: none;
             display: block;
             transition: var(--transition);
         }
-        .yt-thumbnail { width: 100%; height: 420px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-        .play-icon { width: 70px; height: 70px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .play-icon::after { content: ''; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
-        .yt-details { padding: 25px; text-align: center; }
-        .yt-details h2 { font-size: 19px; color: #fff; margin-bottom: 8px; }
-        .yt-details p { color: var(--primary-gold); font-weight: 700; }
+        .yt-thumbnail { width: 100%; height: 380px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+        .play-icon { width: 65px; height: 65px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
+        .play-icon::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 4px; }
+        .yt-details { padding: 20px; text-align: center; }
+        .yt-details h2 { font-size: 18px; color: #fff; margin-bottom: 5px; }
 
-        /* Games Library */
+        /* Games Library (5 per row) */
         .library-container { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .category-title { font-size: 24px; font-weight: 800; color: var(--primary-gold); margin-bottom: 30px; border-right: 5px solid var(--primary-gold); padding-right: 15px; }
-        .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 50px; }
-        .game-card { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.03); transition: var(--transition); text-align: center; }
-        .game-img { width: 100%; height: 110px; object-fit: cover; }
-        .game-info { padding: 12px; }
-        .game-name { font-size: 13px; font-weight: 800; color: #efefef; }
-        .game-note { font-size: 11px; color: var(--primary-gold); margin-top: 2px; font-weight: 700; }
+        .category-title { font-size: 20px; font-weight: 800; color: var(--primary-gold); margin-bottom: 25px; border-right: 4px solid var(--primary-gold); padding-right: 12px; }
+        .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 45px; }
+        .game-card { background: var(--bg-card); border-radius: 18px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition); text-align: center; }
+        .game-img { width: 100%; height: 105px; object-fit: cover; }
+        .game-info { padding: 10px; }
+        .game-name { font-size: 12px; font-weight: 800; color: #fff; }
+        .game-note { font-size: 10px; color: var(--primary-gold); margin-top: 3px; font-weight: 700; }
 
-        /* Social Media */
+        /* Social Media (6 per row) */
         .socials-section { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
-        .social-item { background: var(--bg-card); border-radius: 20px; padding: 25px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .social-item img { width: 38px; height: 38px; filter: invert(1); }
-        .social-item .name { font-weight: 800; color: #fff; font-size: 14px; }
-        .social-item .desc { font-size: 11px; color: var(--text-gray); }
+        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+        .social-item { background: var(--bg-card); border-radius: 18px; padding: 22px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .social-item img { width: 34px; height: 34px; filter: invert(1); }
+        .social-item .name { font-weight: 800; color: #fff; font-size: 13px; }
+        .social-item .desc { font-size: 10px; color: var(--text-gray); }
 
         /* Form */
-        .form-container { max-width: 700px; margin: 0 auto 100px; padding: 40px; background: var(--bg-card); border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.05); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--text-gray); font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: #080808; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: #fff; outline: none; }
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary-gold); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .form-container { max-width: 650px; margin: 0 auto 80px; padding: 35px; background: var(--bg-card); border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-gray); font-size: 14px; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: #fff; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary-gold); }
+        .btn-submit { width: 100%; padding: 16px; background: var(--primary-gold); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: #fff; transform: scale(1.02); }
 
-        footer { padding: 60px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.03); color: var(--text-gray); font-size: 14px; }
+        footer { padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-gray); font-size: 13px; }
         footer b { color: var(--primary-gold); }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 992px) { .games-grid { grid-template-columns: repeat(3, 1fr); } .socials-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .games-grid { grid-template-columns: repeat(2, 1fr); } .socials-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .games-grid { grid-template-columns: repeat(2, 1fr); } .socials-grid { grid-template-columns: repeat(2, 1fr); } .yt-thumbnail { height: 220px; } }
     </style>
 </head>
 <body>
@@ -161,7 +175,7 @@
 
     <header class="reveal">
         <div class="logo-container"><img src="logo.png" alt="S4leeh"></div>
-        <div style="margin-top: 20px;"><p style="color: var(--text-gray); font-size: 18px;">صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p></div>
+        <div style="margin-top: 15px;"><p style="color: var(--text-gray); font-size: 17px;">صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p></div>
     </header>
 
     <section class="stats-grid reveal">
@@ -174,7 +188,7 @@
         <h2 class="main-title">المقطع الأخير 📺</h2>
         <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="yt-card">
             <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');"><div class="play-icon"></div></div>
-            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي</h2><p>شاهد المقطع الآن 🔥</p></div>
+            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي</h2><p style="color: var(--primary-gold); font-weight: 700;">شاهد المقطع الآن 🔥</p></div>
         </a>
     </section>
 
@@ -203,10 +217,7 @@
         <div class="games-grid">
             <div class="game-card">
                 <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Minecraft</div>
-                    <div class="game-note">فوق التقييم 👑</div>
-                </div>
+                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div>
             </div>
         </div>
     </div>
@@ -228,7 +239,7 @@
         <form action="https://formspree.io/f/mwvewwew" method="POST">
             <div class="form-group"><label>الاسم</label><input type="text" name="name" placeholder="اسمك الكريم" required></div>
             <div class="form-group"><label>نوع الاقتراح</label><select name="type"><option value="game">لعبة جديدة</option><option value="video">فكرة مقطع</option></select></div>
-            <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" placeholder="اكتب اقتراحك..." required></textarea></div>
+            <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" placeholder="اكتب اقتراحك هنا..." required></textarea></div>
             <button type="submit" class="btn-submit">إرسال الاقتراح</button>
         </form>
     </section>
@@ -246,7 +257,7 @@
         }
         function reveal() {
             document.querySelectorAll(".reveal").forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
             });
         }
         window.onload = () => { updateExp(); reveal(); };
