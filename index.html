@@ -84,7 +84,7 @@
     .video-card:hover .play-btn { transform: scale(1.1); background: #cc0000; }
     .play-btn::after { content: ""; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
 
-    /* ===== Library Sections - UPDATED GRID ===== */
+    /* ===== Library Sections ===== */
     .library-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
     .library-section h2 { color: var(--gold); text-align: center; margin-bottom: 40px; font-size: 32px; }
     .game-category { margin-bottom: 50px; }
@@ -94,14 +94,15 @@
     }
     .games-grid { 
         display: grid; 
-        grid-template-columns: repeat(5, 1fr); /* 5 أعمدة */
+        grid-template-columns: repeat(5, 1fr); 
         gap: 15px; 
     }
     .game-card { background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: 0.3s; }
     .game-card:hover { transform: translateY(-5px); border-color: var(--gold-soft); }
-    .game-img { width: 100%; height: 120px; object-fit: cover; } /* صغرنا الارتفاع */
+    .game-img { width: 100%; height: 120px; object-fit: cover; }
     .game-info { padding: 12px; text-align: center; }
-    .game-name { font-weight: 800; font-size: 15px; color: var(--gold); margin-bottom: 5px; }
+    .game-name { font-weight: 800; font-size: 14px; color: var(--gold); margin-bottom: 5px; }
+    .game-note { color: var(--text-muted); font-size: 11px; font-weight: 600; }
     .rating-special { color: var(--gold); font-weight: 800; font-size: 12px; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px; }
 
     /* ===== Social Grid ===== */
@@ -119,9 +120,9 @@
       transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; 
     }
     .social-card:hover { border-color: white; transform: translateY(-5px); background: #161618; }
-    .social-card img { width: 50px; height: 50px; filter: invert(1); margin-bottom: 10px; }
-    .social-card .username { color: white; font-weight: 800; font-size: 16px; white-space: nowrap; }
-    .social-card .desc { color: var(--text-muted); font-size: 12px; }
+    .social-card img { width: 40px; height: 40px; filter: invert(1); margin-bottom: 10px; }
+    .social-card .username { color: white; font-weight: 800; font-size: 15px; white-space: nowrap; }
+    .social-card .desc { color: var(--text-muted); font-size: 11px; }
 
     /* ===== Form Section ===== */
     .form-section { 
@@ -146,12 +147,10 @@
     footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-    /* Responsive */
     @media (max-width: 1000px) {
-      .games-grid { grid-template-columns: repeat(2, 1fr); } /* في الجوال خليهم 2 */
+      .games-grid { grid-template-columns: repeat(2, 1fr); }
       .socials-grid { justify-content: flex-start; padding-left: 20px; padding-right: 20px; }
       .video-banner { height: 200px; }
-      .form-section { padding: 25px; margin: 20px; }
     }
   </style>
 </head>
@@ -209,18 +208,40 @@
       <h3 class="category-title">🟢 العبها حالياً</h3>
       <div class="games-grid">
         <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1382070/header.jpg" class="game-img" alt="Viewfinder">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img" alt="Viewfinder">
           <div class="game-info"><div class="game-name">Viewfinder</div></div>
         </div>
-        </div>
+      </div>
     </div>
 
     <div class="game-category">
       <h3 class="category-title">⏳ مخطط لها مستقبلًا</h3>
       <div class="games-grid">
-        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div></div></div>
-        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
-        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div></div></div>
+        <div class="game-card">
+          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img">
+          <div class="game-info"><div class="game-name">Candleman</div></div>
+        </div>
+        <div class="game-card">
+          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img">
+          <div class="game-info"><div class="game-name">Supraworld</div></div>
+        </div>
+        <div class="game-card">
+          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
+          <div class="game-info"><div class="game-name">Superliminal</div></div>
+        </div>
+        <div class="game-card">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/998ac2a14769cc38a7f58e6dcd3e4e56452e3a3a/header.jpg?t=1760717898" class="game-img">
+          <div class="game-info">
+            <div class="game-name">Parallel Experiment</div>
+            <div class="game-note">( مع BDR1 )</div>
+          </div>
+        </div>
+        <div class="game-card">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg?t=1748596541" class="game-img">
+          <div class="game-info">
+            <div class="game-name">Let me out</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -253,9 +274,8 @@
   <section class="form-section reveal">
     <h2>ارسل لي اقتراحك 💡</h2>
     <form action="https://formspree.io/f/mwvewwew" method="POST">
-      <div class="form-group"><label>اسمك</label><input type="text" name="name" placeholder="مثلاً: كليجة" required></div>
-      <div class="form-group"><label>نوع الاقتراح</label><select name="type"><option value="game">لعبة جديدة</option><option value="video">فكرة مقطع</option><option value="stream">فكرة بث</option><option value="other">شيء آخر</option></select></div>
-      <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" placeholder="اكتب فكرتك هنا..." required></textarea></div>
+      <div class="form-group"><label>اسمك</label><input type="text" name="name" required></div>
+      <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" required></textarea></div>
       <button type="submit" class="submit-btn">إرسال الاقتراح</button>
     </form>
   </section>
@@ -264,34 +284,24 @@
 
   <script>
     const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
-
     async function updateSubs() {
       const subElement = document.getElementById('yt-subs');
       try {
         const response = await fetch(`https://api.subscribercounter.com/api/youtube-subscriber-count/${CHANNEL_ID}/live`);
         const data = await response.json();
-        if (data && data.subCount) {
-          subElement.innerText = Number(data.subCount).toLocaleString();
-        }
-      } catch (e) { console.log("Subs update fallback"); }
+        if (data && data.subCount) subElement.innerText = Number(data.subCount).toLocaleString();
+      } catch (e) {}
     }
-
     async function checkKick() {
       const liveBar = document.getElementById('live-bar');
       const liveText = document.getElementById('live-text');
       try {
         const res = await fetch(`https://kick.com/api/v1/channels/Saleeh?t=${Date.now()}`);
         const data = await res.json();
-        if (data.livestream) {
-          liveBar.className = "live-indicator is-live";
-          liveText.innerText = "صالح فاتح بث مباشر الآن! اضغط للدخول";
-        } else {
-          liveBar.className = "live-indicator is-offline";
-          liveText.innerText = "صالح غير متصل حالياً";
-        }
-      } catch (e) { console.log("Kick status error"); }
+        if (data.livestream) { liveBar.className = "live-indicator is-live"; liveText.innerText = "صالح فاتح بث مباشر الآن! اضغط للدخول"; }
+        else { liveBar.className = "live-indicator is-offline"; liveText.innerText = "صالح غير متصل حالياً"; }
+      } catch (e) {}
     }
-
     function updateExp() {
       const start = new Date('2022-06-02');
       const now = new Date();
@@ -300,22 +310,13 @@
       if (m < 0) { y--; m += 12; }
       document.getElementById('experience-counter').innerText = `${y} سنوات و ${m} أشهر`;
     }
-
     function reveal() {
       document.querySelectorAll(".reveal").forEach(el => {
         if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
       });
     }
-
     window.addEventListener("scroll", reveal);
-    window.onload = () => { 
-      updateExp(); 
-      reveal();
-      updateSubs(); 
-      checkKick();
-      setInterval(updateSubs, 20000); 
-      setInterval(checkKick, 60000);
-    };
+    window.onload = () => { updateExp(); reveal(); updateSubs(); checkKick(); setInterval(updateSubs, 20000); setInterval(checkKick, 60000); };
   </script>
 </body>
 </html>
