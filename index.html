@@ -111,6 +111,16 @@
         .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none;
+            footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-gray);
+        }
+        footer b {
+            color: var(--gold);
+        }
         }
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #fff; color: #000; }
@@ -150,7 +160,7 @@
     </section>
 
     <div class="library-container">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة الألعاب</h2>
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         
         <h3 class="sub-title">العبها حالياً</h3>
         <div class="games-grid">
@@ -206,6 +216,9 @@
             <button type="submit" class="submit-btn">إرسال الاقتراح</button>
         </form>
     </section>
+    <footer>
+        <p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2025</p>
+    </footer>
 
     <script>
         function updateExp() {
