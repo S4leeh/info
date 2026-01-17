@@ -1,521 +1,663 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="favicon.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>صالح | S4leeh</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صالح | S4leeh</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           VARIABLES & RESET
+           ========================================
+        */
+        :root {
+            --bg-body: #080808;
+            --bg-card: #111112;
+            --bg-card-hover: #161617;
+            --primary-gold: #d4af37;
+            --primary-gold-glow: rgba(212, 175, 55, 0.3);
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --kick-green: #53fc18;
+            --live-red: #ea1d2c;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-  <style>
-    /* ===== Variables & Root ===== */
-    :root {
-      --bg-dark: #0b0b0c;
-      --bg-soft: #121214;
-      --gold: #d4af37;
-      --gold-hover: #f1c40f;
-      --gold-soft: rgba(212, 175, 55, 0.15);
-      --text-main: #f5f5f5;
-      --text-muted: #b3b3b3;
-      --kick-green: #53fc18;
-      --live-red: #ff4b4b;
-      --card-bg: #0f0f10;
-      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    /* ===== Global Styles ===== */
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Cairo', sans-serif; 
-      scroll-behavior: smooth;
-    }
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a1a1c 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #0d0d0e 0%, transparent 30%);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    body {
-      background: radial-gradient(circle at top, #1a1a1c, var(--bg-dark));
-      color: var(--text-main);
-      overflow-x: hidden;
-      line-height: 1.8;
-    }
+        /* ========================================
+           LIVE STATUS BAR
+           ========================================
+        */
+        .live-status-bar {
+            width: 100%;
+            background: rgba(8, 8, 8, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 14px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            transition: var(--transition);
+        }
 
-    /* ===== Live Indicator Bar ===== */
-    .live-indicator {
-      background: rgba(11, 11, 12, 0.9);
-      border-bottom: 1px solid var(--gold-soft);
-      padding: 15px;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 9999;
-      backdrop-filter: blur(15px);
-      transition: var(--transition);
-    }
-    .live-btn { 
-      color: var(--text-main); 
-      text-decoration: none; 
-      font-weight: 700; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 12px;
-      font-size: 15px;
-    }
-    .dot { 
-      height: 12px; 
-      width: 12px; 
-      border-radius: 50%; 
-      display: inline-block; 
-    }
-    .is-live .dot { 
-      background: var(--kick-green); 
-      box-shadow: 0 0 15px var(--kick-green); 
-      animation: pulse 1.5s infinite; 
-    }
-    .is-offline .dot { background: var(--live-red); }
+        .live-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: relative;
+        }
 
-    /* ===== Scroll Reveal ===== */
-    .reveal { 
-      opacity: 0; 
-      transform: translateY(40px); 
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
-    }
-    .reveal.active { 
-      opacity: 1; 
-      transform: translateY(0); 
-    }
+        .is-offline .status-dot { background-color: var(--live-red); }
+        .is-live .status-dot { 
+            background-color: var(--kick-green); 
+            box-shadow: 0 0 12px var(--kick-green);
+        }
+        
+        .is-live .status-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
 
-    /* ===== Header & Logo ===== */
-    header { 
-      display: flex; 
-      justify-content: center; 
-      padding: 60px 0 30px 0; 
-    }
-    header img { 
-      width: 110px; 
-      animation: float 4s ease-in-out infinite; 
-      filter: drop-shadow(0 0 20px var(--gold-soft)); 
-    }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes pulse-ring {
+            0% { transform: scale(.33); }
+            80%, 100% { opacity: 0; }
+        }
 
-    /* ===== Hero Section ===== */
-    .hero { text-align: center; padding: 0 20px; margin-bottom: 60px; }
-    .hero h1 { font-size: 50px; font-weight: 800; color: var(--gold); margin-bottom: 10px; }
-    .hero p { color: var(--text-muted); font-size: 19px; max-width: 600px; margin: 0 auto 40px; }
+        .status-text {
+            color: var(--text-white);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
 
-    /* ===== Stats Grid (Order: Journey Right | Subs Center | Streams Left) ===== */
-    .stats-container {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .stat-card {
-      background: var(--bg-soft);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 28px;
-      padding: 35px 20px;
-      width: 260px;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card:hover {
-      transform: translateY(-10px);
-      border-color: var(--gold);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    }
-    .stat-card h3 { 
-      color: var(--gold); 
-      font-size: 36px; 
-      font-weight: 800; 
-      margin-bottom: 8px; 
-    }
-    /* تصغير خط الرحلة ليتناسب تماماً */
-    .stat-card h3.exp-title {
-      font-size: 22px;
-      line-height: 1.3;
-    }
-    .stat-card .label {
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 600;
-    }
-    .stat-card .sub-label {
-      color: var(--gold);
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-    }
+        /* ========================================
+           HEADER
+           ========================================
+        */
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
 
-    /* ===== YouTube Section ===== */
-    .section-title {
-      text-align: center;
-      font-size: 32px;
-      color: var(--gold);
-      margin-bottom: 40px;
-      font-weight: 800;
-    }
-    .youtube-container {
-      max-width: 900px;
-      margin: 80px auto;
-      padding: 0 20px;
-    }
-    .video-wrapper {
-      display: block;
-      text-decoration: none;
-      background: var(--bg-soft);
-      border-radius: 30px;
-      overflow: hidden;
-      border: 1px solid var(--gold-soft);
-      transition: var(--transition);
-    }
-    .video-wrapper:hover {
-      transform: scale(1.02);
-      border-color: var(--gold);
-    }
-    .thumb-area {
-      height: 450px;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .thumb-area::before {
-      content: '';
-      position: absolute;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.2);
-    }
-    .play-circle {
-      width: 85px;
-      height: 85px;
-      background: #ff0000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      box-shadow: 0 0 30px rgba(255,0,0,0.5);
-      transition: var(--transition);
-    }
-    .play-circle::after {
-      content: "";
-      border-style: solid;
-      border-width: 15px 0 15px 25px;
-      border-color: transparent transparent transparent white;
-      margin-left: 7px;
-    }
-    .video-wrapper:hover .play-circle { transform: scale(1.1); background: #e60000; }
-    .video-info { padding: 35px; text-align: center; }
-    .video-info h2 { font-size: 22px; margin-bottom: 10px; color: #fff; }
-    .video-info p { color: var(--gold); font-weight: 700; }
+        .logo-container img {
+            width: 110px;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.2));
+            animation: floating 3s ease-in-out infinite;
+        }
 
-    /* ===== Library Section ===== */
-    .library-wrap { max-width: 1200px; margin: 100px auto; padding: 0 20px; }
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 35px;
-      border-right: 5px solid var(--gold);
-      padding-right: 20px;
-    }
-    .category-header h2 { font-size: 28px; color: var(--gold); }
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 25px;
-      margin-bottom: 70px;
-    }
-    .game-item {
-      background: var(--bg-soft);
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.03);
-      transition: var(--transition);
-    }
-    .game-item:hover { transform: translateY(-10px); border-color: var(--gold); }
-    .game-img { width: 100%; height: 130px; object-fit: cover; }
-    .game-detail { padding: 18px; text-align: center; }
-    .game-detail .name { font-weight: 800; color: var(--gold); font-size: 15px; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
 
-    /* ===== Social Media Grid ===== */
-    .social-wrap { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
-    .social-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    .social-box {
-      background: var(--card-bg);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 25px;
-      padding: 40px 15px;
-      text-align: center;
-      text-decoration: none;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .social-box:hover {
-      background: #161618;
-      transform: translateY(-8px);
-      border-color: #fff;
-    }
-    .social-box img { width: 45px; height: 45px; filter: invert(1); }
-    .social-box .user { color: #fff; font-weight: 800; font-size: 16px; }
-    .social-box .info { color: var(--text-muted); font-size: 13px; }
+        .hero-info {
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
 
-    /* ===== Suggestion Form ===== */
-    .form-container {
-      max-width: 750px;
-      margin: 100px auto;
-      padding: 50px;
-      background: var(--bg-soft);
-      border-radius: 40px;
-      border: 1px solid var(--gold-soft);
-    }
-    .field { margin-bottom: 25px; }
-    .field label { display: block; margin-bottom: 12px; color: var(--gold); font-weight: 600; }
-    .field input, .field select, .field textarea {
-      width: 100%;
-      padding: 18px;
-      background: #0b0b0c;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 18px;
-      color: #fff;
-      font-size: 16px;
-      outline: none;
-      transition: 0.3s;
-    }
-    .field input:focus, .field textarea:focus { border-color: var(--gold); }
-    .send-btn {
-      width: 100%;
-      padding: 20px;
-      background: var(--gold);
-      border: none;
-      border-radius: 18px;
-      color: #000;
-      font-weight: 800;
-      font-size: 18px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .send-btn:hover { background: var(--gold-hover); transform: scale(1.02); }
+        .hero-info p {
+            color: var(--text-gray);
+            font-size: 18px;
+            font-weight: 500;
+        }
 
-    /* ===== Footer ===== */
-    footer {
-      text-align: center;
-      padding: 80px 20px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-    footer b { color: var(--gold); }
+        /* ========================================
+           STATS SECTION (The Order: Journey | Subs | Streams)
+           ========================================
+        */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
 
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 38px; }
-      .thumb-area { height: 250px; }
-      .stat-card { width: 100%; }
-      .form-container { padding: 30px; margin: 40px 20px; }
-    }
-  </style>
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-value {
+            color: var(--primary-gold);
+            font-weight: 800;
+            font-size: 38px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        /* تصغير خط الرحلة ليتناسب */
+        .stat-value.journey-text {
+            font-size: 20px;
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-sub-label {
+            color: var(--primary-gold);
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        /* ========================================
+           YOUTUBE SECTION
+           ========================================
+        */
+        .content-section {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .yt-card {
+            background: var(--bg-card);
+            border-radius: 28px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .yt-card:hover {
+            transform: scale(1.01);
+            border-color: var(--primary-gold);
+        }
+
+        .yt-thumbnail {
+            width: 100%;
+            height: 420px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-icon {
+            width: 70px;
+            height: 70px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .play-icon::after {
+            content: '';
+            border-style: solid;
+            border-width: 12px 0 12px 20px;
+            border-color: transparent transparent transparent white;
+            margin-left: 5px;
+        }
+
+        .yt-details {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .yt-details h2 {
+            font-size: 19px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .yt-details p {
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+
+        /* ========================================
+           GAMES LIBRARY
+           ========================================
+        */
+        .library-container {
+            max-width: 1100px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to left, rgba(212, 175, 55, 0.2), transparent);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 50px;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: var(--transition);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+        }
+
+        .game-img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .game-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #efefef;
+        }
+
+        .game-rating {
+            color: #f1c40f;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        /* ========================================
+           SOCIAL MEDIA GRID
+           ========================================
+        */
+        .socials-section {
+            max-width: 1100px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .socials-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+
+        .social-item {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 25px 10px;
+            text-decoration: none;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-item:hover {
+            background: var(--bg-card-hover);
+            border-color: #fff;
+            transform: translateY(-5px);
+        }
+
+        .social-item img {
+            width: 38px;
+            height: 38px;
+            filter: invert(1);
+        }
+
+        .social-item .name {
+            font-weight: 800;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .social-item .desc {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        /* ========================================
+           SUGGESTIONS FORM
+           ========================================
+        */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto 100px;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.05);
+        }
+
+        .form-title {
+            text-align: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: #080808;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gold);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-submit:hover {
+            background: #f1c40f;
+            transform: scale(1.02);
+        }
+
+        /* ========================================
+           FOOTER
+           ========================================
+        */
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        footer b { color: var(--primary-gold); }
+
+        /* ========================================
+           SCROLL REVEAL
+           ========================================
+        */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ========================================
+        */
+        @media (max-width: 992px) {
+            .games-grid { grid-template-columns: repeat(3, 1fr); }
+            .socials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .games-grid { grid-template-columns: repeat(2, 1fr); }
+            .yt-thumbnail { height: 250px; }
+            .socials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
 
-  <div id="live-bar" class="live-indicator is-offline">
-    <a href="https://kick.com/Saleeh" target="_blank" class="live-btn">
-      <span class="dot"></span>
-      <span id="live-text">جاري فحص حالة البث...</span>
-    </a>
-  </div>
-
-  <header class="reveal">
-    <img src="logo.png" alt="S4leeh">
-  </header>
-
-  <section class="hero reveal">
-    <h1>صالح</h1>
-    <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
-
-    <div class="stats-container">
-      <div class="stat-card">
-        <h3 class="exp-title" id="experience-counter">...</h3>
-        <span class="label">رحلة صناعة المحتوى</span>
-      </div>
-
-      <div class="stat-card">
-        <div class="sub-label">S4leeh - صالح</div>
-        <h3 id="yt-subs">1,526</h3>
-        <span class="label">مشترك باليوتيوب</span>
-      </div>
-
-      <div class="stat-card">
-        <h3>114</h3>
-        <span class="label">عدد بثوث سنة 2025</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="youtube-container reveal">
-    <h2 class="section-title">جديدنا على اليوتيوب 📺</h2>
-    <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="video-wrapper">
-      <div class="thumb-area" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');">
-        <div class="play-circle"></div>
-      </div>
-      <div class="video-info">
-        <h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2>
-        <p>اضغط لمشاهدة التحدي الأقوى الآن 🔥</p>
-      </div>
-    </a>
-  </section>
-
-  <section class="library-wrap reveal">
-    <div class="category-header">
-      <h2><span style="color: var(--kick-green);">●</span> العبها حالياً</h2>
-    </div>
-    <div class="games-grid">
-      <div class="game-item">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
-        <div class="game-detail"><div class="name">Viewfinder</div></div>
-      </div>
+    <div id="live-bar" class="live-status-bar is-offline">
+        <a href="https://kick.com/Saleeh" target="_blank" class="live-link">
+            <span class="status-dot"></span>
+            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
+        </a>
     </div>
 
-    <div class="category-header">
-      <h2>⏳ مخطط لها مستقبلاً</h2>
+    <header class="reveal">
+        <div class="logo-container">
+            <img src="logo.png" alt="S4leeh Logo">
+        </div>
+        <div class="hero-info">
+            <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
+        </div>
+    </header>
+
+    <section class="stats-grid reveal">
+        <div class="stat-card">
+            <div id="experience-counter" class="stat-value journey-text">...</div>
+            <span class="stat-label">رحلة صناعة المحتوى</span>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-sub-label">S4leeh - صالح</div>
+            <div id="yt-subs" class="stat-value">1,526</div>
+            <span class="stat-label">مشترك باليوتيوب</span>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">114</div>
+            <span class="stat-label">عدد بثوث سنة 2025</span>
+        </div>
+    </section>
+
+    <section class="content-section reveal">
+        <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="yt-card">
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');">
+                <div class="play-icon"></div>
+            </div>
+            <div class="yt-details">
+                <h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي</h2>
+                <p>شاهد المقطع الجديد الآن 🔥</p>
+            </div>
+        </a>
+    </section>
+
+    <div class="library-container reveal">
+        <h2 class="category-title">● العبها حالياً</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg" class="game-img">
+                <div class="game-info"><div class="game-name">Viewfinder</div></div>
+            </div>
+        </div>
+
+        <h2 class="category-title">⏳ مخطط لها مستقبلاً</h2>
+        <div class="games-grid">
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Parallel Experiment</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
+        </div>
+
+        <h2 class="category-title">✅ ألعاب انتهينا منها</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Minecraft</div>
+                    <div class="game-rating">★★★★★</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="games-grid">
-      <div class="game-item"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-detail"><div class="name">Superliminal</div></div></div>
-      <div class="game-item"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-detail"><div class="name">Supraworld</div></div></div>
-      <div class="game-item"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-detail"><div class="name">Candleman</div></div></div>
-      <div class="game-item"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-detail"><div class="name">Parallel Experiment</div></div></div>
-      <div class="game-item"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-detail"><div class="name">Let me out</div></div></div>
+
+    <div class="socials-section reveal">
+        <div class="socials-grid">
+            <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
+                <span class="name">S4leeh</span>
+                <span class="desc">المقاطع الرئيسية</span>
+            </a>
+            <a href="https://kick.com/Saleeh" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
+                <span class="name">Saleeh</span>
+                <span class="desc">بثوث مباشرة</span>
+            </a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
+                <span class="name">مجتمع صالح</span>
+                <span class="desc">سوالف وفعاليات</span>
+            </a>
+            <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
+                <span class="name">@iS4leeh</span>
+                <span class="desc">اليوميات والكواليس</span>
+            </a>
+            <a href="https://www.tiktok.com/@KICK.Saleeh" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
+                <span class="name">تيك توك</span>
+                <span class="desc">أقوى اللقطات</span>
+            </a>
+            <a href="https://x.com/iS4leeh" target="_blank" class="social-item">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
+                <span class="name">تويتر / X</span>
+                <span class="desc">آخر الأخبار</span>
+            </a>
+        </div>
     </div>
 
-    <div class="category-header">
-      <h2>✅ ألعاب انتهينا منها</h2>
-    </div>
-    <div class="games-grid">
-      <div class="game-item"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-detail"><div class="name">Minecraft</div></div></div>
-    </div>
-  </section>
+    <section class="form-container reveal">
+        <h2 class="form-title">ارسل لي اقتراحك 💡</h2>
+        <form action="https://formspree.io/f/mwvewwew" method="POST">
+            <div class="form-group"><label>الاسم</label><input type="text" name="name" placeholder="اسمك الكريم" required></div>
+            <div class="form-group"><label>نوع الاقتراح</label>
+                <select name="type">
+                    <option value="game">لعبة جديدة</option>
+                    <option value="video">فكرة مقطع</option>
+                </select>
+            </div>
+            <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" placeholder="اكتب اقتراحك هنا..." required></textarea></div>
+            <button type="submit" class="btn-submit">إرسال الاقتراح</button>
+        </form>
+    </section>
 
-  <section class="social-wrap reveal">
-    <h2 class="section-title">تابعني على حساباتي 🌐</h2>
-    <div class="social-grid">
-      <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
-        <div class="user">S4leeh</div>
-        <div class="info">المقاطع الرئيسية</div>
-      </a>
-      <a href="https://kick.com/Saleeh" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
-        <div class="user">Saleeh</div>
-        <div class="info">بثوث مباشرة يومياً</div>
-      </a>
-      <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
-        <div class="user">مجتمع صالح</div>
-        <div class="info">سوالف وفعاليات</div>
-      </a>
-      <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
-        <div class="user">@iS4leeh</div>
-        <div class="info">اليوميات والكواليس</div>
-      </a>
-      <a href="https://www.tiktok.com/@KICK.Saleeh" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
-        <div class="user">تيك توك</div>
-        <div class="info">أقوى اللقطات</div>
-      </a>
-      <a href="https://x.com/iS4leeh" target="_blank" class="social-box">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
-        <div class="user">تويتر / X</div>
-        <div class="info">آخر الأخبار والتحديثات</div>
-      </a>
-    </div>
-  </section>
+    <footer>
+        <p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p>
+    </footer>
 
-  <section class="form-container reveal">
-    <h2 class="section-title">ارسل لي اقتراحك 💡</h2>
-    <form action="https://formspree.io/f/mwvewwew" method="POST">
-      <div class="field">
-        <label>اسمك الكريم</label>
-        <input type="text" name="name" placeholder="ادخل اسمك هنا..." required>
-      </div>
-      <div class="field">
-        <label>نوع الاقتراح</label>
-        <select name="type">
-          <option value="game">لعبة جديدة</option>
-          <option value="video">فكرة مقطع يوتيوب</option>
-          <option value="stream">فكرة فعاليات بث</option>
-          <option value="other">اقتراح عام</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>تفاصيل الاقتراح</label>
-        <textarea name="message" rows="5" placeholder="اكتب اقتراحك هنا بكل وضوح..." required></textarea>
-      </div>
-      <button type="submit" class="send-btn">إرسال الاقتراح الآن</button>
-    </form>
-  </section>
-
-  <footer>
-    <p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p>
-    <p style="margin-top: 10px; font-size: 12px; opacity: 0.6;">تم التصميم بكل حب لمجتمع صالح</p>
-  </footer>
-
-  <script>
-    // Update Experience Counter
-    function updateExperience() {
-      const start = new Date('2022-06-02');
-      const now = new Date();
-      let years = now.getFullYear() - start.getFullYear();
-      let months = now.getMonth() - start.getMonth();
-      if (months < 0) { years--; months += 12; }
-      document.getElementById('experience-counter').innerText = `${years} سنوات و ${months} أشهر`;
-    }
-
-    // Scroll Animation
-    function revealSections() {
-      const reveals = document.querySelectorAll(".reveal");
-      reveals.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const elementTop = el.getBoundingClientRect().top;
-        const elementVisible = 100;
-        if (elementTop < windowHeight - elementVisible) {
-          el.classList.add("active");
+    <script>
+        // Calculate Experience
+        function updateExp() {
+            const start = new Date('2022-06-02');
+            const now = new Date();
+            let y = now.getFullYear() - start.getFullYear();
+            let m = now.getMonth() - start.getMonth();
+            if (m < 0) { y--; m += 12; }
+            document.getElementById('experience-counter').innerText = `${y} سنوات و ${m} أشهر`;
         }
-      });
-    }
 
-    // Initialize
-    window.onload = () => {
-      updateExperience();
-      revealSections();
-    };
-    window.onscroll = revealSections;
-  </script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add("active");
+                }
+            });
+        }
 
+        window.onload = () => { updateExp(); reveal(); };
+        window.onscroll = reveal;
+    </script>
 </body>
 </html>
