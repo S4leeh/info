@@ -217,18 +217,9 @@
     <div class="game-category">
       <h3 class="category-title">⏳ مخطط لها مستقبلًا</h3>
       <div class="games-grid">
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img">
-          <div class="game-info"><div class="game-name">Candleman</div></div>
-        </div>
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img">
-          <div class="game-info"><div class="game-name">Supraworld</div></div>
-        </div>
-        <div class="game-card">
-          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
-          <div class="game-info"><div class="game-name">Superliminal</div></div>
-        </div>
+        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div></div></div>
+        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
+        <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div></div></div>
         <div class="game-card">
           <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/998ac2a14769cc38a7f58e6dcd3e4e56452e3a3a/header.jpg?t=1760717898" class="game-img">
           <div class="game-info">
@@ -238,9 +229,7 @@
         </div>
         <div class="game-card">
           <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg?t=1748596541" class="game-img">
-          <div class="game-info">
-            <div class="game-name">Let me out</div>
-          </div>
+          <div class="game-info"><div class="game-name">Let me out</div></div>
         </div>
       </div>
     </div>
@@ -266,16 +255,23 @@
       <a href="https://kick.com/Saleeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div class="username">Saleeh</div><div class="desc">البث المباشر</div></a>
       <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div class="username">مجتمع صالح</div><div class="desc">سيرفر الديسكورد</div></a>
       <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div class="username">@iS4leeh</div><div class="desc">اليوميّات والحصريّات</div></a>
-      <a href="https://www.tiktok.com/@KICK.Saleeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div class="username">@KICK.Saleeh</div><div class="desc">مقاطع سريعة</div></a>
-      <a href="https://x.com/iS4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div class="username">@iS4leeh</div><div class="desc">آخر الأخبار</div></a>
     </div>
   </section>
 
   <section class="form-section reveal">
     <h2>ارسل لي اقتراحك 💡</h2>
     <form action="https://formspree.io/f/mwvewwew" method="POST">
-      <div class="form-group"><label>اسمك</label><input type="text" name="name" required></div>
-      <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" required></textarea></div>
+      <div class="form-group"><label>اسمك</label><input type="text" name="name" placeholder="مثلاً: كليجة" required></div>
+      <div class="form-group">
+        <label>نوع الاقتراح</label>
+        <select name="type">
+          <option value="game">لعبة جديدة</option>
+          <option value="video">فكرة مقطع</option>
+          <option value="stream">فكرة بث</option>
+          <option value="other">شيء آخر</option>
+        </select>
+      </div>
+      <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" placeholder="اكتب فكرتك هنا..." required></textarea></div>
       <button type="submit" class="submit-btn">إرسال الاقتراح</button>
     </form>
   </section>
