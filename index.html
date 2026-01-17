@@ -37,7 +37,7 @@
             min-height: 100vh;
         }
 
-        /* شريط حالة البث */
+        /* 1. شريط حالة البث */
         .live-status-bar {
             width: 100%;
             background: rgba(5, 5, 5, 0.95);
@@ -56,12 +56,13 @@
         @keyframes pulse-live { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .status-text { color: #fff; font-weight: 700; font-size: 14px; }
 
+        /* 2. الهيدر */
         header { padding: 50px 20px 20px; text-align: center; }
         .logo-container img { width: 110px; animation: float 4s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--primary-gold); text-shadow: 0 0 20px var(--gold-glow); display: block; margin-top: 10px; }
 
-        /* المربعات مع التوهج */
+        /* 3. الإحصائيات مع التوهج */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 60px; padding: 0 20px; }
         .stat-card { 
             background: var(--bg-card); border-radius: 22px; padding: 30px 15px; text-align: center; 
@@ -73,7 +74,7 @@
 
         .main-title { text-align: center; font-size: 28px; color: var(--primary-gold); margin-bottom: 35px; font-weight: 800; }
 
-        /* المقطع الأخير */
+        /* 4. المقطع الأخير */
         .content-section { max-width: 850px; margin: 0 auto 80px; padding: 0 20px; }
         .yt-card { background: var(--bg-card); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; display: block; transition: var(--transition); }
         .yt-card:hover { transform: scale(1.02); border-color: var(--primary-gold); box-shadow: 0 0 30px var(--gold-glow); }
@@ -83,7 +84,7 @@
         .yt-details { padding: 30px; text-align: center; }
         .yt-details h2 { color: #ffffff !important; font-size: 22px; margin-bottom: 10px; font-weight: 800; }
 
-        /* المكتبة */
+        /* 5. المكتبة والألعاب */
         .library-container { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .category-title { font-size: 19px; color: var(--primary-gold); margin: 25px 0; border-right: 4px solid var(--primary-gold); padding-right: 12px; font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 40px; }
@@ -94,21 +95,25 @@
         .game-name { font-size: 13px; color: #fff; font-weight: 700; }
         .game-note { font-size: 11px; color: var(--primary-gold); font-weight: 800; margin-top: 5px; }
 
-        /* الحسابات (إصلاح اللون الوصف) */
+        /* 6. الحسابات مع التوهج والوصف */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: var(--bg-card); border-radius: 20px; padding: 25px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); }
         .social-item img { width: 35px; height: 35px; filter: invert(1); margin-bottom: 12px; transition: 0.3s; }
         .social-item .s-name { display: block; color: #fff; font-weight: 800; font-size: 14px; }
         .social-item .s-desc { font-size: 11px; color: var(--text-gray); }
         .social-item:hover { border-color: var(--primary-gold); transform: translateY(-8px); box-shadow: 0 0 25px var(--gold-glow); }
-        .social-item:hover .s-name { color: #fff; } /* ضمان بقاء اللون أبيض */
+        .social-item:hover img { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--primary-gold)); }
 
-        /* الاقتراحات */
+        /* 7. صندوق الاقتراحات الكامل */
         .form-container { max-width: 650px; margin: 0 auto 80px; padding: 40px; background: var(--bg-card); border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary-gold); }
         .btn-submit { width: 100%; padding: 18px; background: var(--primary-gold); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--gold-glow); }
+
+        footer { padding: 40px; text-align: center; color: var(--text-gray); font-size: 13px; }
 
         @media (max-width: 768px) { .stats-grid, .socials-grid, .games-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -118,7 +123,7 @@
     <div id="live-bar" class="live-status-bar">
         <a href="https://kick.com/Saleeh" target="_blank" class="live-link">
             <span class="status-dot"></span>
-            <span id="live-text" class="status-text">جاري فحص البث...</span>
+            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
         </a>
     </div>
 
@@ -133,8 +138,17 @@
         <div class="stat-card"><div class="stat-value">114</div><div class="stat-label">بثوث سنة 2025</div></div>
     </section>
 
+    <section class="content-section">
+        <h2 class="main-title">📺 المقطع الأخير</h2>
+        <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" class="yt-card" target="_blank">
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-icon"></div></div>
+            <div class="yt-details"><h2>ثلاثيات تحداني 🧡 : مباريات ربع النهائي</h2><p style="color:var(--primary-gold); font-weight:800;">شاهد المقطع الآن 🔥</p></div>
+        </a>
+    </section>
+
     <div class="library-container">
         <h2 class="main-title">🎮 مكتبة ألعاب 2026</h2>
+        
         <h3 class="category-title">● العبها حالياً</h3>
         <div class="games-grid">
             <div class="game-card">
@@ -179,15 +193,17 @@
             <div class="form-group">
                 <label>نوع الاقتراح</label>
                 <select name="type">
-                    <option value="لعبة">لعبة جديدة</option>
-                    <option value="فكرة">فكرة مقطع</option>
-                    <option value="تحسين">تحسين للموقع</option>
+                    <option value="لعبة جديدة">لعبة جديدة</option>
+                    <option value="فكرة مقطع">فكرة مقطع</option>
+                    <option value="تحسين للموقع">تحسين للموقع</option>
                 </select>
             </div>
             <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="4" required></textarea></div>
             <button type="submit" class="btn-submit">إرسال الاقتراح</button>
         </form>
     </section>
+
+    <footer><p>© 2026 جميع الحقوق محفوظة لـ صالح | S4leeh</p></footer>
 
     <script>
         async function checkKick() {
