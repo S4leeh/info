@@ -88,6 +88,15 @@
         .stat-label { color: var(--text-gray); font-size: 14px; font-weight: 600; margin-top: 5px; }
         .stat-sub-label { color: var(--primary-gold); font-size: 12px; font-weight: 800; margin-bottom: 4px; }
 
+        /* Titles Styling */
+        .main-title {
+            text-align: center;
+            font-size: 28px;
+            color: var(--primary-gold);
+            margin-bottom: 35px;
+            font-weight: 800;
+        }
+
         /* YouTube Section */
         .content-section { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
         .yt-card {
@@ -106,7 +115,7 @@
         .yt-details h2 { font-size: 19px; color: #fff; margin-bottom: 8px; }
         .yt-details p { color: var(--primary-gold); font-weight: 700; }
 
-        /* Games Library (5 per row) */
+        /* Games Library */
         .library-container { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .category-title { font-size: 24px; font-weight: 800; color: var(--primary-gold); margin-bottom: 30px; border-right: 5px solid var(--primary-gold); padding-right: 15px; }
         .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 50px; }
@@ -116,7 +125,7 @@
         .game-name { font-size: 13px; font-weight: 800; color: #efefef; }
         .game-note { font-size: 11px; color: var(--primary-gold); margin-top: 2px; font-weight: 700; }
 
-        /* Social Media (6 per row) */
+        /* Social Media */
         .socials-section { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
         .social-item { background: var(--bg-card); border-radius: 20px; padding: 25px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -162,9 +171,10 @@
     </section>
 
     <section class="content-section reveal">
+        <h2 class="main-title">المقطع الأخير 📺</h2>
         <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="yt-card">
             <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');"><div class="play-icon"></div></div>
-            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي</h2><p>شاهد المقطع الجديد الآن 🔥</p></div>
+            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي</h2><p>شاهد المقطع الآن 🔥</p></div>
         </a>
     </section>
 
@@ -202,6 +212,7 @@
     </div>
 
     <div class="socials-section reveal">
+        <h2 class="main-title">حساباتي 🌐</h2>
         <div class="socials-grid">
             <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><span class="name">S4leeh</span><span class="desc">المقاطع الرئيسية</span></a>
             <a href="https://kick.com/Saleeh" target="_blank" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><span class="name">Saleeh</span><span class="desc">بثوث مباشرة</span></a>
@@ -213,7 +224,7 @@
     </div>
 
     <section class="form-container reveal">
-        <h2 style="text-align: center; color: var(--primary-gold); margin-bottom: 30px;">ارسل لي اقتراحك 💡</h2>
+        <h2 class="main-title" style="margin-bottom: 20px;">ارسل لي اقتراحك 💡</h2>
         <form action="https://formspree.io/f/mwvewwew" method="POST">
             <div class="form-group"><label>الاسم</label><input type="text" name="name" placeholder="اسمك الكريم" required></div>
             <div class="form-group"><label>نوع الاقتراح</label><select name="type"><option value="game">لعبة جديدة</option><option value="video">فكرة مقطع</option></select></div>
