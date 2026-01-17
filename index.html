@@ -17,7 +17,7 @@
             --bg-body: #050505;
             --bg-card: rgba(20, 20, 22, 0.7);
             --primary-gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.2);
+            --gold-glow: rgba(212, 175, 55, 0.3);
             --text-white: #ffffff;
             --text-gray: #b0b0b0;
             --kick-green: #53fc18;
@@ -57,9 +57,27 @@
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); }
         .status-text { color: var(--text-white); font-weight: 700; font-size: 14px; }
 
-        /* Header */
+        /* Header & Logo */
         header { padding: 50px 20px 20px; text-align: center; }
         .logo-container img { width: 100px; animation: floating 4s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.15)); }
+        
+        /* تأثير اسم صالح المتوهج */
+        .owner-name {
+            display: block;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--primary-gold);
+            margin-top: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.2);
+            animation: glowText 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowText {
+            from { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+            to { text-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 35px rgba(212, 175, 55, 0.4); }
+        }
+
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
 
         /* Global Titles */
@@ -72,7 +90,7 @@
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
 
-        /* Stats Grid - Fixed Layout */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -96,7 +114,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* تأثير الـ Hover المطلب */
         .stat-card:hover, .game-card:hover, .social-item:hover, .yt-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: var(--primary-gold);
@@ -126,7 +143,7 @@
         .yt-details { padding: 20px; text-align: center; }
         .yt-details h2 { font-size: 18px; color: #fff; margin-bottom: 5px; }
 
-        /* Games Library (5 per row) */
+        /* Games Library */
         .library-container { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .category-title { font-size: 20px; font-weight: 800; color: var(--primary-gold); margin-bottom: 25px; border-right: 4px solid var(--primary-gold); padding-right: 12px; }
         .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 45px; }
@@ -136,7 +153,7 @@
         .game-name { font-size: 12px; font-weight: 800; color: #fff; }
         .game-note { font-size: 10px; color: var(--primary-gold); margin-top: 3px; font-weight: 700; }
 
-        /* Social Media (6 per row) */
+        /* Social Media */
         .socials-section { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
         .social-item { background: var(--bg-card); border-radius: 18px; padding: 22px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -175,7 +192,8 @@
 
     <header class="reveal">
         <div class="logo-container"><img src="logo.png" alt="S4leeh"></div>
-        <div style="margin-top: 15px;"><p style="color: var(--text-gray); font-size: 17px;">صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p></div>
+        <h1 class="owner-name">صالح</h1>
+        <div style="margin-top: 5px;"><p style="color: var(--text-gray); font-size: 17px;">صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p></div>
     </header>
 
     <section class="stats-grid reveal">
