@@ -56,55 +56,61 @@
     header img { width: 100px; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 0 15px var(--gold-soft)); }
 
     .hero { text-align: center; padding: 20px; }
-    .hero h1 { font-size: 55px; font-weight: 800; color: var(--gold); margin-bottom: 5px; }
     .hero p { color: var(--text-muted); font-size: 18px; margin-bottom: 30px; }
 
-    /* ===== Stats Grid (Fixed from Images) ===== */
+    /* ===== Stats Grid (Order: Journey Right, Subs Center, Streams Left) ===== */
     .stats { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 50px; }
     .stat { 
         background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); border-radius: 25px; 
-        padding: 30px 20px; width: 240px; min-height: 180px; display: flex; flex-direction: column; 
+        padding: 20px; width: 230px; min-height: 180px; display: flex; flex-direction: column; 
         align-items: center; justify-content: center; text-align: center; transition: 0.3s;
     }
-    .stat h3 { color: var(--gold); font-size: 34px; font-weight: 800; margin-bottom: 5px; }
+    .stat h3 { color: var(--gold); font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+    /* تصغير حجم خط الرحلة ليتناسب مع المربع */
+    .stat h3.experience-text { font-size: 24px; line-height: 1.2; } 
     .stat .sub-title { color: var(--gold); font-size: 13px; font-weight: 800; margin-bottom: 5px; }
     .stat span { color: var(--text-muted); font-size: 14px; font-weight: 600; }
 
-    /* ===== Library Sections (Fixed Grid) ===== */
-    .library-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
-    .library-section h2 { color: var(--gold); text-align: right; margin-bottom: 30px; font-size: 28px; display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
-    .game-category { margin-bottom: 50px; }
-    .games-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-        gap: 20px; 
+    /* ===== Youtube Card Section ===== */
+    .video-section { max-width: 850px; margin: 40px auto 80px; padding: 0 20px; }
+    .video-card {
+      display: block;
+      text-decoration: none;
+      background: var(--bg-soft);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--gold-soft);
+      transition: 0.4s;
     }
+    .video-card:hover { transform: scale(1.02); border-color: var(--gold); }
+    .video-banner { height: 380px; background: #1a1a1a no-repeat center; background-size: cover; display: flex; align-items: center; justify-content: center; position: relative; }
+    .play-btn { width: 70px; height: 70px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 2; }
+    .play-btn::after { content: ""; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; margin-left: 5px; }
+
+    /* ===== Library Sections ===== */
+    .library-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+    .library-section h2 { color: var(--gold); text-align: right; margin-bottom: 30px; font-size: 24px; display: flex; align-items: center; gap: 10px; border-right: 4px solid var(--gold); padding-right: 15px; }
+    .game-category { margin-bottom: 50px; }
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
     .game-card { background: var(--bg-soft); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s; }
-    .game-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-    .game-img { width: 100%; height: 120px; object-fit: cover; }
-    .game-info { padding: 12px; text-align: left; background: #0f0f10; }
-    .game-name { font-weight: 700; font-size: 13px; color: var(--gold); }
+    .game-img { width: 100%; height: 110px; object-fit: cover; }
+    .game-info { padding: 12px; text-align: center; }
+    .game-name { font-weight: 800; font-size: 13px; color: var(--gold); }
     .game-note { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
 
     /* ===== Socials Section ===== */
     .socials-section { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
     .socials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
-    .social-card { 
-      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; 
-      padding: 30px 10px; text-align: center; text-decoration: none; transition: 0.3s; 
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
-    .social-card:hover { border-color: white; transform: translateY(-5px); }
-    .social-card img { width: 40px; height: 40px; filter: invert(1); }
+    .social-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 10px; text-align: center; text-decoration: none; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .social-card img { width: 35px; height: 35px; filter: invert(1); }
     .social-card .username { color: white; font-weight: 800; font-size: 14px; }
 
     /* ===== Form Section ===== */
     .form-section { max-width: 700px; margin: 60px auto; padding: 40px; background: var(--bg-soft); border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.1); }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: 600; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; padding: 15px; background: #0b0b0c; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; color: white; outline: none;
-    }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: #0b0b0c; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; color: white; outline: none; }
+    .submit-btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   </style>
@@ -124,21 +130,37 @@
 
   <section class="hero reveal">
     <p>صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
+    
     <div class="stats">
       <div class="stat">
-        <h3>114</h3>
-        <span>عدد بثوث سنة 2025</span>
+        <h3 id="experience-counter" class="experience-text">...</h3>
+        <span>رحلة صناعة المحتوى</span>
       </div>
+
       <div class="stat">
         <div class="sub-title">S4leeh - صالح</div>
         <h3 id="yt-subs">1,526</h3>
         <span>مشترك باليوتيوب</span>
       </div>
+
       <div class="stat">
-        <h3 id="experience-counter">3 سنوات و 7 أشهر</h3>
-        <span>رحلة صناعة المحتوى</span>
+        <h3>114</h3>
+        <span>عدد بثوث سنة 2025</span>
       </div>
     </div>
+  </section>
+
+  <section class="video-section reveal">
+    <h2 style="margin-bottom: 20px; text-align: center; color: var(--gold);">جديدنا على اليوتيوب 📺</h2>
+    <a href="https://www.youtube.com/watch?v=vz0qbRaHRA8" target="_blank" class="video-card">
+      <div class="video-banner" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg');">
+        <div class="play-btn"></div>
+      </div>
+      <div style="padding: 20px; text-align: center;">
+        <h3 style="color: white; font-size: 18px;">ثلاثيات تحداني 🧡: مباريات ربع النهائي</h3>
+        <p style="color: var(--gold); font-size: 14px; margin-top: 5px;">اضغط للمشاهدة الآن 🔥</p>
+      </div>
+    </a>
   </section>
 
   <section class="library-section reveal">
@@ -198,7 +220,7 @@
         </select>
       </div>
       <div class="form-group"><label>الاقتراح</label><textarea name="message" rows="4" required></textarea></div>
-      <button type="submit" style="width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 12px; font-weight: 800; cursor: pointer;">إرسال</button>
+      <button type="submit" class="submit-btn">إرسال</button>
     </form>
   </section>
 
