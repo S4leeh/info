@@ -26,72 +26,88 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
 
-        /* 1. شريط حالة البث */
-        .live-status-bar { width: 100%; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 12px; position: sticky; top: 0; z-index: 9999; display: flex; justify-content: center; }
+        /* إصلاح الخلفية (ليست سوداء سادة) */
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 50% -10%, #1a1a1c 0%, transparent 40%),
+                radial-gradient(circle at 10% 90%, #0d0d0e 0%, transparent 20%);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* شريط حالة البث */
+        .live-status-bar {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+        }
         .live-link { text-decoration: none; display: flex; align-items: center; gap: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .status-text { color: #fff; font-weight: 700; font-size: 14px; }
 
-        /* 2. الهيدر */
+        /* الهيدر */
         header { padding: 50px 20px; text-align: center; }
         .logo-container img { width: 110px; animation: float 4s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--primary-gold); text-shadow: 0 0 20px var(--gold-glow); margin-top: 10px; display: block; }
 
-        /* 3. الإحصائيات */
+        /* الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 60px; padding: 0 20px; }
-        .stat-card { background: var(--bg-card); border-radius: 22px; padding: 30px 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .stat-card { background: var(--bg-card); border-radius: 22px; padding: 30px 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; backdrop-filter: blur(5px); }
         .stat-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); }
         .stat-value { color: var(--primary-gold); font-weight: 900; font-size: 30px; }
         .stat-label { color: var(--text-gray); font-size: 14px; margin-top: 5px; font-weight: 600; }
 
-        /* 4. العناوين */
         .main-title { text-align: center; font-size: 28px; color: var(--primary-gold); margin-bottom: 35px; font-weight: 800; }
 
-        /* 5. المقطع الأخير */
+        /* المقطع الأخير */
         .content-section { max-width: 850px; margin: 0 auto 80px; padding: 0 20px; }
         .yt-card { background: var(--bg-card); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; display: block; transition: 0.3s; }
-        .yt-card:hover { transform: scale(1.01); border-color: var(--primary-gold); }
         .yt-thumbnail { width: 100%; height: 380px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
         .play-icon { width: 65px; height: 65px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .play-icon::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 5px; }
         .yt-details { padding: 30px; text-align: center; }
         .yt-details h2 { color: #ffffff !important; font-size: 22px; margin-bottom: 10px; font-weight: 800; }
 
-        /* 6. مكتبة الألعاب */
+        /* مكتبة الألعاب */
         .library-container { max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .category-title { font-size: 19px; color: var(--primary-gold); margin: 25px 0; border-right: 4px solid var(--primary-gold); padding-right: 12px; font-weight: 800; }
-        .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+        .games-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 40px; }
         .game-card { background: var(--bg-card); border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: 0.3s; }
-        .game-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); }
         .game-img { width: 100%; height: 115px; object-fit: cover; }
-        .game-name { font-size: 13px; padding: 12px; color: #fff; font-weight: 700; }
+        .game-info { padding: 12px; }
+        .game-name { font-size: 13px; color: #fff; font-weight: 700; }
+        .game-note { font-size: 11px; color: var(--primary-gold); font-weight: 800; margin-top: 4px; }
 
-        /* 7. الحسابات */
+        /* الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: var(--bg-card); border-radius: 20px; padding: 25px 10px; text-decoration: none; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
         .social-item img { width: 35px; height: 35px; filter: invert(1); margin-bottom: 12px; }
-        .social-item .s-name { font-size: 14px; color: #fff; font-weight: 800; display: block; }
-        .social-item .s-desc { font-size: 11px; color: var(--text-gray); }
-        .social-item:hover { border-color: var(--primary-gold); transform: translateY(-8px); background: rgba(212,175,55,0.05); }
+        .social-item:hover { border-color: var(--primary-gold); transform: translateY(-8px); }
 
-        /* 8. صندوق الاقتراحات */
+        /* صندوق الاقتراحات */
         .form-container { max-width: 650px; margin: 0 auto 80px; padding: 40px; background: var(--bg-card); border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; transition: 0.3s; }
-        .form-group input:focus { border-color: var(--primary-gold); }
-        .btn-submit { width: 100%; padding: 18px; background: var(--primary-gold); border: none; border-radius: 12px; font-weight: 900; color: #000; cursor: pointer; font-size: 16px; }
+        .form-group label { display: block; color: var(--text-gray); margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary-gold); border: none; border-radius: 12px; font-weight: 900; color: #000; cursor: pointer; }
 
-        footer { padding: 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-gray); font-size: 14px; }
+        footer { padding: 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-gray); }
         footer b { color: var(--primary-gold); }
 
-        @media (max-width: 992px) { .socials-grid { grid-template-columns: repeat(3, 1fr); } .games-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .stats-grid, .socials-grid, .games-grid { grid-template-columns: repeat(2, 1fr); } .yt-thumbnail { height: 250px; } }
+        @media (max-width: 768px) { .stats-grid, .socials-grid, .games-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -128,27 +144,41 @@
         
         <h3 class="category-title">● العبها حالياً</h3>
         <div class="games-grid">
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/header.jpg" class="game-img"><div class="game-name">Viewfinder</div></div>
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/header.jpg" class="game-img">
+                <div class="game-info"><div class="game-name">Viewfinder</div></div>
+            </div>
         </div>
 
         <h3 class="category-title">⏳ مخطط لها مستقبلاً</h3>
         <div class="games-grid">
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-name">Superliminal</div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-name">Supraworld</div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-name">Candleman</div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-name">Parallel Experiment</div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-name">Let me out</div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div></div></div>
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img">
+                <div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">( مع BDR1 )</div></div>
+            </div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
+        </div>
+
+        <h3 class="category-title">✅ ألعاب انتهينا منها</h3>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div>
+            </div>
         </div>
     </div>
 
     <h2 class="main-title">🌐 حساباتي</h2>
     <div class="socials-grid">
-        <a href="https://www.youtube.com/@S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><span class="s-name">S4leeh</span><span class="s-desc">المقاطع الرئيسية</span></a>
-        <a href="https://kick.com/Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><span class="s-name">Saleeh</span><span class="s-desc">بثوث مباشرة</span></a>
-        <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><span class="s-name">مجتمع صالح</span><span class="s-desc">فعاليات وسوالف</span></a>
-        <a href="https://www.instagram.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><span class="s-name">iS4leeh</span><span class="s-desc">يوميات وحصريات</span></a>
-        <a href="https://www.tiktok.com/@KICK.Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><span class="s-name">KICK.Saleeh</span><span class="s-desc">أقوى اللقطات</span></a>
-        <a href="https://x.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><span class="s-name">تويتر / X</span><span class="s-desc">أخبار وتحديثات</span></a>
+        <a href="https://www.youtube.com/@S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div><b style="color:#fff">S4leeh</b></div></a>
+        <a href="https://kick.com/Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div><b style="color:#fff">Saleeh</b></div></a>
+        <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div><b style="color:#fff">Discord</b></div></a>
+        <a href="https://www.instagram.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div><b style="color:#fff">Instagram</b></div></a>
+        <a href="https://www.tiktok.com/@KICK.Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div><b style="color:#fff">TikTok</b></div></a>
+        <a href="https://x.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div><b style="color:#fff">X / Twitter</b></div></a>
     </div>
 
     <section class="form-container">
