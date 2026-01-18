@@ -47,10 +47,17 @@
         /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { 
-            width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--gold); 
-            padding: 5px; box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px;
-            animation: float 4s ease-in-out infinite;
-        }
+    width: 140px; /* كبرنا الدائرة شوي عشان تاخذ راحتها */
+    height: 140px; 
+    border-radius: 50%; 
+    border: 3px solid var(--gold); 
+    padding: 0px; /* صفرنا المسافة عشان الصورة تملا الدائرة */
+    box-shadow: 0 0 20px var(--gold-glow); 
+    margin-bottom: 20px;
+    animation: float 4s ease-in-out infinite;
+    object-fit: cover; /* يخلي الصورة تعبي المساحة بالكامل */
+    overflow: hidden; /* يضمن ما يخرج شيء من الدائرة */
+}
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
