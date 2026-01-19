@@ -22,7 +22,7 @@
             background-color: var(--bg-dark);
             background-image: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%);
             color: #fff;
-            padding-bottom: 0; /* تم تعديله ليتناسب مع الحقوق */
+            padding-bottom: 0;
         }
 
         /* 1. شريط حالة البث المطور */
@@ -47,17 +47,17 @@
         /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { 
-    width: 140px; /* كبرنا الدائرة شوي عشان تاخذ راحتها */
-    height: 140px; 
-    border-radius: 50%; 
-    border: 3px solid var(--gold); 
-    padding: 0px; /* صفرنا المسافة عشان الصورة تملا الدائرة */
-    box-shadow: 0 0 20px var(--gold-glow); 
-    margin-bottom: 20px;
-    animation: float 4s ease-in-out infinite;
-    object-fit: cover; /* يخلي الصورة تعبي المساحة بالكامل */
-    overflow: hidden; /* يضمن ما يخرج شيء من الدائرة */
-}
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; 
+            border: 3px solid var(--gold); 
+            padding: 0px; 
+            box-shadow: 0 0 20px var(--gold-glow); 
+            margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite;
+            object-fit: cover;
+            overflow: hidden;
+        }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
@@ -86,7 +86,7 @@
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
         /* 5. المكتبة */
-        .library-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
+        .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; } /* تم تعديل المسافة السفلية لـ 100px */
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .game-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; }
@@ -97,7 +97,7 @@
         .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
 
         /* 6. الحسابات */
-        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
+        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item {
             background: var(--card-bg); border: 1px solid var(--border-color);
             border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s;
@@ -122,7 +122,7 @@
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #fff; color: #000; }
 
-        /* 8. تنسيق الحقوق المعدل */
+        /* 8. تنسيق الحقوق */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -130,15 +130,8 @@
             background: rgba(0,0,0,0.2);
             margin-top: 20px;
         }
-        footer p {
-            color: #888;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        footer b {
-            color: var(--gold);
-            text-shadow: 0 0 10px var(--gold-glow);
-        }
+        footer p { color: #888; font-size: 14px; font-weight: 700; }
+        footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
         @media (max-width: 900px) { .socials-grid { grid-template-columns: repeat(3, 1fr); } .stats-grid { grid-template-columns: 1fr; } }
     </style>
@@ -196,25 +189,26 @@
             <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
         </div>
 
-      <h3 class="sub-title">الألعاب اللي لعبناها</h3>
-<div class="games-grid">
-    <div class="game-card">
-        <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-        <div class="game-info">
-            <div class="game-name">Minecraft</div>
-            <div class="game-note">اللعبة فوق التقييم 👑</div>
-        </div>
-    </div>
+        <h3 class="sub-title">الألعاب اللي لعبناها</h3>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Minecraft</div>
+                    <div class="game-note">اللعبة فوق التقييم 👑</div>
+                </div>
+            </div>
 
-    <div class="game-card">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
-        <div class="game-info">
-            <div class="game-name">Viewfinder</div>
-            <div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div>
-            <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Viewfinder</div>
+                    <div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div>
+                    <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="socials-grid">
         <a href="https://kick.com/Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
@@ -232,11 +226,11 @@
             <div class="form-group">
                 <label>نوع الاقتراح</label>
                <select name="type">
-    <option value="لعبة جديدة">لعبة جديدة</option>
-    <option value="فكرة مقطع">فكرة مقطع</option>
-    <option value="فكرة بث">فكرة بث</option>
-    <option value="تحسين للموقع">تحسين للموقع</option>
-</select>
+                    <option value="لعبة جديدة">لعبة جديدة</option>
+                    <option value="فكرة مقطع">فكرة مقطع</option>
+                    <option value="فكرة بث">فكرة بث</option>
+                    <option value="تحسين للموقع">تحسين للموقع</option>
+                </select>
             </div>
             <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
             <button type="submit" class="submit-btn">إرسال الاقتراح</button>
