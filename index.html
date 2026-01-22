@@ -86,7 +86,7 @@
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
         /* 5. المكتبة */
-        .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; } /* تم تعديل المسافة السفلية لـ 100px */
+        .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .game-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; }
@@ -138,7 +138,7 @@
 </head>
 <body>
 
-    <a href="https://kick.com/Saleeh" target="_blank" class="live-status-bar" id="live-bar-container">
+    <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
         <div class="status-content">
             <span class="status-dot"></span>
             <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
@@ -207,11 +207,20 @@
                     <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
                 </div>
             </div>
+
+            <div class="game-card">
+                <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Hytale</div>
+                    <div class="game-note">تقييم صالح: ⭐⭐⭐</div>
+                    <div class="game-note">تقييم الشات: ⭐⭐⭐</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="socials-grid">
-        <a href="https://kick.com/Saleeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+        <a href="https://kick.com/S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
         <a href="https://www.youtube.com/@S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
         <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
         <a href="https://www.instagram.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
@@ -254,7 +263,7 @@
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
             try {
-                const res = await fetch(`https://corsproxy.io/?https://kick.com/api/v1/channels/Saleeh`);
+                const res = await fetch(`https://corsproxy.io/?https://kick.com/api/v1/channels/S4leeh`);
                 const data = await res.json();
                 if (data.livestream) { 
                     container.classList.add('is-live'); 
@@ -263,7 +272,7 @@
                     container.classList.remove('is-live'); 
                     txt.innerText = "البث المباشر مغلق حالياً"; 
                 }
-            } catch (e) { txt.innerText = "Kick.com/Saleeh"; }
+            } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
         window.onload = () => { updateExp(); checkKick(); setInterval(checkKick, 60000); };
     </script>
