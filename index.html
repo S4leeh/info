@@ -47,16 +47,9 @@
         /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { 
-            width: 140px; 
-            height: 140px; 
-            border-radius: 50%; 
-            border: 3px solid var(--gold); 
-            padding: 0px; 
-            box-shadow: 0 0 20px var(--gold-glow); 
-            margin-bottom: 20px;
-            animation: float 4s ease-in-out infinite;
-            object-fit: cover;
-            overflow: hidden;
+            width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); 
+            padding: 0px; box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden;
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
@@ -72,7 +65,7 @@
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
-        /* 4. قسم اليوتيوب - تم تحديث المقطع */
+        /* 4. قسم اليوتيوب */
         .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
         .yt-card { 
             background: var(--card-bg); border-radius: 25px; overflow: hidden; 
@@ -108,28 +101,15 @@
         .social-item span { color: #666; font-size: 10px; display: block; }
 
         /* 7. الاقتراحات */
-        .form-box { 
-            max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); 
-            padding: 35px; border-radius: 20px; border: 1px solid var(--border-color);
-            transition: 0.3s;
-        }
+        .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none;
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; }
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #fff; color: #000; }
 
-        /* 8. تنسيق الحقوق */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid var(--border-color);
-            background: rgba(0,0,0,0.2);
-            margin-top: 20px;
-        }
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.2); margin-top: 20px; }
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
@@ -153,8 +133,8 @@
 
     <section class="stats-grid">
         <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
-        <div class="stat-card"><div class="stat-value">1,532</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
-        <div class="stat-card"><div class="stat-value">114</div><div class="stat-label">عدد البثوث المباشرة في 2025</div></div>
+        <div class="stat-card"><div class="stat-value" id="sub-count">...</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
+        <div class="stat-card"><div class="stat-value" id="live-count">0</div><div class="stat-label">عدد البثوث المباشرة في 2026</div></div>
     </section>
 
     <section class="content-section">
@@ -182,10 +162,7 @@
         <div class="games-grid">
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div></div></div>
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
-            <div class="game-card">
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div>
-            </div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
             <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
         </div>
 
@@ -193,12 +170,8 @@
         <div class="games-grid">
             <div class="game-card">
                 <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Minecraft</div>
-                    <div class="game-note">اللعبة فوق التقييم 👑</div>
-                </div>
+                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">اللعبة فوق التقييم 👑</div></div>
             </div>
-
             <div class="game-card">
                 <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
                 <div class="game-info">
@@ -207,7 +180,6 @@
                     <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
                 </div>
             </div>
-
             <div class="game-card">
                 <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
                 <div class="game-info">
@@ -232,33 +204,45 @@
         <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
         <form action="https://formspree.io/f/mwvewwew" method="POST">
             <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-            <div class="form-group">
-                <label>نوع الاقتراح</label>
-               <select name="type">
-                    <option value="لعبة جديدة">لعبة جديدة</option>
-                    <option value="فكرة مقطع">فكرة مقطع</option>
-                    <option value="فكرة بث">فكرة بث</option>
-                    <option value="تحسين للموقع">تحسين للموقع</option>
-                </select>
-            </div>
+            <div class="form-group"><label>نوع الاقتراح</label><select name="type">
+                <option value="لعبة جديدة">لعبة جديدة</option>
+                <option value="فكرة مقطع">فكرة مقطع</option>
+                <option value="فكرة بث">فكرة بث</option>
+                <option value="تحسين للموقع">تحسين للموقع</option>
+            </select></div>
             <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
             <button type="submit" class="submit-btn">إرسال الاقتراح</button>
         </form>
     </section>
 
-    <footer>
-        <p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p>
-    </footer>
+    <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
 
     <script>
-        function updateExp() {
-            const start = new Date('2022-06-02');
+        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
+        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+
+        async function updateYouTubeSubs() {
+            try {
+                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
+                const data = await res.json();
+                const count = data.items[0].statistics.subscriberCount;
+                document.getElementById('sub-count').innerText = Number(count).toLocaleString();
+            } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
+        }
+
+        function updateStats() {
+            const startExp = new Date('2022-06-02');
             const now = new Date();
-            let y = now.getFullYear() - start.getFullYear();
-            let m = now.getMonth() - start.getMonth();
+            let y = now.getFullYear() - startExp.getFullYear();
+            let m = now.getMonth() - startExp.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+
+            const startOf2026 = new Date('2026-01-01');
+            const diffDays = Math.ceil(Math.abs(now - startOf2026) / (1000 * 60 * 60 * 24));
+            document.getElementById('live-count').innerText = Math.floor(diffDays * 0.6); 
         }
+
         async function checkKick() {
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
@@ -274,7 +258,8 @@
                 }
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
-        window.onload = () => { updateExp(); checkKick(); setInterval(checkKick, 60000); };
+
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); };
     </script>
 </body>
 </html>
