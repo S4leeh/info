@@ -19,6 +19,10 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
+        html {
+            scroll-behavior: smooth; /* لجعل التنقل بين الأقسام انسيابياً */
+        }
+
         body {
             background-color: var(--bg-dark);
             background-image: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%);
@@ -47,7 +51,7 @@
             padding: 15px;
             position: sticky;
             top: 0;
-            z-index: 9999;
+            z-index: 10000;
             display: flex;
             justify-content: center;
             text-decoration: none;
@@ -57,6 +61,33 @@
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
         .status-text { color: #fff; font-weight: 900; font-size: 16px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        /* شريط التنقل العلوي الجديد (مثل spitfire) */
+        .nav-bar {
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            position: sticky;
+            top: 54px; /* يظهر تحت شريط حالة البث */
+            z-index: 9998;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            backdrop-filter: blur(10px);
+        }
+        .nav-link {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .nav-link:hover {
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
 
         /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
@@ -134,10 +165,14 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { .socials-grid { grid-template-columns: repeat(3, 1fr); } .stats-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
+            .nav-bar { display: none; } /* إخفاء الشريط في الجوال ليكون الموقع مريحاً */
+        }
     </style>
 </head>
-<body>
+<body id="top">
 
     <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
         <div class="status-content">
@@ -145,6 +180,14 @@
             <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
         </div>
     </a>
+
+    <nav class="nav-bar">
+        <a href="#top" class="nav-link">أعلى الصفحة</a>
+        <a href="#last-video" class="nav-link">آخر مقطع</a>
+        <a href="#games-library" class="nav-link">الألعاب</a>
+        <a href="#my-socials" class="nav-link">حساباتي</a>
+        <a href="#suggestions" class="nav-link">الاقتراحات</a>
+    </nav>
 
     <header class="reveal">
         <img src="logo.png" class="logo" alt="S4leeh">
@@ -167,7 +210,7 @@
         </div>
     </section>
 
-    <section class="content-section reveal">
+    <section id="last-video" class="content-section reveal">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
         <a href="https://www.youtube.com/watch?v=_WCiXkU-G8Y" class="yt-card" target="_blank">
             <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')">
@@ -177,7 +220,7 @@
         </a>
     </section>
 
-    <div class="library-container">
+    <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         
         <h3 class="sub-title reveal">ألعبها حاليًا</h3>
@@ -236,7 +279,7 @@
         </div>
     </div>
 
-    <div class="socials-grid reveal">
+    <div id="my-socials" class="socials-grid reveal">
         <a href="https://kick.com/S4leeh" class="social-item" target="_blank">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
             <div>Kick</div>
@@ -269,7 +312,7 @@
         </a>
     </div>
 
-    <section class="form-box reveal">
+    <section id="suggestions" class="form-box reveal">
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
