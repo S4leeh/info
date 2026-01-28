@@ -20,7 +20,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
         html {
-            scroll-behavior: smooth; /* لجعل التنقل بين الأقسام انسيابياً */
+            scroll-behavior: smooth;
+        }
+
+        /* حل مشكلة الإزاحة عند الضغط على الروابط */
+        section, div[id] {
+            scroll-margin-top: 120px; 
         }
 
         body {
@@ -31,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* تأثيرات الظهور التدريجي (مثل موقع spitfire) */
         .reveal {
             opacity: 0;
             transform: translateX(30px);
@@ -43,64 +47,80 @@
             transform: translateX(0);
         }
 
-        /* 1. شريط حالة البث المطور */
+        /* 1. شريط حالة البث */
         .live-status-bar {
             width: 100%;
             background: rgba(5, 5, 5, 0.98);
             border-bottom: 2px solid var(--border-color);
-            padding: 15px;
+            padding: 12px;
             position: sticky;
             top: 0;
-            z-index: 10000;
+            z-index: 10001;
             display: flex;
             justify-content: center;
             text-decoration: none;
         }
         .status-content { display: flex; align-items: center; gap: 12px; }
-        .status-dot { width: 12px; height: 12px; border-radius: 50%; background-color: var(--live-red); }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
-        .status-text { color: #fff; font-weight: 900; font-size: 16px; }
+        .status-text { color: #fff; font-weight: 900; font-size: 14px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* شريط التنقل العلوي الجديد (مثل spitfire) */
+        /* تصميم شريط التنقل المطور (Glassmorphism) */
         .nav-bar {
-            width: 100%;
-            background: rgba(26, 26, 26, 0.95);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 0;
+            width: fit-content;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 8px 25px;
             position: sticky;
-            top: 54px; /* يظهر تحت شريط حالة البث */
-            z-index: 9998;
+            top: 65px;
+            z-index: 10000;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
-            gap: 25px;
-            backdrop-filter: blur(10px);
+            gap: 20px;
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
         .nav-link {
-            color: #aaa;
+            color: #eee;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
             transition: 0.3s;
-            cursor: pointer;
+            position: relative;
+            padding: 5px 2px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--gold);
+            transition: 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
         }
         .nav-link:hover {
             color: var(--gold);
-            text-shadow: 0 0 10px var(--gold-glow);
         }
 
-        /* 2. الهيدر واللوقو المتحرك */
+        /* الهيدر */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { 
             width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); 
-            padding: 0px; box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px;
+            box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px;
             animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden;
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
 
-        /* 3. الإحصائيات */
+        /* الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
         .stat-card {
             background: var(--card-bg); border: 1px solid var(--border-color);
@@ -110,7 +130,7 @@
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
-        /* 4. قسم اليوتيوب */
+        /* اليوتيوب */
         .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
         .yt-card { 
             background: var(--card-bg); border-radius: 25px; overflow: hidden; 
@@ -123,7 +143,7 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* 5. المكتبة */
+        /* المكتبة */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
@@ -134,7 +154,7 @@
         .game-name { font-size: 14px; font-weight: 700; color: #fff; }
         .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
 
-        /* 6. الحسابات */
+        /* الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item {
             background: var(--card-bg); border: 1px solid var(--border-color);
@@ -145,7 +165,7 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; }
 
-        /* 7. الاقتراحات */
+        /* الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -168,11 +188,16 @@
         @media (max-width: 900px) { 
             .socials-grid { grid-template-columns: repeat(3, 1fr); } 
             .stats-grid { grid-template-columns: 1fr; } 
-            .nav-bar { display: none; } /* إخفاء الشريط في الجوال ليكون الموقع مريحاً */
+            .nav-bar { 
+                gap: 10px; 
+                padding: 8px 15px; 
+                width: 95%;
+            }
+            .nav-link { font-size: 11px; }
         }
     </style>
 </head>
-<body id="top">
+<body id="top-page">
 
     <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
         <div class="status-content">
@@ -182,7 +207,7 @@
     </a>
 
     <nav class="nav-bar">
-        <a href="#top" class="nav-link">أعلى الصفحة</a>
+        <a href="#top-page" class="nav-link">أعلى الصفحة</a>
         <a href="#last-video" class="nav-link">آخر مقطع</a>
         <a href="#games-library" class="nav-link">الألعاب</a>
         <a href="#my-socials" class="nav-link">حساباتي</a>
@@ -328,7 +353,7 @@
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
         </div>
-        <div id="success-message">تم استلام اقتراحك بنجاح، شكراً لك! 🧡</div>
+        <div id="success-message">تم استلام ملاحظتك بنجاح، شكراً لك! 🧡</div>
     </section>
 
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
@@ -337,7 +362,6 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        // 1. نظام الظهور التدريجي (Intersection Observer)
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -349,7 +373,6 @@
 
         revealElements.forEach(el => observer.observe(el));
 
-        // 2. نظام الإرسال المحدث والمضمون
         const form = document.getElementById("suggestion-form");
         const container = document.getElementById("suggestion-container");
         const success = document.getElementById("success-message");
@@ -361,7 +384,6 @@
             setTimeout(() => { form.reset(); }, 1000);
         };
 
-        // 3. تحديث المشتركين والرحلة والـ Kick
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
