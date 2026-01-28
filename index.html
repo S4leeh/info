@@ -24,6 +24,19 @@
             background-image: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%);
             color: #fff;
             padding-bottom: 0;
+            overflow-x: hidden;
+        }
+
+        /* تأثيرات الظهور التدريجي (مثل موقع spitfire) */
+        .reveal {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* 1. شريط حالة البث المطور */
@@ -110,13 +123,12 @@
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #fff; color: #000; }
 
-        /* رسالة الشكر الأنيقة */
         #success-message { 
             display: none; text-align: center; padding: 30px; 
             background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); 
             border-radius: 15px; color: var(--gold); font-weight: 900;
         }
-        .honey { display: none; } /* حماية من السبام */
+        .honey { display: none; }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.2); margin-top: 20px; }
         footer p { color: #888; font-size: 14px; font-weight: 700; }
@@ -134,28 +146,28 @@
         </div>
     </a>
 
-    <header>
+    <header class="reveal">
         <img src="logo.png" class="logo" alt="S4leeh">
         <h1 class="owner-name">صالح</h1>
         <p class="bio">صانع محتوى وبثوث مباشرة – ترفيه، ألعاب، وتفاعل</p>
     </header>
 
-  <section class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-value" id="exp">...</div>
-        <div class="stat-label">رحلة صناعة المحتوى</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value" id="sub-count">...</div>
-        <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value" id="live-count">8</div>
-        <div class="stat-label">عدد البثوث في 2026</div>
-    </div>
-</section>
+    <section class="stats-grid reveal">
+        <div class="stat-card">
+            <div class="stat-value" id="exp">...</div>
+            <div class="stat-label">رحلة صناعة المحتوى</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="sub-count">...</div>
+            <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="live-count">8</div>
+            <div class="stat-label">عدد البثوث في 2026</div>
+        </div>
+    </section>
 
-    <section class="content-section">
+    <section class="content-section reveal">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
         <a href="https://www.youtube.com/watch?v=_WCiXkU-G8Y" class="yt-card" target="_blank">
             <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')">
@@ -166,25 +178,25 @@
     </section>
 
     <div class="library-container">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
+        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         
-        <h3 class="sub-title">ألعبها حاليًا</h3>
-        <div class="games-grid">
+        <h3 class="sub-title reveal">ألعبها حاليًا</h3>
+        <div class="games-grid reveal">
             <div class="game-card">
                 <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
                 <div class="game-info"><div class="game-name">Superliminal</div></div>
             </div>
         </div>
 
-        <h3 class="sub-title">مُخطط لها مستقبلًا</h3>
-        <div class="games-grid">
+        <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
+        <div class="games-grid reveal">
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
             <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
             <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
         </div>
 
-        <h3 class="sub-title">الألعاب اللي لعبناها</h3>
-        <div class="games-grid">
+        <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
+        <div class="games-grid reveal">
             <div class="game-card">
                 <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
                 <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">اللعبة فوق التقييم 👑</div></div>
@@ -224,45 +236,40 @@
         </div>
     </div>
 
-  <div class="socials-grid">
-    <a href="https://kick.com/S4leeh" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
-        <div>Kick</div>
-        <span>بثوث مباشرة</span>
-    </a>
+    <div class="socials-grid reveal">
+        <a href="https://kick.com/S4leeh" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
+            <div>Kick</div>
+            <span>بثوث مباشرة</span>
+        </a>
+        <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
+            <div>YouTube</div>
+            <span>المقاطع الرئيسية</span>
+        </a>
+        <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
+            <div>Discord</div>
+            <span>مجتمع صالح</span>
+        </a>
+        <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
+            <div>Instagram</div>
+            <span>يوميات وحصريات</span>
+        </a>
+        <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
+            <div>TikTok</div>
+            <span>أقوى اللقطات</span>
+        </a>
+        <a href="https://x.com/iS4leeh" class="social-item" target="_blank">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
+            <div>X / Twitter</div>
+            <span>أحدث الأخبار</span>
+        </a>
+    </div>
 
-    <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
-        <div>YouTube</div>
-        <span>المقاطع الرئيسية</span>
-    </a>
-
-    <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
-        <div>Discord</div>
-        <span>مجتمع صالح</span>
-    </a>
-
-    <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
-        <div>Instagram</div>
-        <span>يوميات وحصريات</span>
-    </a>
-
-    <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
-        <div>TikTok</div>
-        <span>أقوى اللقطات</span>
-    </a>
-
-    <a href="https://x.com/iS4leeh" class="social-item" target="_blank">
-        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
-        <div>X / Twitter</div>
-        <span>أحدث الأخبار</span>
-    </a>
-</div>
-
-    <section class="form-box">
+    <section class="form-box reveal">
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
@@ -287,23 +294,31 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        // نظام الإرسال المحدث والمضمون لضمان وصول الرسائل
+        // 1. نظام الظهور التدريجي (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        // 2. نظام الإرسال المحدث والمضمون
         const form = document.getElementById("suggestion-form");
         const container = document.getElementById("suggestion-container");
         const success = document.getElementById("success-message");
 
         form.onsubmit = function() {
-            // إظهار رسالة النجاح فوراً في الموقع
             container.style.display = "none";
             success.style.display = "block";
-            
-            // فتح صفحة التأكيد في نافذة مستقلة لضمان الإرسال 100%
             form.target = "_blank"; 
-            
-            // إعادة تعيين النموذج بعد ثانية
             setTimeout(() => { form.reset(); }, 1000);
         };
 
+        // 3. تحديث المشتركين والرحلة والـ Kick
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
