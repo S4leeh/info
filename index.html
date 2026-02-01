@@ -19,14 +19,9 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
-        /* حل مشكلة الإزاحة عند الضغط على الروابط لضمان عدم تغطية العناوين */
-        section, div[id] {
-            scroll-margin-top: 130px; 
-        }
+        section, div[id] { scroll-margin-top: 130px; }
 
         body {
             background-color: var(--bg-dark);
@@ -36,19 +31,10 @@
             overflow-x: hidden;
         }
 
-        /* تأثيرات الظهور التدريجي والمائل مثل موقع spitfire */
-        .reveal {
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.8s ease-out;
-        }
+        .reveal { opacity: 0; transform: translateX(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateX(0); }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* 1. شريط حالة البث المطور */
+        /* شريط حالة البث */
         .live-status-bar {
             width: 100%;
             background: rgba(5, 5, 5, 0.98);
@@ -67,7 +53,7 @@
         .status-text { color: #fff; font-weight: 900; font-size: 14px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* شريط التنقل العلوي المحسن (Glassmorphism) */
+        /* شريط التنقل */
         .nav-bar {
             width: fit-content;
             background: rgba(26, 26, 26, 0.8);
@@ -84,74 +70,38 @@
             border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .nav-link {
-            color: #eee;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            transition: 0.3s;
-            position: relative;
-            padding: 5px 2px;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--gold);
-            transition: 0.3s;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        .nav-link:hover {
-            color: var(--gold);
-        }
+        .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--gold); }
 
-        /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
-        .logo { 
-            width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); 
-            box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px;
-            animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden;
-        }
+        .logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px; animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
 
-        /* 3. الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
-        .stat-card {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 15px; padding: 25px; text-align: center; transition: 0.3s;
-        }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; text-align: center; transition: 0.3s; }
         .stat-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
-        /* 4. قسم اليوتيوب */
         .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
-        .yt-card { 
-            background: var(--card-bg); border-radius: 25px; overflow: hidden; 
-            border: 1px solid var(--border-color); text-decoration: none; display: block; transition: 0.3s;
-        }
+        .yt-card { background: var(--card-bg); border-radius: 25px; overflow: hidden; border: 1px solid var(--border-color); text-decoration: none; display: block; transition: 0.3s; position: relative; }
         .yt-card:hover { transform: scale(1.02); border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .yt-thumbnail { width: 100%; height: 350px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-        .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
         .play-btn::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 5px; }
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* 5. الأرشيف الاحترافي المطور بنظام التبويبات المتوهجة */
+        /* الأرشيف المطور */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: var(--card-bg); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; }
-        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; }
-        .tab-btn {
-            background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; 
-            border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s;
-        }
+        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
+        .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
         .tab-btn:hover { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
         .tab-btn.active { background: #000; border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); color: var(--gold); }
 
@@ -165,18 +115,14 @@
         .team-members { font-size: 13px; color: #ccc; }
 
         .episodes-selector { display: flex; justify-content: center; gap: 15px; margin: 30px 0; border-top: 1px solid #333; padding-top: 30px; flex-wrap: wrap; }
-        .ep-node {
-            width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; 
-            border-radius: 30px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888;
-        }
+        .ep-node { width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888; }
         .ep-node:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
         .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: scale(1.05); }
 
-        /* 6. المكتبة */
+        /* مكتبة الألعاب ونظام السطر الواحد */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; transition: 0.5s; }
         .game-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; }
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
         .game-img { width: 100%; height: 115px; object-fit: cover; }
@@ -184,18 +130,24 @@
         .game-name { font-size: 14px; font-weight: 700; color: #fff; }
         .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
 
-        /* 7. الحسابات */
-        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .social-item {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s;
+        /* الألعاب المخفية */
+        .hidden-games { display: none; }
+        .show-more-btn { 
+            display: block; margin: 30px auto 0; padding: 12px 35px; 
+            background: transparent; border: 2px solid var(--gold); 
+            color: var(--gold); border-radius: 50px; font-weight: 900; 
+            cursor: pointer; transition: 0.3s; 
         }
+        .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
+
+        /* الحسابات */
+        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
+        .social-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; }
         .social-item:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: translateY(-5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; }
 
-        /* 8. الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -204,11 +156,7 @@
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #fff; color: #000; }
 
-        #success-message { 
-            display: none; text-align: center; padding: 30px; 
-            background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); 
-            border-radius: 15px; color: var(--gold); font-weight: 900;
-        }
+        #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
         .honey { display: none; }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.2); margin-top: 20px; }
@@ -220,6 +168,7 @@
             .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
+            .yt-thumbnail { height: 250px; }
         }
     </style>
 </head>
@@ -248,26 +197,15 @@
     </header>
 
     <section class="stats-grid reveal">
-        <div class="stat-card">
-            <div class="stat-value" id="exp">...</div>
-            <div class="stat-label">رحلة صناعة المحتوى</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="sub-count">...</div>
-            <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="live-count">9</div>
-            <div class="stat-label">عدد البثوث في 2026</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
+        <div class="stat-card"><div class="stat-value" id="sub-count">...</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
+        <div class="stat-card"><div class="stat-value" id="live-count">9</div><div class="stat-label">عدد البثوث في 2026</div></div>
     </section>
 
     <section id="last-video" class="content-section reveal">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
         <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" class="yt-card" target="_blank">
-            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')">
-                <div class="play-btn"></div>
-            </div>
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
             <div class="yt-details"><h2>تحدي الهروب من الغرفة 🧩: هل بنقدر نحلها؟</h2></div>
         </a>
     </section>
@@ -276,67 +214,48 @@
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📂 الأرشيف</h2>
         <div class="archive-wrapper">
             <div class="archive-tabs">
-                <button class="tab-btn active" onclick="showArchive('events')">أرشيف الفعاليات</button>
-                <button class="tab-btn" onclick="showArchive('highlights')">البثوث المميزة</button>
+                <button id="events-tab" class="tab-btn" onclick="toggleMainArchive('events')">🏆 أرشيف الفعاليات</button>
+                <button id="highlights-tab" class="tab-btn" onclick="toggleMainArchive('highlights')">🎬 البثوث المميزة</button>
             </div>
 
-            <div id="events-body" class="archive-body active">
-                <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🏆 ثلاثيّات تحداني</h3>
-                
-                <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
-                    <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
-                    <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بالمركز الأول بجائزة مالية قدرها 150$ توزع على الفريق، بالإضافة إلى 15 لعبة مجانية وحصرية داخل تحدّاني.</p>
-                </div>
-
-                <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
-                <div class="team-grid">
-                    <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
-                    <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
-                    <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
-                    <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
-                    <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
-                    <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
-                    <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
-                    <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
-                </div>
-
-                <div class="episodes-selector">
-                    <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
-                    <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
-                    <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
-                    <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
-                </div>
-
-                <div id="ep-display">
-                    <div id="ep-1" class="archive-body" style="text-align:center;">
-                        <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card">
-                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
-                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div>
-                        </a>
+            <div id="archive-content-area" class="archive-main-content">
+                <div id="events-body" class="archive-body">
+                    <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">ثلاثيّات تحداني</h3>
+                    <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
+                        <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
+                        <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
                     </div>
-                    <div id="ep-2" class="archive-body" style="text-align:center;">
-                        <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card">
-                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div>
-                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div>
-                        </a>
+
+                    <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
+                    <div class="team-grid">
+                        <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                        <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
+                        <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
+                        <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                        <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
+                        <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
+                        <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
+                        <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
                     </div>
-                    <div id="ep-3" class="archive-body" style="text-align:center;">
-                        <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card">
-                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div>
-                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div>
-                        </a>
+
+                    <div class="episodes-selector">
+                        <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
+                        <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
+                        <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
+                        <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
                     </div>
-                    <div id="ep-4" class="archive-body" style="text-align:center;">
-                        <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card">
-                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
-                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div>
-                        </a>
+
+                    <div id="ep-display">
+                        <div id="ep-1" class="archive-body"><a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div></a></div>
+                        <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div></a></div>
+                        <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div></a></div>
+                        <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div></a></div>
                     </div>
                 </div>
-            </div>
 
-            <div id="highlights-body" class="archive-body">
-                <p style="text-align:center; padding:40px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+                <div id="highlights-body" class="archive-body">
+                    <p style="text-align:center; padding:40px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+                </div>
             </div>
         </div>
     </section>
@@ -345,12 +264,7 @@
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         
         <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img">
-                <div class="game-info"><div class="game-name">Fateel - فتيل</div></div>
-            </div>
-        </div>
+        <div class="games-grid reveal"><div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div></div>
 
         <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
         <div class="games-grid reveal">
@@ -361,62 +275,28 @@
 
         <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
         <div class="games-grid reveal">
-            <div class="game-card">
-                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">اللعبة فوق التقييم 👑</div></div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Viewfinder</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div>
-                    <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Hytale</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐⭐ ✫ ✫ </div>
-                    <div class="game-note">تقييم الشات: ⭐⭐⭐ ✫ ✫ </div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Candleman The Complete Journey</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐⭐⭐✫</div>
-                    <div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Fever Meme</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐✫ ✫ ✫</div>
-                    <div class="game-note">تقييم الشات: ( لم يتم التقييم )</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Superliminal</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐⭐⭐✫</div>
-                    <div class="game-note">تقييم الشات: ( لم يتم التقييم )</div>
-                </div>
+            <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
+            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div><div class="game-note">الشات: ⭐⭐⭐✫✫</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
+            
+            <div id="more-games" class="hidden-games">
+                <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
+                <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
             </div>
         </div>
+        <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد الألعاب</button>
     </div>
 
     <div id="my-socials" class="library-container">
-        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل الاجتماعي</h2>
+        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div></a>
         </div>
     </div>
 
@@ -426,14 +306,7 @@
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
                 <input type="text" name="_gotcha" class="honey">
                 <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>نوع الاقتراح</label>
-                    <select name="type">
-                        <option value="لعبة جديدة">لعبة جديدة</option>
-                        <option value="فكرة مقطع">فكرة مقطع</option>
-                        <option value="فكرة بث">فكرة بث</option>
-                        <option value="تحسين للموقع">تحسين للموقع</option>
-                    </select>
-                </div>
+                <div class="form-group"><label>نوع الاقتراح</label><select name="type"><option value="لعبة جديدة">لعبة جديدة</option><option value="فكرة مقطع">فكرة مقطع</option><option value="فكرة بث">فكرة بث</option><option value="تحسين للموقع">تحسين للموقع</option></select></div>
                 <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
@@ -447,15 +320,26 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* 1. وظيفة تبديل الأرشيف (الفعاليات / البثوث) */
-        function showArchive(type) {
-            document.querySelectorAll('.archive-body').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(type + '-body').classList.add('active');
-            event.target.classList.add('active');
+        /* نظام الأرشيف المخفي */
+        function toggleMainArchive(type) {
+            const area = document.getElementById('archive-content-area');
+            const bodies = document.querySelectorAll('.archive-body');
+            const tabs = document.querySelectorAll('.tab-btn');
+            
+            // إذا كان القسم مفتوحاً ونفس الزر ضغطنا عليه، نغلقه
+            if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
+                area.style.display = "none";
+                tabs.forEach(t => t.classList.remove('active'));
+            } else {
+                area.style.display = "block";
+                bodies.forEach(b => b.classList.remove('active'));
+                tabs.forEach(t => t.classList.remove('active'));
+                document.getElementById(type + '-body').classList.add('active');
+                document.getElementById(type + '-tab').classList.add('active');
+                if(type === 'events') showEp('ep-1', document.querySelector('.ep-node'));
+            }
         }
 
-        /* 2. وظيفة عرض الحلقات داخل الأرشيف */
         function showEp(epId, node) {
             document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
@@ -463,18 +347,27 @@
             node.classList.add('active');
         }
 
-        /* 3. تأثير الظهور التدريجي عند التمرير (Reveal Effect) */
+        /* نظام عرض المزيد للألعاب */
+        function toggleGames() {
+            const hiddenArea = document.getElementById('more-games');
+            const btn = document.getElementById('show-more-btn');
+            if (hiddenArea.style.display === "grid") {
+                hiddenArea.style.display = "none";
+                btn.innerText = "عرض المزيد الألعاب";
+            } else {
+                hiddenArea.style.display = "grid";
+                hiddenArea.style.gridTemplateColumns = "repeat(auto-fill, minmax(180px, 1fr))";
+                hiddenArea.style.gap = "20px";
+                btn.innerText = "إخفاء الألعاب";
+            }
+        }
+
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         revealElements.forEach(el => observer.observe(el));
 
-        /* 4. نظام إرسال الاقتراحات المضمون */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
             document.getElementById("suggestion-container").style.display = "none";
@@ -483,17 +376,14 @@
             setTimeout(() => { form.reset(); }, 1000);
         };
 
-        /* 5. جلب عدد مشتركين اليوتيوب من API */
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
                 const data = await res.json();
-                const count = data.items[0].statistics.subscriberCount;
-                document.getElementById('sub-count').innerText = Number(count).toLocaleString();
+                document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
 
-        /* 6. تحديث إحصائيات رحلة صناعة المحتوى */
         function updateStats() {
             const startExp = new Date('2022-06-02');
             const now = new Date();
@@ -503,33 +393,18 @@
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
 
-        /* 7. فحص حالة البث على منصة Kick */
         async function checkKick() {
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
             try {
                 const res = await fetch(`https://corsproxy.io/?https://kick.com/api/v1/channels/S4leeh`);
                 const data = await res.json();
-                if (data.livestream) { 
-                    container.classList.add('is-live'); 
-                    txt.innerText = "صالح فاتح بث مباشر الآن! اضغط للمشاهدة 🔥"; 
-                } else { 
-                    container.classList.remove('is-live'); 
-                    txt.innerText = "البث المباشر مغلق حالياً"; 
-                }
+                if (data.livestream) { container.classList.add('is-live'); txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
+                else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
 
-        /* 8. تشغيل الوظائف عند تحميل الصفحة */
-        window.onload = () => { 
-            updateStats(); 
-            updateYouTubeSubs(); 
-            checkKick(); 
-            setInterval(checkKick, 60000); // تحديث حالة البث كل دقيقة
-            // تفعيل أول حلقة تلقائياً في الأرشيف
-            const firstEpNode = document.querySelector('.ep-node');
-            if(firstEpNode) showEp('ep-1', firstEpNode);
-        };
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); };
     </script>
 </body>
 </html>
