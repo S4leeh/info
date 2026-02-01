@@ -53,7 +53,7 @@
         .status-text { color: #fff; font-weight: 900; font-size: 14px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* شريط التنقل */
+        /* شريط التنقل العلوي */
         .nav-bar {
             width: fit-content;
             background: rgba(26, 26, 26, 0.8);
@@ -75,18 +75,21 @@
         .nav-link:hover::after { width: 100%; }
         .nav-link:hover { color: var(--gold); }
 
+        /* الهيدر */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px; animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
 
+        /* الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
         .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; text-align: center; transition: 0.3s; }
         .stat-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
+        /* اليوتيوب */
         .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
         .yt-card { background: var(--card-bg); border-radius: 25px; overflow: hidden; border: 1px solid var(--border-color); text-decoration: none; display: block; transition: 0.3s; position: relative; }
         .yt-card:hover { transform: scale(1.02); border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
@@ -96,18 +99,17 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* الأرشيف المطور */
+        /* أرشيف الفعاليات المطور */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: var(--card-bg); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; }
         .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
         .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
-        .tab-btn:hover { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
-        .tab-btn.active { background: #000; border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); color: var(--gold); }
-
-        .archive-body { display: none; animation: fadeIn 0.5s ease-in; }
-        .archive-body.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
+        
+        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
+        .tournament-btn { width: 100%; padding: 20px; background: #0b0b0b; border: 1px solid #333; border-radius: 15px; color: var(--gold); font-weight: 900; font-size: 18px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .tournament-btn:hover { border-color: var(--gold); background: #111; }
+        .tournament-details { display: none; animation: fadeIn 0.5s ease-in; }
 
         .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
         .team-card { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border-right: 4px solid var(--gold); }
@@ -116,28 +118,30 @@
 
         .episodes-selector { display: flex; justify-content: center; gap: 15px; margin: 30px 0; border-top: 1px solid #333; padding-top: 30px; flex-wrap: wrap; }
         .ep-node { width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888; }
-        .ep-node:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
-        .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: scale(1.05); }
+        .ep-node:hover, .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); transform: scale(1.05); }
 
-        /* مكتبة الألعاب ونظام السطر الواحد */
+        /* عرض الحلقة بحجم ضخم */
+        .large-ep-card { width: 100%; max-width: 900px; margin: 0 auto; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; }
+        .large-ep-thumbnail { width: 100%; height: 500px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
+        .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
+
+        .archive-body { display: none; }
+        .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* مكتبة الألعاب وتصحيح التضخم */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; transition: 0.5s; }
-        .game-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; width: 100%; }
+        .game-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 100%; }
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-        .game-img { width: 100%; height: 115px; object-fit: cover; }
+        .game-img { width: 100%; height: 115px; object-fit: cover; display: block; }
         .game-info { padding: 12px; text-align: center; }
         .game-name { font-size: 14px; font-weight: 700; color: #fff; }
         .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
 
-        /* الألعاب المخفية */
-        .hidden-games { display: none; }
-        .show-more-btn { 
-            display: block; margin: 30px auto 0; padding: 12px 35px; 
-            background: transparent; border: 2px solid var(--gold); 
-            color: var(--gold); border-radius: 50px; font-weight: 900; 
-            cursor: pointer; transition: 0.3s; 
-        }
+        .hidden-games { display: none; width: 100%; margin-top: 20px; }
+        .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
 
         /* الحسابات */
@@ -146,8 +150,8 @@
         .social-item:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: translateY(-5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
-        .social-item span { color: #666; font-size: 10px; display: block; }
 
+        /* الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -168,7 +172,7 @@
             .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
-            .yt-thumbnail { height: 250px; }
+            .large-ep-thumbnail { height: 250px; }
         }
     </style>
 </head>
@@ -219,37 +223,65 @@
             </div>
 
             <div id="archive-content-area" class="archive-main-content">
+                
                 <div id="events-body" class="archive-body">
-                    <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">ثلاثيّات تحداني</h3>
-                    <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
-                        <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
-                        <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
-                    </div>
+                    
+                    <button class="tournament-btn" onclick="toggleTournament('tahadani-details')">
+                        <span>🏆 ثلاثيّات تحداني</span>
+                        <span id="arrow-tahadani">▼</span>
+                    </button>
 
-                    <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
-                    <div class="team-grid">
-                        <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
-                        <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
-                        <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
-                        <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
-                        <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
-                        <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
-                        <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
-                        <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
-                    </div>
+                    <div id="tahadani-details" class="tournament-details">
+                        <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:30px;">
+                            <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
+                            <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
+                        </div>
 
-                    <div class="episodes-selector">
-                        <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
-                        <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
-                        <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
-                        <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
-                    </div>
+                        <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
+                        <div class="team-grid">
+                            <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
+                            <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
+                            <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
+                        </div>
 
-                    <div id="ep-display">
-                        <div id="ep-1" class="archive-body"><a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div></a></div>
-                        <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div></a></div>
-                        <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div></a></div>
-                        <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div></a></div>
+                        <div class="episodes-selector">
+                            <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
+                            <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
+                            <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
+                            <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
+                        </div>
+
+                        <div id="ep-display">
+                            <div id="ep-1" class="archive-body active">
+                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div>
+                                </a>
+                            </div>
+                            <div id="ep-2" class="archive-body">
+                                <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div>
+                                </a>
+                            </div>
+                            <div id="ep-3" class="archive-body">
+                                <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div>
+                                </a>
+                            </div>
+                            <div id="ep-4" class="archive-body">
+                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -276,13 +308,15 @@
         <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
         <div class="games-grid reveal">
             <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
-            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div><div class="game-note">الشات: ⭐⭐⭐✫✫</div></div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div></div></div>
+            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div></div></div>
             
             <div id="more-games" class="hidden-games">
-                <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
-                <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
+                <div class="games-grid" style="margin-top:20px;">
+                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div></div></div>
+                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div></div></div>
+                </div>
             </div>
         </div>
         <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد الألعاب</button>
@@ -320,13 +354,12 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* نظام الأرشيف المخفي */
+        /* نظام الأرشيف المطور */
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
             const tabs = document.querySelectorAll('.tab-btn');
             
-            // إذا كان القسم مفتوحاً ونفس الزر ضغطنا عليه، نغلقه
             if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
                 area.style.display = "none";
                 tabs.forEach(t => t.classList.remove('active'));
@@ -336,8 +369,15 @@
                 tabs.forEach(t => t.classList.remove('active'));
                 document.getElementById(type + '-body').classList.add('active');
                 document.getElementById(type + '-tab').classList.add('active');
-                if(type === 'events') showEp('ep-1', document.querySelector('.ep-node'));
             }
+        }
+
+        function toggleTournament(id) {
+            const content = document.getElementById(id);
+            const arrow = document.getElementById('arrow-tahadani');
+            const isVisible = content.style.display === "block";
+            content.style.display = isVisible ? "none" : "block";
+            arrow.innerText = isVisible ? "▼" : "▲";
         }
 
         function showEp(epId, node) {
@@ -347,17 +387,15 @@
             node.classList.add('active');
         }
 
-        /* نظام عرض المزيد للألعاب */
+        /* عرض المزيد للألعاب مع تصحيح CSS */
         function toggleGames() {
             const hiddenArea = document.getElementById('more-games');
             const btn = document.getElementById('show-more-btn');
-            if (hiddenArea.style.display === "grid") {
+            if (hiddenArea.style.display === "block") {
                 hiddenArea.style.display = "none";
                 btn.innerText = "عرض المزيد الألعاب";
             } else {
-                hiddenArea.style.display = "grid";
-                hiddenArea.style.gridTemplateColumns = "repeat(auto-fill, minmax(180px, 1fr))";
-                hiddenArea.style.gap = "20px";
+                hiddenArea.style.display = "block";
                 btn.innerText = "إخفاء الألعاب";
             }
         }
