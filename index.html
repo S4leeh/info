@@ -104,8 +104,8 @@
         .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
         .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
 
-        .tournament-details { display: none; animation: fadeIn 0.5s ease-in; }
-        .tournament-details.active { display: block; }
+        .tournament-details { display: none; }
+        .tournament-details.active { display: block; animation: fadeIn 0.5s ease-in; }
         .archive-body { display: none; }
         .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -130,7 +130,7 @@
         
         .games-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); /* تصغير متوازن للبطاقة */
+            grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); /* مقاس ناعم ومتوازن */
             gap: 15px; 
             width: 100%;
         }
@@ -141,16 +141,16 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
-            height: 245px; /* ارتفاع ثابت ناعم */
+            height: 240px; /* ارتفاع ثابت متناسق */
             display: flex;
             flex-direction: column;
         }
         
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
         .game-img { width: 100%; height: 95px; object-fit: cover; flex-shrink: 0; }
-        .game-info { padding: 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+        .game-info { padding: 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
         .game-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
-        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.2; }
+        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.3; }
 
         .hidden-games-container { display: none; width: 100%; margin-top: 15px; }
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
@@ -226,7 +226,7 @@
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
         <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" class="yt-card" target="_blank">
             <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
-            <div class="yt-details"><h2>تحدي الهروب من الغرفة 🧩: هل بنقدر نحلها؟</h2></div>
+            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي الكبير وتحديد البطل</h2></div>
         </a>
     </section>
 
@@ -270,16 +270,16 @@
                         </div>
 
                         <div id="ep-display">
-                            <div id="ep-1" class="archive-body">
+                            <div id="ep-1" class="archive-body active">
                                 <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
                                     <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: بداية الانطلاقة والحماس</h2></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div>
                                 </a>
                             </div>
                             <div id="ep-2" class="archive-body">
                                 <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card">
                                     <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: تحدي البقاء والمواجهات الصعبة</h2></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div>
                                 </a>
                             </div>
                             <div id="ep-3" class="archive-body">
@@ -356,7 +356,7 @@
                         <div class="game-info">
                             <div class="game-name">Fever Meme</div>
                             <div class="game-note">صالح: ⭐⭐✫✫✫</div>
-                            <div class="game-note">الشات: ( لم يتم التقييم )</div>
+                            <div class="game-note">الشات: ( لم يتم )</div>
                         </div>
                     </div>
                     <div class="game-card">
@@ -364,24 +364,24 @@
                         <div class="game-info">
                             <div class="game-name">Superliminal</div>
                             <div class="game-note">صالح: ⭐⭐⭐⭐✫</div>
-                            <div class="game-note">الشات: ( لم يتم التقييم )</div>
+                            <div class="game-note">الشات: ( لم يتم )</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد من الألعاب</button>
+        <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد الألعاب</button>
     </div>
 
     <div id="my-socials" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-            <a href="https://x.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -428,7 +428,6 @@
             const btn = document.getElementById('tahadani-main-btn');
             content.classList.toggle('active');
             btn.classList.toggle('active');
-            if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
         }
 
         function showEp(epId, node) {
