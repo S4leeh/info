@@ -133,6 +133,19 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
+        /* تنسيقات الأرشيف الجديدة */
+        .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
+        .archive-box { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); padding: 25px; margin-bottom: 20px; }
+        .archive-item { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
+        .archive-trigger { cursor: pointer; color: var(--gold); font-weight: 800; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .archive-trigger:hover { text-shadow: 0 0 10px var(--gold-glow); }
+        .archive-content { display: none; padding: 20px 10px; color: #ccc; line-height: 1.8; }
+        .team-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .team-item { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; border-right: 3px solid var(--gold); font-size: 14px; }
+        .episode-btn { background: #0b0b0b; border: 1px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; display: block; width: 100%; text-align: right; color: #fff; font-weight: 700; }
+        .episode-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .episode-content { display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 15px; }
+
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
@@ -175,6 +188,7 @@
         @media (max-width: 900px) { 
             .socials-grid { grid-template-columns: repeat(3, 1fr); } 
             .stats-grid { grid-template-columns: 1fr; } 
+            .team-list { grid-template-columns: 1fr; }
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
         }
@@ -192,6 +206,7 @@
     <nav class="nav-bar">
         <a href="#top-page" class="nav-link">أعلى الصفحة</a>
         <a href="#last-video" class="nav-link">آخر مقطع</a>
+        <a href="#archive-section" class="nav-link">الأرشيف</a>
         <a href="#games-library" class="nav-link">الألعاب</a>
         <a href="#my-socials" class="nav-link">حساباتي</a>
         <a href="#suggestions" class="nav-link">الاقتراحات</a>
@@ -226,6 +241,80 @@
             </div>
             <div class="yt-details"><h2>تحدي الهروب من الغرفة 🧩: هل بنقدر نحلها؟</h2></div>
         </a>
+    </section>
+
+    <section id="archive-section" class="archive-container reveal">
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📂 أرشيف صالح</h2>
+        
+        <div class="archive-box">
+            <div class="archive-item">
+                <div class="archive-trigger" onclick="toggleArchive('event-archive')">
+                    <span>🏆 أرشيف الفعاليات (ثلاثيّات تحداني)</span>
+                    <span>▼</span>
+                </div>
+                <div id="event-archive" class="archive-content">
+                    <p style="color:var(--gold); font-weight:800;">💡 فكرة البطولة:</p>
+                    <p>بطولة تنافسية قائمة على التحديات والمهارات بين 8 فرق، حيث يضم كل فريق 3 صناع محتوى يتنافسون في عوالم مختلفة للوصول إلى اللقب.</p>
+                    
+                    <p style="color:var(--gold); font-weight:800; margin-top:20px;">👥 المشاركون (24 مشارك):</p>
+                    <div class="team-list">
+                        <div class="team-item"><b>الفريق 1:</b> Spitfire57, iDexter89, imRashly</div>
+                        <div class="team-item"><b>الفريق 2:</b> PYWQ, BDR1, 7og9</div>
+                        <div class="team-item"><b>الفريق 3:</b> IIKhaled77, Raheeb, Mohammd</div>
+                        <div class="team-item"><b>الفريق 4:</b> HIR0, MEDO_DV, Mr8asm</div>
+                        <div class="team-item"><b>الفريق 5:</b> S3eedxx, Q7sa, marions77</div>
+                        <div class="team-item"><b>الفريق 6:</b> ex21xe, KhalledHD, MK119</div>
+                        <div class="team-item"><b>الفريق 7:</b> LNXX, 3Yazan, llYousf</div>
+                        <div class="team-item"><b>الفريق 8:</b> w9k1, 7ader, ml3bdalah77</div>
+                    </div>
+
+                    <p style="color:var(--gold); font-weight:800; margin-top:20px;">🎬 الحلقات:</p>
+                    <div style="margin-top:10px;">
+                        <button class="episode-btn" onclick="toggleEpisode('ep1')">الحلقة الأولى</button>
+                        <div id="ep1" class="episode-content">
+                            <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card">
+                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
+                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: بداية الانطلاقة والحماس</h2></div>
+                            </a>
+                        </div>
+
+                        <button class="episode-btn" onclick="toggleEpisode('ep2')">الحلقة الثانية</button>
+                        <div id="ep2" class="episode-content">
+                            <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card">
+                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div>
+                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: تحدي البقاء والمواجهات الصعبة</h2></div>
+                            </a>
+                        </div>
+
+                        <button class="episode-btn" onclick="toggleEpisode('ep3')">الحلقة الثالثة</button>
+                        <div id="ep3" class="episode-content">
+                            <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card">
+                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div>
+                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية</h2></div>
+                            </a>
+                        </div>
+
+                        <button class="episode-btn" onclick="toggleEpisode('ep4')">الحلقة الرابعة</button>
+                        <div id="ep4" class="episode-content">
+                            <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card">
+                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
+                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي الكبير وتحديد البطل</h2></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="archive-item">
+                <div class="archive-trigger" onclick="toggleArchive('live-archive')">
+                    <span>🎬 أرشيف البثوث المميزة</span>
+                    <span>▼</span>
+                </div>
+                <div id="live-archive" class="archive-content">
+                    <p style="text-align:center; padding:20px;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <div id="games-library" class="library-container">
@@ -355,6 +444,21 @@
     <script>
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+
+        // وظائف الأرشيف
+        function toggleArchive(id) {
+            const content = document.getElementById(id);
+            const isVisible = content.style.display === "block";
+            content.style.display = isVisible ? "none" : "block";
+        }
+
+        function toggleEpisode(id) {
+            const content = document.getElementById(id);
+            const isVisible = content.style.display === "block";
+            // إغلاق أي حلقة مفتوحة أخرى (اختياري)
+            document.querySelectorAll('.episode-content').forEach(el => el.style.display = 'none');
+            content.style.display = isVisible ? "none" : "block";
+        }
 
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
