@@ -23,8 +23,9 @@
             scroll-behavior: smooth;
         }
 
+        /* حل مشكلة الإزاحة عند الضغط على الروابط لضمان عدم تغطية العناوين */
         section, div[id] {
-            scroll-margin-top: 120px; 
+            scroll-margin-top: 130px; 
         }
 
         body {
@@ -35,6 +36,7 @@
             overflow-x: hidden;
         }
 
+        /* تأثيرات الظهور التدريجي والمائل مثل موقع spitfire */
         .reveal {
             opacity: 0;
             transform: translateX(30px);
@@ -46,6 +48,7 @@
             transform: translateX(0);
         }
 
+        /* 1. شريط حالة البث المطور */
         .live-status-bar {
             width: 100%;
             background: rgba(5, 5, 5, 0.98);
@@ -64,6 +67,7 @@
         .status-text { color: #fff; font-weight: 900; font-size: 14px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
+        /* شريط التنقل العلوي المحسن (Glassmorphism) */
         .nav-bar {
             width: fit-content;
             background: rgba(26, 26, 26, 0.8);
@@ -99,9 +103,14 @@
             background-color: var(--gold);
             transition: 0.3s;
         }
-        .nav-link:hover::after { width: 100%; }
-        .nav-link:hover { color: var(--gold); }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link:hover {
+            color: var(--gold);
+        }
 
+        /* 2. الهيدر واللوقو المتحرك */
         header { text-align: center; padding: 60px 20px 40px; }
         .logo { 
             width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); 
@@ -112,6 +121,7 @@
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
 
+        /* 3. الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
         .stat-card {
             background: var(--card-bg); border: 1px solid var(--border-color);
@@ -121,6 +131,7 @@
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
+        /* 4. قسم اليوتيوب */
         .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
         .yt-card { 
             background: var(--card-bg); border-radius: 25px; overflow: hidden; 
@@ -133,19 +144,36 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* تنسيقات الأرشيف الجديدة */
+        /* 5. الأرشيف الاحترافي المطور بنظام التبويبات المتوهجة */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
-        .archive-box { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); padding: 25px; margin-bottom: 20px; }
-        .archive-item { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .archive-trigger { cursor: pointer; color: var(--gold); font-weight: 800; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
-        .archive-trigger:hover { text-shadow: 0 0 10px var(--gold-glow); }
-        .archive-content { display: none; padding: 20px 10px; color: #ccc; line-height: 1.8; }
-        .team-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-        .team-item { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; border-right: 3px solid var(--gold); font-size: 14px; }
-        .episode-btn { background: #0b0b0b; border: 1px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; display: block; width: 100%; text-align: right; color: #fff; font-weight: 700; }
-        .episode-btn:hover { border-color: var(--gold); color: var(--gold); }
-        .episode-content { display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 15px; }
+        .archive-wrapper { background: var(--card-bg); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; }
+        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; }
+        .tab-btn {
+            background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; 
+            border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s;
+        }
+        .tab-btn:hover { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
+        .tab-btn.active { background: #000; border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); color: var(--gold); }
 
+        .archive-body { display: none; animation: fadeIn 0.5s ease-in; }
+        .archive-body.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+        .team-card { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border-right: 4px solid var(--gold); }
+        .team-title { font-weight: 900; font-size: 14px; color: var(--gold); margin-bottom: 5px; }
+        .team-members { font-size: 13px; color: #ccc; }
+
+        .episodes-selector { display: flex; justify-content: center; gap: 15px; margin: 30px 0; border-top: 1px solid #333; padding-top: 30px; flex-wrap: wrap; }
+        .ep-node {
+            width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; 
+            border-radius: 30px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888;
+        }
+        .ep-node:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
+        .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: scale(1.05); }
+
+        /* 6. المكتبة */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
@@ -156,6 +184,7 @@
         .game-name { font-size: 14px; font-weight: 700; color: #fff; }
         .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
 
+        /* 7. الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item {
             background: var(--card-bg); border: 1px solid var(--border-color);
@@ -166,6 +195,7 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; }
 
+        /* 8. الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -188,7 +218,6 @@
         @media (max-width: 900px) { 
             .socials-grid { grid-template-columns: repeat(3, 1fr); } 
             .stats-grid { grid-template-columns: 1fr; } 
-            .team-list { grid-template-columns: 1fr; }
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
         }
@@ -244,75 +273,70 @@
     </section>
 
     <section id="archive-section" class="archive-container reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📂 أرشيف صالح</h2>
-        
-        <div class="archive-box">
-            <div class="archive-item">
-                <div class="archive-trigger" onclick="toggleArchive('event-archive')">
-                    <span>🏆 أرشيف الفعاليات (ثلاثيّات تحداني)</span>
-                    <span>▼</span>
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📂 الأرشيف</h2>
+        <div class="archive-wrapper">
+            <div class="archive-tabs">
+                <button class="tab-btn active" onclick="showArchive('events')">أرشيف الفعاليات</button>
+                <button class="tab-btn" onclick="showArchive('highlights')">البثوث المميزة</button>
+            </div>
+
+            <div id="events-body" class="archive-body active">
+                <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🏆 ثلاثيّات تحداني</h3>
+                
+                <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
+                    <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
+                    <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بالمركز الأول بجائزة مالية قدرها 150$ توزع على الفريق، بالإضافة إلى 15 لعبة مجانية وحصرية داخل تحدّاني.</p>
                 </div>
-                <div id="event-archive" class="archive-content">
-                    <p style="color:var(--gold); font-weight:800;">💡 فكرة البطولة:</p>
-                    <p>بطولة تنافسية قائمة على التحديات والمهارات بين 8 فرق، حيث يضم كل فريق 3 صناع محتوى يتنافسون في عوالم مختلفة للوصول إلى اللقب.</p>
-                    
-                    <p style="color:var(--gold); font-weight:800; margin-top:20px;">👥 المشاركون (24 مشارك):</p>
-                    <div class="team-list">
-                        <div class="team-item"><b>الفريق 1:</b> Spitfire57, iDexter89, imRashly</div>
-                        <div class="team-item"><b>الفريق 2:</b> PYWQ, BDR1, 7og9</div>
-                        <div class="team-item"><b>الفريق 3:</b> IIKhaled77, Raheeb, Mohammd</div>
-                        <div class="team-item"><b>الفريق 4:</b> HIR0, MEDO_DV, Mr8asm</div>
-                        <div class="team-item"><b>الفريق 5:</b> S3eedxx, Q7sa, marions77</div>
-                        <div class="team-item"><b>الفريق 6:</b> ex21xe, KhalledHD, MK119</div>
-                        <div class="team-item"><b>الفريق 7:</b> LNXX, 3Yazan, llYousf</div>
-                        <div class="team-item"><b>الفريق 8:</b> w9k1, 7ader, ml3bdalah77</div>
+
+                <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
+                <div class="team-grid">
+                    <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                    <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
+                    <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
+                    <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                    <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
+                    <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
+                    <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
+                    <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
+                </div>
+
+                <div class="episodes-selector">
+                    <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
+                    <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
+                    <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
+                    <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
+                </div>
+
+                <div id="ep-display">
+                    <div id="ep-1" class="archive-body" style="text-align:center;">
+                        <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card">
+                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
+                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div>
+                        </a>
                     </div>
-
-                    <p style="color:var(--gold); font-weight:800; margin-top:20px;">🎬 الحلقات:</p>
-                    <div style="margin-top:10px;">
-                        <button class="episode-btn" onclick="toggleEpisode('ep1')">الحلقة الأولى</button>
-                        <div id="ep1" class="episode-content">
-                            <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card">
-                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
-                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: بداية الانطلاقة والحماس</h2></div>
-                            </a>
-                        </div>
-
-                        <button class="episode-btn" onclick="toggleEpisode('ep2')">الحلقة الثانية</button>
-                        <div id="ep2" class="episode-content">
-                            <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card">
-                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div>
-                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: تحدي البقاء والمواجهات الصعبة</h2></div>
-                            </a>
-                        </div>
-
-                        <button class="episode-btn" onclick="toggleEpisode('ep3')">الحلقة الثالثة</button>
-                        <div id="ep3" class="episode-content">
-                            <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card">
-                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div>
-                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية</h2></div>
-                            </a>
-                        </div>
-
-                        <button class="episode-btn" onclick="toggleEpisode('ep4')">الحلقة الرابعة</button>
-                        <div id="ep4" class="episode-content">
-                            <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card">
-                                <div class="yt-thumbnail" style="height:150px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
-                                <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي الكبير وتحديد البطل</h2></div>
-                            </a>
-                        </div>
+                    <div id="ep-2" class="archive-body" style="text-align:center;">
+                        <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card">
+                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div>
+                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div>
+                        </a>
+                    </div>
+                    <div id="ep-3" class="archive-body" style="text-align:center;">
+                        <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card">
+                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div>
+                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div>
+                        </a>
+                    </div>
+                    <div id="ep-4" class="archive-body" style="text-align:center;">
+                        <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card">
+                            <div class="yt-thumbnail" style="height:200px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
+                            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div>
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div class="archive-item">
-                <div class="archive-trigger" onclick="toggleArchive('live-archive')">
-                    <span>🎬 أرشيف البثوث المميزة</span>
-                    <span>▼</span>
-                </div>
-                <div id="live-archive" class="archive-content">
-                    <p style="text-align:center; padding:20px;">قريباً... يتم العمل على الأرشيف 🏗️</p>
-                </div>
+            <div id="highlights-body" class="archive-body">
+                <p style="text-align:center; padding:40px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
             </div>
         </div>
     </section>
@@ -387,36 +411,12 @@
     <div id="my-socials" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل الاجتماعي</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
-                <div>Kick</div>
-                <span>بثوث مباشرة</span>
-            </a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
-                <div>YouTube</div>
-                <span>المقاطع الرئيسية</span>
-            </a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
-                <div>Discord</div>
-                <span>مجتمع صالح</span>
-            </a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
-                <div>Instagram</div>
-                <span>يوميات وحصريات</span>
-            </a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
-                <div>TikTok</div>
-                <span>أقوى اللقطات</span>
-            </a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
-                <div>X / Twitter</div>
-                <span>أحدث الأخبار</span>
-            </a>
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -426,12 +426,14 @@
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
                 <input type="text" name="_gotcha" class="honey">
                 <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>نوع الاقتراح</label><select name="type">
-                    <option value="لعبة جديدة">لعبة جديدة</option>
-                    <option value="فكرة مقطع">فكرة مقطع</option>
-                    <option value="فكرة بث">فكرة بث</option>
-                    <option value="تحسين للموقع">تحسين للموقع</option>
-                </select></div>
+                <div class="form-group"><label>نوع الاقتراح</label>
+                    <select name="type">
+                        <option value="لعبة جديدة">لعبة جديدة</option>
+                        <option value="فكرة مقطع">فكرة مقطع</option>
+                        <option value="فكرة بث">فكرة بث</option>
+                        <option value="تحسين للموقع">تحسين للموقع</option>
+                    </select>
+                </div>
                 <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
@@ -445,21 +447,23 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        // وظائف الأرشيف
-        function toggleArchive(id) {
-            const content = document.getElementById(id);
-            const isVisible = content.style.display === "block";
-            content.style.display = isVisible ? "none" : "block";
+        /* 1. وظيفة تبديل الأرشيف (الفعاليات / البثوث) */
+        function showArchive(type) {
+            document.querySelectorAll('.archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(type + '-body').classList.add('active');
+            event.target.classList.add('active');
         }
 
-        function toggleEpisode(id) {
-            const content = document.getElementById(id);
-            const isVisible = content.style.display === "block";
-            // إغلاق أي حلقة مفتوحة أخرى (اختياري)
-            document.querySelectorAll('.episode-content').forEach(el => el.style.display = 'none');
-            content.style.display = isVisible ? "none" : "block";
+        /* 2. وظيفة عرض الحلقات داخل الأرشيف */
+        function showEp(epId, node) {
+            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
+            document.getElementById(epId).classList.add('active');
+            node.classList.add('active');
         }
 
+        /* 3. تأثير الظهور التدريجي عند التمرير (Reveal Effect) */
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -468,20 +472,18 @@
                 }
             });
         }, { threshold: 0.1 });
-
         revealElements.forEach(el => observer.observe(el));
 
+        /* 4. نظام إرسال الاقتراحات المضمون */
         const form = document.getElementById("suggestion-form");
-        const container = document.getElementById("suggestion-container");
-        const success = document.getElementById("success-message");
-
         form.onsubmit = function() {
-            container.style.display = "none";
-            success.style.display = "block";
+            document.getElementById("suggestion-container").style.display = "none";
+            document.getElementById("success-message").style.display = "block";
             form.target = "_blank"; 
             setTimeout(() => { form.reset(); }, 1000);
         };
 
+        /* 5. جلب عدد مشتركين اليوتيوب من API */
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
@@ -491,6 +493,7 @@
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
 
+        /* 6. تحديث إحصائيات رحلة صناعة المحتوى */
         function updateStats() {
             const startExp = new Date('2022-06-02');
             const now = new Date();
@@ -500,6 +503,7 @@
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
 
+        /* 7. فحص حالة البث على منصة Kick */
         async function checkKick() {
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
@@ -516,7 +520,16 @@
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
 
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); };
+        /* 8. تشغيل الوظائف عند تحميل الصفحة */
+        window.onload = () => { 
+            updateStats(); 
+            updateYouTubeSubs(); 
+            checkKick(); 
+            setInterval(checkKick, 60000); // تحديث حالة البث كل دقيقة
+            // تفعيل أول حلقة تلقائياً في الأرشيف
+            const firstEpNode = document.querySelector('.ep-node');
+            if(firstEpNode) showEp('ep-1', firstEpNode);
+        };
     </script>
 </body>
 </html>
