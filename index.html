@@ -96,21 +96,18 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* الأرشيف المطور والموحد */
+        /* الأرشيف */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: var(--card-bg); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; }
         .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
         .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
+        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
 
-        /* تصميم البطولة */
-        .tournament-item-selector { display: flex; justify-content: center; margin-bottom: 30px; }
         .tournament-details { display: none; animation: fadeIn 0.5s ease-in; }
         .tournament-details.active { display: block; }
-
-        .archive-body { display: none; animation: fadeIn 0.5s ease-in; }
-        .archive-body.active { display: block; }
+        .archive-body { display: none; }
+        .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
@@ -122,15 +119,16 @@
         .ep-node { width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888; }
         .ep-node:hover, .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); transform: scale(1.05); }
 
-        /* مكتبة الألعاب ونظام السطر الواحد الثابت */
+        /* مكتبة الألعاب - إصلاح الحجم الثابت */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         
         .games-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); 
             gap: 20px; 
             width: 100%;
+            align-items: start;
         }
         
         .game-card { 
@@ -139,29 +137,32 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
+            height: 280px; /* توحيد الارتفاع لمنع التضخم */
             display: flex;
             flex-direction: column;
-            height: 100%;
         }
         
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-        .game-img { width: 100%; height: 115px; object-fit: cover; flex-shrink: 0; }
-        .game-info { padding: 12px; text-align: center; flex-grow: 1; }
-        .game-name { font-size: 14px; font-weight: 700; color: #fff; }
-        .game-note { font-size: 11px; color: var(--gold); margin-top: 5px; font-weight: 800; }
+        .game-img { width: 100%; height: 110px; object-fit: cover; flex-shrink: 0; }
+        .game-info { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: start; gap: 5px; }
+        .game-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .game-note { font-size: 11px; color: var(--gold); font-weight: 800; line-height: 1.4; }
 
-        .hidden-games { display: none; width: 100%; margin-top: 20px; }
+        .hidden-games-container { display: none; width: 100%; margin-top: 20px; }
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
 
-        /* الحسابات */
+        /* الحسابات - إعادة التفاصيل والأسماء */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .social-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; }
+        .social-item {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s;
+        }
         .social-item:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: translateY(-5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
+        .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
-        /* الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: var(--card-bg); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -182,7 +183,6 @@
             .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
-            .yt-thumbnail { height: 250px; }
         }
     </style>
 </head>
@@ -234,7 +234,7 @@
 
             <div id="archive-content-area" class="archive-main-content">
                 <div id="events-body" class="archive-body">
-                    <div class="tournament-item-selector">
+                    <div style="display:flex; justify-content:center; margin-bottom:30px;">
                         <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
                     </div>
 
@@ -264,10 +264,10 @@
                         </div>
 
                         <div id="ep-display">
-                            <div id="ep-1" class="archive-body"><a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:350px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div></a></div>
-                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:350px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div></a></div>
-                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:350px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div></a></div>
-                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:350px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div></a></div>
+                            <div id="ep-1" class="archive-body"><a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الأولى</h2></div></a></div>
+                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثانية</h2></div></a></div>
+                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الثالثة</h2></div></a></div>
+                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="yt-card"><div class="yt-thumbnail" style="height:450px; background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div><div class="yt-details"><h2>ثلاثيات تحداني 🧡: الحلقة الرابعة</h2></div></a></div>
                         </div>
                     </div>
                 </div>
@@ -294,15 +294,53 @@
 
         <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
         <div class="games-grid reveal">
-            <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div></div></div>
-            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div></div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div></div></div>
+            <div class="game-card">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div>
+            </div>
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Viewfinder</div>
+                    <div class="game-note">تقييم صالح: ⭐⭐⭐⭐⭐</div>
+                    <div class="game-note">الشات: ⭐⭐⭐⭐✫</div>
+                </div>
+            </div>
+            <div class="game-card">
+                <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Hytale</div>
+                    <div class="game-note">صالح: ⭐⭐⭐✫✫</div>
+                    <div class="game-note">الشات: ⭐⭐⭐✫✫</div>
+                </div>
+            </div>
+            <div class="game-card">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img">
+                <div class="game-info">
+                    <div class="game-name">Candleman</div>
+                    <div class="game-note">صالح: ⭐⭐⭐⭐✫</div>
+                    <div class="game-note">الشات: ⭐⭐⭐⭐✫</div>
+                </div>
+            </div>
             
-            <div id="more-games" class="hidden-games">
+            <div id="hidden-games-area" class="hidden-games-container">
                 <div class="games-grid">
-                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div></div></div>
-                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div></div></div>
+                    <div class="game-card">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img">
+                        <div class="game-info">
+                            <div class="game-name">Fever Meme</div>
+                            <div class="game-note">صالح: ⭐⭐✫✫✫</div>
+                            <div class="game-note">الشات: ( لم يتم )</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
+                        <div class="game-info">
+                            <div class="game-name">Superliminal</div>
+                            <div class="game-note">صالح: ⭐⭐⭐⭐✫</div>
+                            <div class="game-note">الشات: ( لم يتم )</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -312,12 +350,12 @@
     <div id="my-socials" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div></a>
+            <a href="https://kick.com/S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -341,12 +379,10 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* وظائف الأرشيف */
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
             const tabs = document.querySelectorAll('.tab-btn');
-            
             if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
                 area.style.display = "none";
                 tabs.forEach(t => t.classList.remove('active'));
@@ -356,7 +392,6 @@
                 tabs.forEach(t => t.classList.remove('active'));
                 document.getElementById(type + '-body').classList.add('active');
                 document.getElementById(type + '-tab').classList.add('active');
-                // إخفاء تفاصيل البطولة عند فتح الأرشيف لأول مرة
                 document.getElementById('tahadani-details').classList.remove('active');
                 document.getElementById('tahadani-main-btn').classList.remove('active');
             }
@@ -367,18 +402,18 @@
             const btn = document.getElementById('tahadani-main-btn');
             content.classList.toggle('active');
             btn.classList.toggle('active');
+            if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
         }
 
         function showEp(epId, node) {
-            const displayArea = document.getElementById('ep-display');
-            displayArea.querySelectorAll('.archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
             document.getElementById(epId).classList.add('active');
             node.classList.add('active');
         }
 
         function toggleGames() {
-            const hiddenArea = document.getElementById('more-games');
+            const hiddenArea = document.getElementById('hidden-games-area');
             const btn = document.getElementById('show-more-btn');
             if (hiddenArea.style.display === "block") {
                 hiddenArea.style.display = "none";
@@ -431,9 +466,7 @@
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
 
-        window.onload = () => { 
-            updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); 
-        };
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); };
     </script>
 </body>
 </html>
