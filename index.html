@@ -104,10 +104,10 @@
         .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
 
-        /* تصميم البطولة كأرشبف فرعي مضيء */
-        .tournament-item { display: none; margin-bottom: 20px; }
-        .tournament-item.active { display: block; }
-        .sub-archive-tabs { display: flex; justify-content: center; margin-bottom: 30px; }
+        /* تصميم البطولة */
+        .tournament-item-selector { display: flex; justify-content: center; margin-bottom: 30px; }
+        .tournament-details { display: none; animation: fadeIn 0.5s ease-in; }
+        .tournament-details.active { display: block; }
 
         .archive-body { display: none; animation: fadeIn 0.5s ease-in; }
         .archive-body.active { display: block; }
@@ -234,11 +234,11 @@
 
             <div id="archive-content-area" class="archive-main-content">
                 <div id="events-body" class="archive-body">
-                    <div class="sub-archive-tabs">
-                        <button class="tab-btn active" onclick="showTournament('tahadani-details')">🏆 ثلاثيّات تحداني</button>
+                    <div class="tournament-item-selector">
+                        <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
                     </div>
 
-                    <div id="tahadani-details" class="tournament-details active">
+                    <div id="tahadani-details" class="tournament-details">
                         <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
                             <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
                             <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
@@ -341,7 +341,7 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* وظائف الأرشيف الموحدة */
+        /* وظائف الأرشيف */
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
@@ -356,11 +356,22 @@
                 tabs.forEach(t => t.classList.remove('active'));
                 document.getElementById(type + '-body').classList.add('active');
                 document.getElementById(type + '-tab').classList.add('active');
+                // إخفاء تفاصيل البطولة عند فتح الأرشيف لأول مرة
+                document.getElementById('tahadani-details').classList.remove('active');
+                document.getElementById('tahadani-main-btn').classList.remove('active');
             }
         }
 
+        function showTournamentDetails(id) {
+            const content = document.getElementById(id);
+            const btn = document.getElementById('tahadani-main-btn');
+            content.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
         function showEp(epId, node) {
-            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
+            const displayArea = document.getElementById('ep-display');
+            displayArea.querySelectorAll('.archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
             document.getElementById(epId).classList.add('active');
             node.classList.add('active');
@@ -420,9 +431,8 @@
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
 
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); 
-            const firstEp = document.querySelector('.ep-node');
-            if(firstEp) showEp('ep-1', firstEp);
+        window.onload = () => { 
+            updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); 
         };
     </script>
 </body>
