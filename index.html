@@ -291,7 +291,7 @@
             font-weight: 800;
         }
 
-        /* قسم الأرشيف المطور */
+        /* الأرشيف */
         .archive-container {
             max-width: 1100px;
             margin: 0 auto 60px;
@@ -723,7 +723,6 @@
             text-shadow: 0 0 10px var(--gold-glow);
         }
 
-        /* التجاوب مع الجوال */
         @media (max-width: 900px) {
             .socials-grid { grid-template-columns: repeat(3, 1fr); }
             .stats-grid { grid-template-columns: 1fr; }
@@ -760,29 +759,16 @@
     </header>
 
     <section class="stats-grid reveal">
-        <div class="stat-card">
-            <div class="stat-value" id="exp">...</div>
-            <div class="stat-label">رحلة صناعة المحتوى</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="sub-count">...</div>
-            <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="live-count">9</div>
-            <div class="stat-label">عدد البثوث في 2026</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
+        <div class="stat-card"><div class="stat-value" id="sub-count">...</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
+        <div class="stat-card"><div class="stat-value" id="live-count">9</div><div class="stat-label">عدد البثوث في 2026</div></div>
     </section>
 
     <section id="last-video" class="content-section reveal">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
         <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" class="yt-card" target="_blank">
-            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')">
-                <div class="play-btn"></div>
-            </div>
-            <div class="yt-details">
-                <h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2>
-            </div>
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
+            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
         </a>
     </section>
 
@@ -806,7 +792,6 @@
                             <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
                             <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
                         </div>
-                        
                         <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
                         <div class="team-grid">
                             <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
@@ -818,14 +803,12 @@
                             <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">LNXX, 3Yazan, llYousf</div></div>
                             <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
                         </div>
-
                         <div class="episodes-selector">
                             <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
                             <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
                             <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
                             <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
                         </div>
-
                         <div id="ep-display">
                             <div id="ep-1" class="archive-body active">
                                 <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
@@ -858,7 +841,6 @@
                 <div id="ramadan-body" class="archive-body">
                     <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🌙 رمضانيّات مع صالح</h3>
                     <p style="text-align:center; color:#ccc; line-height:1.6;">انتظرونا في شهر رمضان المبارك مع حلقات خاصة وحصرية في الشهر الفضيل</p>
-                    
                     <div style="margin-top:40px; text-align:center;">
                         <h4 id="countdown-title" style="color:var(--gold); margin-bottom:20px;">⏳ العد التنازلي للحلقة الأولى</h4>
                         <div class="countdown-container">
@@ -880,80 +862,24 @@
 
     <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
-        
         <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img">
-                <div class="game-info"><div class="game-name">Fateel - فتيل</div></div>
-            </div>
-        </div>
-
+        <div class="games-grid reveal"><div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div></div>
         <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
         <div class="games-grid reveal">
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Supraworld</div></div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Let me out</div></div>
-            </div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
         </div>
-
         <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
         <div class="games-grid reveal">
-            <div class="game-card">
-                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Viewfinder</div>
-                    <div class="game-note">صالح: ⭐⭐⭐⭐⭐</div>
-                    <div class="game-note">الشات: ⭐⭐⭐⭐✫</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Hytale</div>
-                    <div class="game-note">صالح: ⭐⭐⭐✫✫</div>
-                    <div class="game-note">الشات: ⭐⭐⭐✫✫</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Candleman</div>
-                    <div class="game-note">صالح: ⭐⭐⭐⭐✫</div>
-                    <div class="game-note">الشات: ⭐⭐⭐⭐✫</div>
-                </div>
-            </div>
-            
+            <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
+            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">صالح: ⭐⭐⭐⭐⭐</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
+            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div><div class="game-note">الشات: ⭐⭐⭐✫✫</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
             <div id="hidden-games-area" class="hidden-games-container">
                 <div class="games-grid">
-                    <div class="game-card">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img">
-                        <div class="game-info">
-                            <div class="game-name">Fever Meme</div>
-                            <div class="game-note">صالح: ⭐⭐✫✫✫</div>
-                            <div class="game-note">الشات: ( لم يتم )</div>
-                        </div>
-                    </div>
-                    <div class="game-card">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
-                        <div class="game-info">
-                            <div class="game-name">Superliminal</div>
-                            <div class="game-note">صالح: ⭐⭐⭐⭐✫</div>
-                            <div class="game-note">الشات: ( لم يتم )</div>
-                        </div>
-                    </div>
+                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
+                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ( لم يتم )</div></div></div>
                 </div>
             </div>
         </div>
@@ -963,30 +889,12 @@
     <div id="my-socials" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg">
-                <div>Kick</div><span>بثوث مباشرة</span>
-            </a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg">
-                <div>YouTube</div><span>المقاطع الرئيسية</span>
-            </a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg">
-                <div>Discord</div><span>مجتمع صالح</span>
-            </a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg">
-                <div>Instagram</div><span>يوميات وحصريات</span>
-            </a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg">
-                <div>TikTok</div><span>أقوى اللقطات</span>
-            </a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg">
-                <div>X / Twitter</div><span>أحدث الأخبار</span>
-            </a>
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -995,12 +903,8 @@
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
                 <input type="text" name="_gotcha" class="honey">
-                <div class="form-group">
-                    <label>الاسم</label>
-                    <input type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>نوع الاقتراح</label>
+                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>نوع الاقتراح</label>
                     <select name="type">
                         <option value="لعبة جديدة">لعبة جديدة</option>
                         <option value="فكرة مقطع">فكرة مقطع</option>
@@ -1008,10 +912,7 @@
                         <option value="تحسين للموقع">تحسين للموقع</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>الاقتراح</label>
-                    <textarea name="msg" rows="3" required></textarea>
-                </div>
+                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
         </div>
@@ -1020,22 +921,15 @@
 
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
 
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
     <script>
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* 1. نظام الخلفية المتحركة (Particles) */
+        /* 1. نظام الخلفية المتحركة */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -1045,61 +939,35 @@
                 this.speedY = Math.random() * 0.5 - 0.25;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
             }
-            draw() {
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-
         function handleParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
+            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
             requestAnimationFrame(handleParticles);
         }
-
-        for (let i = 0; i < 100; i++) {
-            particles.push(new Particle());
-        }
-
-        initCanvas();
-        handleParticles();
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
+        initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
-        /* 2. العداد التنازلي لرمضان (18 فبراير - 8 مساءً) */
+        /* 2. العداد التنازلي لرمضان */
         function updateCountdown() {
             const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
             const gap = ramadanDate - now;
-
             if (gap <= 0) {
                 const timerTitle = document.getElementById('countdown-title');
                 if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
                 return;
             }
-
             const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
-
+            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
             const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d;
-            if (hEl) hEl.innerText = h < 10 ? '0'+h : h;
-            if (mEl) mEl.innerText = m < 10 ? '0'+m : m;
-            if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
+            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
         }
         setInterval(updateCountdown, 1000);
 
@@ -1108,7 +976,6 @@
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
             const tabs = document.querySelectorAll('.tab-btn');
-            
             if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
                 area.style.display = "none";
                 tabs.forEach(t => t.classList.remove('active'));
@@ -1122,51 +989,48 @@
                 document.getElementById('tahadani-main-btn').classList.remove('active');
             }
         }
-
         function showTournamentDetails(id) {
             const content = document.getElementById(id);
             const btn = document.getElementById('tahadani-main-btn');
-            content.classList.toggle('active');
-            btn.classList.toggle('active');
+            content.classList.toggle('active'); btn.classList.toggle('active');
             if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
         }
-
         function showEp(epId, node) {
             document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
-            document.getElementById(epId).classList.add('active');
-            node.classList.add('active');
+            document.getElementById(epId).classList.add('active'); node.classList.add('active');
         }
-
-        /* 4. نظام عرض المزيد للألعاب */
         function toggleGames() {
-            const hiddenArea = document.getElementById('hidden-games-area');
+            const area = document.getElementById('hidden-games-area');
             const btn = document.getElementById('show-more-btn');
-            if (hiddenArea.style.display === "block") {
-                hiddenArea.style.display = "none";
-                btn.innerText = "عرض المزيد من الألعاب";
-            } else {
-                hiddenArea.style.display = "block";
-                btn.innerText = "إخفاء الألعاب";
-            }
+            if (area.style.display === "block") { area.style.display = "none"; btn.innerText = "عرض المزيد من الألعاب"; }
+            else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 5. نظام الإرسال والرسالة (إصلاح الاختفاء) */
+        /* 4. نظام الإرسال الذكي (Fetch) لإصلاح وصول الإيميل */
         const form = document.getElementById("suggestion-form");
-        form.onsubmit = function() {
-            document.getElementById("suggestion-container").style.display = "none";
-            document.getElementById("success-message").style.display = "block";
-            form.target = "hidden_iframe";
-        };
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    document.getElementById("suggestion-container").style.display = "none";
+                    document.getElementById("success-message").style.display = "block";
+                    form.reset();
+                } else { alert("عذراً، حدث خطأ أثناء الإرسال."); }
+            } catch (err) { alert("يرجى التأكد من اتصالك بالإنترنت."); }
+        });
 
-        /* 6. تأثيرات الظهور */
+        /* إحصائيات وبث */
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         revealElements.forEach(el => observer.observe(el));
 
-        /* 7. جلب المشتركين والإحصائيات */
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
@@ -1174,40 +1038,24 @@
                 document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
-
         function updateStats() {
-            const startExp = new Date('2022-06-02');
-            const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear();
-            let m = now.getMonth() - startExp.getMonth();
+            const start = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
-
         async function checkKick() {
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
             try {
                 const res = await fetch(`https://corsproxy.io/?https://kick.com/api/v1/channels/S4leeh`);
                 const data = await res.json();
-                if (data.livestream) { 
-                    container.classList.add('is-live'); 
-                    txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; 
-                } else { 
-                    container.classList.remove('is-live'); 
-                    txt.innerText = "البث المباشر مغلق حالياً"; 
-                }
+                if (data.livestream) { container.classList.add('is-live'); txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
+                else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
 
-        /* تشغيل المهام عند تحميل الصفحة */
-        window.onload = () => { 
-            updateStats(); 
-            updateYouTubeSubs(); 
-            checkKick(); 
-            setInterval(checkKick, 60000); 
-            updateCountdown(); 
-        };
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
 </body>
 </html>
