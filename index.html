@@ -141,16 +141,44 @@
         .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
         .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
-        /* مكتبة الألعاب */
+        /* مكتبة الألعاب - تم التعديل لتطابق المربع الأحمر */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
-        .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 240px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
+        
+        .game-card { 
+            background: rgba(26, 26, 26, 0.8); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid var(--border-color); 
+            transition: 0.3s; 
+            height: 185px; /* الارتفاع المطلوب ليناسب المربع الأحمر */
+            display: flex; 
+            flex-direction: column; 
+            backdrop-filter: blur(5px); 
+        }
+        
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-        .game-img { width: 100%; height: 95px; object-fit: cover; flex-shrink: 0; }
-        .game-info { padding: 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
-        .game-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
-        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.3; }
+        
+        .game-img { 
+            width: 100%; 
+            height: 105px; /* ارتفاع الصورة المناسب */
+            object-fit: cover; 
+            flex-shrink: 0; 
+        }
+        
+        .game-info { 
+            padding: 10px; 
+            text-align: center; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            gap: 2px; 
+        }
+        
+        .game-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 1px; }
+        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.2; }
 
         .hidden-games-container { display: none; width: 100%; margin-top: 15px; }
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
@@ -463,12 +491,11 @@
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 4. نظام الإرسال القديم (استعادة النظام الأصلي) */
+        /* 4. نظام الإرسال القديم */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
             document.getElementById("suggestion-container").style.display = "none";
             document.getElementById("success-message").style.display = "block";
-            // يترك المتصفح يكمل عملية الإرسال لفتح صفحة Formspree الخارجية
         };
 
         const revealElements = document.querySelectorAll('.reveal');
