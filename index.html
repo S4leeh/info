@@ -144,18 +144,8 @@
         /* مكتبة الألعاب */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
-        
-        .games-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); 
-            gap: 15px; 
-            width: 100%;
-        }
-        
-        .game-card { 
-            background: rgba(26, 26, 26, 0.8); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 240px; display: flex; flex-direction: column; backdrop-filter: blur(5px);
-        }
-        
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
+        .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 240px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
         .game-img { width: 100%; height: 95px; object-fit: cover; flex-shrink: 0; }
         .game-info { padding: 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
@@ -168,15 +158,12 @@
 
         /* الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .social-item {
-            background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px);
-        }
+        .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
         .social-item:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: translateY(-5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
-        /* الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -319,7 +306,7 @@
                             <div class="countdown-box"><span id="minutes" class="countdown-value">00</span><span class="countdown-label">دقيقة</span></div>
                             <div class="countdown-box"><span id="seconds" class="countdown-value">00</span><span class="countdown-label">ثانية</span></div>
                         </div>
-                        <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026)</p>
+                        <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
                     </div>
                 </div>
 
@@ -432,11 +419,20 @@
         handleParticles();
         window.addEventListener('resize', initCanvas);
 
-        /* 2. نظام العداد التنازلي لرمضان */
+        /* 2. نظام العداد التنازلي لرمضان - تم التعديل ليكون 18 فبراير 8 مساءً */
         function updateCountdown() {
-            const ramadanDate = new Date('February 18, 2026 00:00:00').getTime();
+            const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
             const gap = ramadanDate - now;
+
+            if (gap <= 0) {
+                const ramadanBody = document.getElementById('ramadan-body');
+                if (ramadanBody) {
+                    const timerTitle = ramadanBody.querySelector('h4');
+                    if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
+                }
+                return;
+            }
 
             const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
 
