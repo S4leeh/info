@@ -494,7 +494,7 @@
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
             try {
-                const res = await fetch(`https://corsproxy.io/?https://7pixels.net/api/kick/s4leeh`);
+                const res = await fetch(`https://7pixels.net/api/kick/s4leeh`);
                 const data = await res.json();
                 if (data.livestream) { container.classList.add('is-live'); txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
                 else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
