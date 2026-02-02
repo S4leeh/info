@@ -7,7 +7,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- المتغيرات الأساسية --- */
         :root {
             --bg-dark: #121212;
             --card-bg: #1a1a1a;
@@ -18,329 +17,80 @@
             --live-red: #ea1d2c;
         }
 
-        /* --- التنسيق العام --- */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Cairo', sans-serif; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        html { scroll-behavior: smooth; }
+        section, div[id] { scroll-margin-top: 130px; }
+        body { background-color: var(--bg-dark); color: #fff; padding-bottom: 0; overflow-x: hidden; position: relative; }
 
-        html { 
-            scroll-behavior: smooth; 
-        }
+        /* حاوية الخلفية المتحركة */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%); }
+        .reveal { opacity: 0; transform: translateX(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateX(0); }
 
-        section, div[id] { 
-            scroll-margin-top: 130px; 
-        }
+        /* شريط حالة البث */
+        .live-status-bar { width: 100%; background: rgba(5, 5, 5, 0.98); border-bottom: 2px solid var(--border-color); padding: 12px; position: sticky; top: 0; z-index: 10001; display: flex; justify-content: center; text-decoration: none; }
+        .status-content { display: flex; align-items: center; gap: 12px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
+        .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
+        .status-text { color: #fff; font-weight: 900; font-size: 14px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        body {
-            background-color: var(--bg-dark);
-            color: #fff;
-            padding-bottom: 0;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* --- حاوية الخلفية المتحركة --- */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%);
-        }
-
-        .reveal { 
-            opacity: 0; 
-            transform: translateX(30px); 
-            transition: all 0.8s ease-out; 
-        }
-
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateX(0); 
-        }
-
-        /* --- شريط حالة البث المباشر --- */
-        .live-status-bar {
-            width: 100%;
-            background: rgba(5, 5, 5, 0.98);
-            border-bottom: 2px solid var(--border-color);
-            padding: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 10001;
-            display: flex;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .status-content { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-        }
-
-        .status-dot { 
-            width: 10px; 
-            height: 10px; 
-            border-radius: 50%; 
-            background-color: var(--live-red); 
-        }
-
-        .is-live .status-dot { 
-            background-color: var(--kick-green); 
-            box-shadow: 0 0 15px var(--kick-green); 
-            animation: pulse 1.2s infinite; 
-        }
-
-        .status-text { 
-            color: #fff; 
-            font-weight: 900; 
-            font-size: 14px; 
-        }
-
-        @keyframes pulse { 
-            0% { opacity: 1; } 
-            50% { opacity: 0.4; } 
-            100% { opacity: 1; } 
-        }
-
-        /* --- شريط التنقل --- */
-        .nav-bar {
-            width: fit-content;
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid var(--border-color);
-            padding: 8px 25px;
-            position: sticky;
-            top: 65px;
-            z-index: 10000;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .nav-link { 
-            color: #eee; 
-            text-decoration: none; 
-            font-size: 13px; 
-            font-weight: 700; 
-            transition: 0.3s; 
-            position: relative; 
-            padding: 5px 2px; 
-        }
-
-        .nav-link::after { 
-            content: ''; 
-            position: absolute; 
-            width: 0; 
-            height: 2px; 
-            bottom: 0; 
-            left: 0; 
-            background-color: var(--gold); 
-            transition: 0.3s; 
-        }
-
+        /* شريط التنقل */
+        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 65px; z-index: 10000; margin: 0 auto; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
         .nav-link:hover::after { width: 100%; }
         .nav-link:hover { color: var(--gold); }
 
-        /* --- الهيدر --- */
+        /* الهيدر */
         header { text-align: center; padding: 60px 20px 40px; }
-        .logo { 
-            width: 140px; 
-            height: 140px; 
-            border-radius: 50%; 
-            border: 3px solid var(--gold); 
-            box-shadow: 0 0 20px var(--gold-glow); 
-            margin-bottom: 20px; 
-            animation: float 4s ease-in-out infinite; 
-            object-fit: cover; 
-            overflow: hidden; 
-        }
-
-        @keyframes float { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-15px); } 
-        }
-
+        .logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px; animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
         .bio { color: #b0b0b0; font-size: 16px; }
 
-        /* --- شبكة الإحصائيات --- */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 20px; 
-            max-width: 1000px; 
-            margin: 0 auto 50px; 
-            padding: 0 20px; 
-        }
-
-        .stat-card { 
-            background: rgba(26, 26, 26, 0.6); 
-            border: 1px solid var(--border-color); 
-            border-radius: 15px; 
-            padding: 25px; 
-            text-align: center; 
-            transition: 0.3s; 
-            backdrop-filter: blur(5px); 
-        }
-
-        .stat-card:hover { 
-            transform: translateY(-8px); 
-            border-color: var(--gold); 
-            box-shadow: 0 0 25px var(--gold-glow); 
-        }
-
+        /* الإحصائيات */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
+        .stat-card { background: rgba(26, 26, 26, 0.6); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; text-align: center; transition: 0.3s; backdrop-filter: blur(5px); }
+        .stat-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
-        /* --- بطاقة اليوتيوب --- */
-        .yt-card { 
-            background: var(--card-bg); 
-            border-radius: 25px; 
-            overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            text-decoration: none; 
-            display: block; 
-            transition: 0.3s; 
-            position: relative; 
-        }
-
-        .yt-card:hover { 
-            transform: scale(1.02); 
-            border-color: var(--gold); 
-            box-shadow: 0 0 30px var(--gold-glow); 
-        }
-
-        .yt-thumbnail { 
-            width: 100%; 
-            height: 350px; 
-            background-size: cover; 
-            background-position: center; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-
-        /* --- قسم الأرشيف --- */
+        /* الأرشيف */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
-        .archive-wrapper { 
-            background: rgba(26, 26, 26, 0.7); 
-            border-radius: 30px; 
-            border: 1px solid var(--border-color); 
-            padding: 40px; 
-            backdrop-filter: blur(10px); 
-        }
-
+        .archive-wrapper { background: rgba(26, 26, 26, 0.7); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; backdrop-filter: blur(10px); }
         .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-        .tab-btn { 
-            background: #111; 
-            border: 1px solid #333; 
-            color: #fff; 
-            padding: 12px 30px; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-weight: 800; 
-            transition: 0.4s; 
-        }
-
-        .tab-btn:hover, .tab-btn.active { 
-            border-color: var(--gold); 
-            box-shadow: 0 0 15px var(--gold-glow); 
-            color: var(--gold); 
-        }
-
+        .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
+        .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
         .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
         .archive-body { display: none; }
         .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- العداد الرمضاني --- */
+        /* العداد الرمضاني */
         .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
-        .countdown-box { 
-            background: rgba(0,0,0,0.4); 
-            border: 1px solid var(--gold); 
-            padding: 20px; 
-            border-radius: 15px; 
-            min-width: 100px; 
-            text-align: center; 
-        }
-
+        .countdown-box { background: rgba(0,0,0,0.4); border: 1px solid var(--gold); padding: 20px; border-radius: 15px; min-width: 100px; text-align: center; }
         .countdown-value { font-size: 32px; font-weight: 900; color: var(--gold); display: block; }
         .countdown-label { font-size: 12px; color: #aaa; font-weight: 700; }
 
-        /* --- مكتبة الألعاب (المقاس المعدل) --- */
-        .game-card { 
-            background: rgba(26, 26, 26, 0.8); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            transition: 0.3s; 
-            height: 185px; /* المقاس المطلوب */
-            display: flex; 
-            flex-direction: column; 
-            backdrop-filter: blur(5px); 
-        }
-
+        /* مكتبة الألعاب - المقاس المربع المطلوب */
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
+        .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 185px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
         .game-img { width: 100%; height: 105px; object-fit: cover; flex-shrink: 0; }
         .game-info { padding: 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
 
-        /* --- ركن التسلية --- */
-        .game-canvas-area { 
-            background: #000; 
-            border: 2px solid var(--gold); 
-            border-radius: 15px; 
-            margin: 20px auto; 
-            position: relative; 
-            overflow: hidden; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
+        /* ركن التسلية */
+        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
 
-        .high-score-board { 
-            margin-top: 15px; 
-            background: rgba(212, 175, 55, 0.1); 
-            padding: 10px; 
-            border-radius: 10px; 
-            font-size: 12px; 
-            color: var(--gold); 
-            text-align: center; 
-        }
-
-        /* --- الحسابات --- */
+        /* الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .social-item { 
-            background: rgba(26, 26, 26, 0.8); 
-            border: 1px solid var(--border-color); 
-            border-radius: 15px; 
-            padding: 20px 10px; 
-            text-align: center; 
-            text-decoration: none; 
-            transition: 0.3s; 
-            backdrop-filter: blur(5px); 
-        }
+        .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
+        .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
 
-        /* --- الفورم --- */
-        .form-box { 
-            max-width: 600px; 
-            margin: 0 auto 60px; 
-            background: rgba(26, 26, 26, 0.8); 
-            padding: 35px; 
-            border-radius: 20px; 
-            border: 1px solid var(--border-color); 
-            transition: 0.3s; 
-            backdrop-filter: blur(10px); 
-        }
-
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
+        /* الاقتراحات */
+        .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; backdrop-filter: blur(10px); }
+        #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
     </style>
 </head>
 <body id="top-page">
@@ -348,10 +98,7 @@
     <canvas id="bg-canvas"></canvas>
 
     <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
-        <div class="status-content">
-            <span class="status-dot"></span>
-            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
-        </div>
+        <div class="status-content"><span class="status-dot"></span><span id="live-text" class="status-text">جاري فحص حالة البث...</span></div>
     </a>
 
     <nav class="nav-bar">
@@ -392,36 +139,26 @@
                 <button id="ramadan-tab" class="tab-btn" onclick="toggleMainArchive('ramadan')">🌙 رمضانيّات مع صالح</button>
                 <button id="highlights-tab" class="tab-btn" onclick="toggleMainArchive('highlights')">🎬 البثوث المميزة</button>
             </div>
-
             <div id="archive-content-area" class="archive-main-content">
                 <div id="events-body" class="archive-body">
                     <div style="display:flex; justify-content:center; margin-bottom:30px;">
                         <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
                     </div>
-                    <div id="tahadani-details" class="tournament-details">
-                        <div class="episodes-selector">
+                    <div id="tahadani-details" style="display:none;">
+                        <div class="episodes-selector" style="display:flex; justify-content:center; gap:10px; margin:20px 0;">
                             <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
-                            <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
-                            <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
-                            <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
+                            <div class="ep-node" onclick="showEp('ep-4', this)">النهائي</div>
                         </div>
                         <div id="ep-display">
                             <div id="ep-1" class="archive-body active">
-                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
-                                </a>
+                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" style="text-decoration:none; color:white; text-align:center;"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></a>
                             </div>
                             <div id="ep-4" class="archive-body">
-                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
-                                </a>
+                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" style="text-decoration:none; color:white; text-align:center;"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></a>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div id="ramadan-body" class="archive-body">
                     <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🌙 رمضانيّات مع صالح</h3>
                     <div style="margin-top:40px; text-align:center;">
@@ -435,6 +172,7 @@
                         <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
                     </div>
                 </div>
+                <div id="highlights-body" class="archive-body"><p style="text-align:center; padding:40px; color:#666;">قريباً... 🏗️</p></div>
             </div>
         </div>
     </section>
@@ -442,13 +180,13 @@
     <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         <div class="games-grid reveal">
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg" class="game-img"><div class="game-info">Fateel - فتيل</div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info">Supraworld</div></div>
         </div>
     </div>
 
     <div id="my-socials" class="library-container">
-        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
+        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي</h2>
         <div class="socials-grid reveal">
             <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div></a>
             <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div></a>
@@ -461,30 +199,15 @@
             <div class="archive-tabs">
                 <button class="tab-btn" onclick="toggleGame('clicker')">🖱️ تحدي النقر</button>
                 <button class="tab-btn" onclick="toggleGame('runner')">🏃 مغامرة صالح</button>
-                <button class="tab-btn" onclick="toggleGame('memory')">🧠 ذاكرة الشعارات</button>
             </div>
-            
             <div id="game-area" class="archive-main-content">
                 <div id="clicker-game" class="archive-body" style="text-align:center;">
                     <div id="clicker-canvas-container" class="game-canvas-area" style="height:350px; width:100%; max-width:500px;">
-                        <button style="background:var(--gold); padding:15px 30px; border-radius:50px; border:none; font-weight:900; cursor:pointer;" onclick="startClicker()">ابدأ اللعب</button>
+                        <button style="background:var(--gold); padding:15px; border-radius:10px; border:none; font-weight:900;" onclick="startClicker()">ابدأ اللعب</button>
                     </div>
-                    <div id="clicker-scores" class="high-score-board">🏆 أفضل النتائج ستظهر هنا</div>
+                    <div id="clicker-scores" class="high-score-board">🏆 التوب 3 الشخصي</div>
                 </div>
-
-                <div id="runner-game" class="archive-body" style="text-align:center;">
-                    <div id="runner-canvas-container" class="game-canvas-area" style="height:350px; width:100%; max-width:600px;">
-                        <p style="color:#666;">🏃 قريباً...</p>
-                    </div>
-                    <div id="runner-scores" class="high-score-board">🏆 قفزاتك الأسطورية</div>
-                </div>
-
-                <div id="memory-game" class="archive-body" style="text-align:center;">
-                    <div id="memory-canvas-container" class="game-canvas-area" style="min-height:350px; width:100%; max-width:500px;">
-                        <p style="color:#666;">🧠 قريباً...</p>
-                    </div>
-                    <div id="memory-scores" class="high-score-board">🏆 وقتك القياسي</div>
-                </div>
+                <div id="runner-game" class="archive-body" style="text-align:center;"><p style="color:#666;">🏃 قريباً...</p></div>
             </div>
         </div>
     </section>
@@ -493,10 +216,9 @@
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
-                <input type="text" name="_gotcha" style="display:none;">
-                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
-                <button type="submit" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:10px; font-weight:900; cursor:pointer;">إرسال</button>
+                <input type="text" name="name" placeholder="الاسم" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:white;" required>
+                <textarea name="msg" placeholder="الاقتراح" rows="3" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:white;" required></textarea>
+                <button type="submit" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:10px; font-weight:900;">إرسال</button>
             </form>
         </div>
         <div id="success-message">تم الاستلام بنجاح! 🧡</div>
@@ -505,10 +227,6 @@
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
 
     <script>
-        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
-        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
-
-        /* --- 1. الخلفية المتحركة (الكود الكامل) --- */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -523,78 +241,52 @@
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
-        /* --- 2. العداد الرمضاني (الكود الدقيق) --- */
         function updateCountdown() {
             const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
             const gap = ramadanDate - now;
             if (gap <= 0) { document.getElementById('countdown-title').innerText = "الحلقة الأولى بدأت! 🔥"; return; }
-            const d = Math.floor(gap / (1000 * 60 * 60 * 24)), h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)), m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((gap % (1000 * 60)) / 1000);
-            document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
+            document.getElementById('days').innerText = Math.floor(gap / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').innerText = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').innerText = Math.floor((gap % (1000 * 60)) / 1000);
         }
         setInterval(updateCountdown, 1000);
 
-        /* --- 3. وظائف الألعاب (نظام الحفظ والتحكم) --- */
-        function toggleGame(gameId) {
-            document.getElementById('game-area').style.display = "block";
-            document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
-            document.getElementById(gameId + '-game').classList.add('active');
-            updateTopScores(gameId);
-        }
-
-        function saveScore(gameId, score) {
-            let scores = JSON.parse(localStorage.getItem(gameId + '-scores')) || [];
-            scores.push(score);
-            scores.sort((a, b) => b - a);
-            scores = scores.slice(0, 3);
-            localStorage.setItem(gameId + '-scores', JSON.stringify(scores));
-            updateTopScores(gameId);
-        }
-
-        function updateTopScores(gameId) {
-            const scores = JSON.parse(localStorage.getItem(gameId + '-scores')) || [];
-            const display = document.getElementById(gameId + '-scores');
-            display.innerHTML = scores.length > 0 ? `🏆 التوب 3 الشخصي: ` + scores.map((s, i) => `${i+1}. [ ${s} ]`).join(' | ') : "كن أول من يسجل رقماً!";
-        }
-
-        function startClicker() {
-            let score = 0, time = 10;
-            const container = document.getElementById('clicker-canvas-container');
-            container.innerHTML = `<div id="target" style="width:60px; height:60px; background:var(--gold); border-radius:50%; position:absolute; cursor:pointer; box-shadow:0 0 20px var(--gold);"></div><div style="position:absolute; top:10px; color:white;">السكور: <span id="s">0</span> | الوقت: <span id="t">10</span></div>`;
-            const target = document.getElementById('target');
-            const move = () => { target.style.top = Math.random() * 280 + 'px'; target.style.left = Math.random() * (container.clientWidth - 60) + 'px'; };
-            target.onclick = () => { score++; document.getElementById('s').innerText = score; move(); };
-            const timer = setInterval(() => { time--; if(document.getElementById('t')) document.getElementById('t').innerText = time; if(time <= 0) { clearInterval(timer); saveScore('clicker', score); container.innerHTML = `<button onclick="startClicker()" style="background:var(--gold); padding:10px; border:none; border-radius:10px; font-weight:900;">انتهى! سكورك: ${score} - العب مرة ثانية</button>`; } }, 1000);
-            move();
-        }
-
-        /* --- 4. المهام الأساسية عند التحميل --- */
         function toggleMainArchive(type) {
             document.getElementById('archive-content-area').style.display = "block";
             document.querySelectorAll('.archive-body').forEach(b => b.classList.remove('active'));
             document.getElementById(type + '-body').classList.add('active');
         }
 
-        window.onload = () => { 
-            updateYouTubeSubs(); 
-            checkKick(); 
-            updateCountdown(); 
-            // حساب الخبرة
+        function showTournamentDetails(id) { document.getElementById(id).style.display = "block"; }
+        function showEp(id, node) { document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+        function toggleGame(gameId) {
+            document.getElementById('game-area').style.display = "block";
+            document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
+            document.getElementById(gameId + '-game').classList.add('active');
+        }
+
+        function startClicker() {
+            let score = 0, time = 10;
+            const container = document.getElementById('clicker-canvas-container');
+            container.innerHTML = `<div id="target" style="width:60px; height:60px; background:var(--gold); border-radius:50%; position:absolute; cursor:pointer;"></div><div style="position:absolute; top:10px; color:white;">السكور: <span id="s">0</span></div>`;
+            const target = document.getElementById('target');
+            const move = () => { target.style.top = Math.random() * 280 + 'px'; target.style.left = Math.random() * (container.clientWidth - 60) + 'px'; };
+            target.onclick = () => { score++; document.getElementById('s').innerText = score; move(); };
+            const timer = setInterval(() => { time--; if(time <= 0) { clearInterval(timer); container.innerHTML = `<button onclick="startClicker()" style="background:var(--gold); padding:10px; border-radius:10px;">انتهى! سكورك: ${score}</button>`; } }, 1000);
+            move();
+        }
+
+        window.onload = () => {
             const start = new Date('2022-06-02'); const now = new Date();
             let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+            document.getElementById('sub-count').innerText = "1,531";
+            document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active'); });
         };
-
-        async function checkKick() {
-            try {
-                const res = await fetch(`https://7pixels.net/api/kick/s4leeh`);
-                const data = await res.json();
-                const bar = document.getElementById('live-bar-container');
-                if (data.livestream) { bar.classList.add('is-live'); document.getElementById('live-text').innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
-                else { bar.classList.remove('is-live'); document.getElementById('live-text').innerText = "البث المباشر مغلق حالياً"; }
-            } catch (e) { document.getElementById('live-text').innerText = "Kick.com/S4leeh"; }
-        }
     </script>
 </body>
 </html>
