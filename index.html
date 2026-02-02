@@ -571,7 +571,10 @@
                 rct.drawImage(salehSkin, 50, py, 50, 50);
 
                 // تقليل سرعة تكرار ظهور العوائق
-                if (Math.random() < 0.01) obs.push({x:600, img: enemies[Math.floor(Math.random()*enemies.length)]});
+                // نتحقق أن آخر عائق ظهر قد ابتعد مسافة 200 بكسل على الأقل قبل إضافة عائق جديد
+if (Math.random() < 0.01 && (obs.length === 0 || obs[obs.length - 1].x < 400)) {
+    obs.push({x: 600, img: enemies[Math.floor(Math.random() * enemies.length)]});
+}
                 
                 obs.forEach((o, i) => {
                     o.x -= 2; // تقليل السرعة الأفقية (كانت 5 أو 6)
