@@ -574,7 +574,7 @@
                 if (Math.random() < 0.01) obs.push({x:600, img: enemies[Math.floor(Math.random()*enemies.length)]});
                 
                 obs.forEach((o, i) => {
-                    o.x -= 4; // تقليل السرعة الأفقية (كانت 5 أو 6)
+                    o.x -= 2; // تقليل السرعة الأفقية (كانت 5 أو 6)
                     rct.drawImage(o.img, o.x, 250, 40, 40);
                     if (o.x < 90 && o.x > 50 && py > 200) { 
                         gameOn = false; 
