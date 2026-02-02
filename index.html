@@ -192,10 +192,6 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
-        /* ستايلات قسم الألعاب التفاعلية */
-        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 600px; cursor: pointer; }
-        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
-
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -211,9 +207,9 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
             .large-ep-thumbnail { height: 250px; }
@@ -237,7 +233,6 @@
         <a href="#archive-section" class="nav-link">الأرشيف</a>
         <a href="#games-library" class="nav-link">الألعاب</a>
         <a href="#my-socials" class="nav-link">حساباتي</a>
-        <a href="#entertainment-section" class="nav-link">ركن التسلية</a>
         <a href="#suggestions" class="nav-link">الاقتراحات</a>
     </nav>
 
@@ -387,32 +382,6 @@
         </div>
     </div>
 
-    <section id="entertainment-section" class="archive-container reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 ركن التسلية مع صالح</h2>
-        <div class="archive-wrapper">
-            <div class="archive-tabs">
-                <button class="tab-btn" onclick="toggleGame('clicker')">🖱️ تحدي النقر</button>
-                <button class="tab-btn" onclick="toggleGame('runner')">🏃 مغامرة صالح</button>
-            </div>
-            
-            <div id="game-area" class="archive-main-content">
-                <div id="clicker-game" class="archive-body" style="text-align:center;">
-                    <div id="clicker-canvas-container" class="game-canvas-area">
-                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startClicker()">ابدأ اللعب</button>
-                    </div>
-                    <div id="clicker-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
-                </div>
-
-                <div id="runner-game" class="archive-body" style="text-align:center;">
-                    <div id="runner-canvas-container" class="game-canvas-area">
-                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startRunner()">ابدأ الركض (نقر للقفز)</button>
-                    </div>
-                    <div id="runner-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section id="suggestions" class="form-box reveal">
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
@@ -522,79 +491,7 @@
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 4. نظام الألعاب التفاعلية */
-        function toggleGame(gameId) {
-            document.getElementById('game-area').style.display = "block";
-            document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
-            document.getElementById(gameId + '-game').classList.add('active');
-            updateTopScores(gameId);
-        }
-
-        function saveScore(id, s) { 
-            let scores = JSON.parse(localStorage.getItem(id)) || []; 
-            scores.push(s); scores.sort((a,b)=>b-a); 
-            localStorage.setItem(id, JSON.stringify(scores.slice(0,3))); 
-            updateTopScores(id); 
-        }
-
-        function updateTopScores(id) { 
-            const s = JSON.parse(localStorage.getItem(id)) || []; 
-            document.getElementById(id+'-scores').innerText = "🏆 توب 3 الشخصي: " + (s.join(' | ') || "لا توجد نتائج بعد"); 
-        }
-
-        function startClicker() {
-            let score = 0, time = 10, container = document.getElementById('clicker-canvas-container');
-            container.innerHTML = `<div id="tar" style="width:50px;height:50px;background:var(--gold);border-radius:50%;position:absolute;cursor:pointer;box-shadow:0 0 15px var(--gold);"></div><div style="position:absolute;top:10px;left:10px;">النقاط: <span id="cs">0</span></div>`;
-            const tar = document.getElementById('tar');
-            const move = () => { tar.style.top = Math.random()*250+'px'; tar.style.left = Math.random()*(container.clientWidth-50)+'px'; };
-            tar.onclick = () => { score++; document.getElementById('cs').innerText = score; move(); };
-            let t = setInterval(() => { time--; if(time<=0) { clearInterval(t); saveScore('clicker', score); container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startClicker()">انتهى! نقاطك: ${score} - العب ثانية</button>`; } }, 1000);
-            move();
-        }
-
-        function startRunner() {
-            const container = document.getElementById('runner-canvas-container');
-            container.innerHTML = `<canvas id="rc" width="600" height="300" style="width:100%;"></canvas>`;
-            const rc = document.getElementById('rc'), rct = rc.getContext('2d');
-            let score = 0, py = 240, jump = false, g = 0.8, v = 0, obs = [], gameOn = true;
-            
-            const salehSkin = new Image(); salehSkin.src = "https://minotar.net/avatar/Saleh/50";
-            const enemies = ["ISpitfire57", "twpywq", "Lonley", "Abo7abs"].map(name => { const img = new Image(); img.src = `https://minotar.net/helm/${name}/40`; return img; });
-
-            function draw() {
-                if (!gameOn) return; 
-                rct.clearRect(0,0,rc.width,rc.height); 
-                rct.fillStyle = "#333"; rct.fillRect(0, 290, 600, 10); // الأرضية
-                
-                v += g;1 py += v; 
-                if (py > 240) { py = 240; v = 0; jump = false; }
-                rct.drawImage(salehSkin, 50, py, 50, 50);
-
-                // تقليل سرعة تكرار ظهور العوائق
-                // نتحقق أن آخر عائق ظهر قد ابتعد مسافة 200 بكسل على الأقل قبل إضافة عائق جديد
-if (Math.random() < 0.01 && (obs.length === 0 || obs[obs.length - 1].x < 400)) {
-    obs.push({x: 600, img: enemies[Math.floor(Math.random() * enemies.length)]});
-}
-                
-                obs.forEach((o, i) => {
-                    o.x -= 2; // تقليل السرعة الأفقية (كانت 5 أو 6)
-                    rct.drawImage(o.img, o.x, 250, 40, 40);
-                    if (o.x < 90 && o.x > 50 && py > 200) { 
-                        gameOn = false; 
-                        saveScore('runner', score); 
-                        container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startRunner()">خسرت! سكورك: ${score} - ثانية؟</button>`; 
-                    }
-                    if (o.x < -40) { obs.splice(i,1); score++; }
-                });
-                rct.fillStyle = "#fff"; rct.font = "bold 16px Cairo"; rct.fillText("النقاط: "+score, 10, 30); 
-                requestAnimationFrame(draw);
-            }
-            window.onkeydown = (e) => { if(e.code === "Space" && !jump) { v = -14; jump = true; } };
-            rc.onclick = () => { if(!jump) { v = -14; jump = true; } }; 
-            draw();
-        }
-
-        /* 5. نظام الإرسال القديم */
+        /* 4. نظام الإرسال القديم */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
             document.getElementById("suggestion-container").style.display = "none";
@@ -615,8 +512,8 @@ if (Math.random() < 0.01 && (obs.length === 0 || obs[obs.length - 1].x < 400)) {
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
         function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
+            const start = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
