@@ -152,7 +152,7 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
-            height: 185px; 
+            height: 185px; /* الارتفاع المطلوب ليناسب المربع الأحمر */
             display: flex; 
             flex-direction: column; 
             backdrop-filter: blur(5px); 
@@ -162,7 +162,7 @@
         
         .game-img { 
             width: 100%; 
-            height: 105px; 
+            height: 105px; /* ارتفاع الصورة المناسب */
             object-fit: cover; 
             flex-shrink: 0; 
         }
@@ -192,8 +192,8 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
-        /* ألعاب تفاعلية */
-        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 600px; cursor: pointer; }
+        /* ستايلات قسم الألعاب التفاعلية */
+        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 550px; }
         .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
 
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
@@ -211,9 +211,9 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
             .large-ep-thumbnail { height: 250px; }
@@ -376,14 +376,14 @@
     </div>
 
     <div id="my-socials" class="library-container">
-        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي</h2>
+        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div></a>
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -398,16 +398,16 @@
             <div id="game-area" class="archive-main-content">
                 <div id="clicker-game" class="archive-body" style="text-align:center;">
                     <div id="clicker-canvas-container" class="game-canvas-area">
-                        <button class="tab-btn" onclick="startClicker()">ابدأ اللعب</button>
+                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startClicker()">ابدأ اللعب</button>
                     </div>
-                    <div id="clicker-scores" class="high-score-board">🏆 توب 3 سيظهر هنا</div>
+                    <div id="clicker-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
                 </div>
 
                 <div id="runner-game" class="archive-body" style="text-align:center;">
                     <div id="runner-canvas-container" class="game-canvas-area">
-                        <button class="tab-btn" onclick="startRunner()">ابدأ الركض (Space للقفز)</button>
+                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startRunner()">ابدأ الركض (نقر للقفز)</button>
                     </div>
-                    <div id="runner-scores" class="high-score-board">🏆 توب 3 سيظهر هنا</div>
+                    <div id="runner-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
                 </div>
             </div>
         </div>
@@ -419,6 +419,7 @@
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
                 <input type="text" name="_gotcha" class="honey">
                 <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>نوع الاقتراح</label><select name="type"><option value="لعبة جديدة">لعبة جديدة</option><option value="فكرة مقطع">فكرة مقطع</option><option value="فكرة بث">فكرة بث</option><option value="تحسين للموقع">تحسين للموقع</option></select></div>
                 <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
@@ -432,38 +433,24 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
+        /* 1. الخلفية المتحركة */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
-            }
+            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.1; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25; }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.y > canvas.height) this.y = 0; }
             draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        function handleParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
-            requestAnimationFrame(handleParticles);
-        }
-        for (let i = 0; i < 100; i++) particles.push(new Particle());
+        function handleParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(handleParticles); }
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
+        /* 2. العداد الرمضاني */
         function updateCountdown() {
-            const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = ramadanDate - now;
+            const gap = new Date('February 18, 2026 20:00:00').getTime() - new Date().getTime();
             if (gap <= 0) { document.getElementById('countdown-title').innerText = "الحلقة الأولى بدأت! 🔥"; return; }
             document.getElementById('days').innerText = Math.floor(gap / 86400000);
             document.getElementById('hours').innerText = Math.floor((gap % 86400000) / 3600000);
@@ -472,47 +459,41 @@
         }
         setInterval(updateCountdown, 1000);
 
+        /* 3. وظائف الأرشيف */
         function toggleMainArchive(type) {
             document.getElementById('archive-content-area').style.display = "block";
             document.querySelectorAll('.archive-body').forEach(b => b.classList.remove('active'));
             document.getElementById(type + '-body').classList.add('active');
         }
         function showTournamentDetails(id) { document.getElementById(id).classList.toggle('active'); }
-        function showEp(epId, node) {
-            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
-            document.getElementById(epId).classList.add('active');
-        }
-        function toggleGames() {
-            const area = document.getElementById('hidden-games-area');
-            area.style.display = area.style.display === "block" ? "none" : "block";
-        }
+        function showEp(epId, node) { document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active')); document.getElementById(epId).classList.add('active'); }
+        function toggleGames() { const area = document.getElementById('hidden-games-area'); area.style.display = area.style.display === "block" ? "none" : "block"; }
 
-        function toggleGame(gameId) {
+        /* 4. نظام الألعاب */
+        function toggleGame(id) {
             document.getElementById('game-area').style.display = "block";
             document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
-            document.getElementById(gameId + '-game').classList.add('active');
-            updateTopScores(gameId);
+            document.getElementById(id + '-game').classList.add('active');
+            updateTopScores(id);
         }
 
         function saveScore(id, s) { 
-            let scores = JSON.parse(localStorage.getItem(id)) || []; 
-            scores.push(s); scores.sort((a,b)=>b-a); 
-            localStorage.setItem(id, JSON.stringify(scores.slice(0,3))); 
-            updateTopScores(id); 
+            let scores = JSON.parse(localStorage.getItem(id)) || []; scores.push(s); scores.sort((a,b)=>b-a);
+            localStorage.setItem(id, JSON.stringify(scores.slice(0,3))); updateTopScores(id); 
         }
 
         function updateTopScores(id) { 
             const s = JSON.parse(localStorage.getItem(id)) || []; 
-            document.getElementById(id+'-scores').innerText = "🏆 توب 3 الشخصي: " + s.join(' | '); 
+            document.getElementById(id+'-scores').innerText = "🏆 توب 3 الشخصي: " + (s.join(' | ') || "لا توجد نتائج"); 
         }
 
         function startClicker() {
             let score = 0, time = 10, container = document.getElementById('clicker-canvas-container');
-            container.innerHTML = `<div id="tar" style="width:50px;height:50px;background:var(--gold);border-radius:50%;position:absolute;cursor:pointer;"></div><div style="position:absolute;top:10px;left:10px;">النقاط: <span id="cs">0</span></div>`;
+            container.innerHTML = `<div id="tar" style="width:50px;height:50px;background:var(--gold);border-radius:50%;position:absolute;cursor:pointer;box-shadow:0 0 15px var(--gold);"></div><div style="position:absolute;top:10px;left:10px;">النقاط: <span id="cs">0</span></div>`;
             const tar = document.getElementById('tar');
             const move = () => { tar.style.top = Math.random()*250+'px'; tar.style.left = Math.random()*(container.clientWidth-50)+'px'; };
             tar.onclick = () => { score++; document.getElementById('cs').innerText = score; move(); };
-            let t = setInterval(() => { time--; if(time<=0) { clearInterval(t); saveScore('clicker', score); container.innerHTML = `<button class="tab-btn" onclick="startClicker()">انتهى! نقاطك: ${score}</button>`; } }, 1000);
+            let t = setInterval(() => { time--; if(time<=0) { clearInterval(t); saveScore('clicker', score); container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startClicker()">انتهى! نقاطك: ${score}</button>`; } }, 1000);
             move();
         }
 
@@ -524,35 +505,34 @@
             const salehSkin = new Image(); salehSkin.src = "https://minotar.net/avatar/Saleh/50";
             const enemies = ["ISpitfire57", "twpywq", "Lonley", "Abo7abs"].map(name => { const img = new Image(); img.src = `https://minotar.net/helm/${name}/40`; return img; });
             function draw() {
-                if (!gameOn) return; rct.clearRect(0,0,600,300); rct.fillStyle = "#333"; rct.fillRect(0, 290, 600, 10);
+                if (!gameOn) return; rct.clearRect(0,0,rc.width,rc.height); rct.fillStyle = "#333"; rct.fillRect(0, 290, 600, 10);
                 v += g; py += v; if (py > 240) { py = 240; v = 0; jump = false; }
                 rct.drawImage(salehSkin, 50, py, 50, 50);
                 if (Math.random() < 0.015) obs.push({x:600, img: enemies[Math.floor(Math.random()*enemies.length)]});
                 obs.forEach((o, i) => {
                     o.x -= 5; rct.drawImage(o.img, o.x, 250, 40, 40);
-                    if (o.x < 100 && o.x > 50 && py > 200) { gameOn = false; saveScore('runner', score); container.innerHTML = `<button class="tab-btn" onclick="startRunner()">خسرت! سكورك: ${score}</button>`; }
+                    if (o.x < 90 && o.x > 50 && py > 200) { gameOn = false; saveScore('runner', score); container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startRunner()">خسرت! سكورك: ${score}</button>`; }
                     if (o.x < -40) { obs.splice(i,1); score++; }
                 });
-                rct.fillStyle = "#fff"; rct.fillText("النقاط: "+score, 10, 20); requestAnimationFrame(draw);
+                rct.fillStyle = "#fff"; rct.font = "bold 16px Cairo"; rct.fillText("النقاط: "+score, 10, 30); requestAnimationFrame(draw);
             }
-            window.addEventListener('keydown', (e) => { if(e.code === "Space" && !jump) { v = -15; jump = true; } });
+            window.onkeydown = (e) => { if(e.code === "Space" && !jump) { v = -15; jump = true; } };
             rc.onclick = () => { if(!jump) { v = -15; jump = true; } }; draw();
         }
+
+        /* 5. المهام الأساسية */
+        const form = document.getElementById("suggestion-form");
+        form.onsubmit = () => { document.getElementById("suggestion-container").style.display = "none"; document.getElementById("success-message").style.display = "block"; };
 
         window.onload = () => {
             const start = new Date('2022-06-02'); const now = new Date();
             let y = now.getFullYear()-start.getFullYear(), m = now.getMonth()-start.getMonth();
             if(m<0) { y--; m+=12; } document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
-            updateCountdown(); checkKick();
+            updateCountdown();
+            fetch(`https://7pixels.net/api/kick/s4leeh`).then(r=>r.json()).then(d=>{
+                if (d.livestream) { document.getElementById('live-bar-container').classList.add('is-live'); document.getElementById('live-text').innerText = "صالح لايف الآن! 🔥"; }
+            });
         };
-
-        async function checkKick() {
-            try {
-                const res = await fetch(`https://7pixels.net/api/kick/s4leeh`);
-                const data = await res.json();
-                if (data.livestream) { document.getElementById('live-bar-container').classList.add('is-live'); document.getElementById('live-text').innerText = "صالح لايف الآن! 🔥"; }
-            } catch (e) { document.getElementById('live-text').innerText = "Kick.com/S4leeh"; }
-        }
     </script>
 </body>
 </html>
