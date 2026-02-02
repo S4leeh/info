@@ -24,11 +24,23 @@
 
         /* حاوية الخلفية المتحركة */
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%); }
+        
         .reveal { opacity: 0; transform: translateX(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateX(0); }
 
         /* شريط حالة البث */
-        .live-status-bar { width: 100%; background: rgba(5, 5, 5, 0.98); border-bottom: 2px solid var(--border-color); padding: 12px; position: sticky; top: 0; z-index: 10001; display: flex; justify-content: center; text-decoration: none; }
+        .live-status-bar {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.98);
+            border-bottom: 2px solid var(--border-color);
+            padding: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            text-decoration: none;
+        }
         .status-content { display: flex; align-items: center; gap: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
@@ -36,7 +48,22 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         /* شريط التنقل */
-        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 65px; z-index: 10000; margin: 0 auto; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .nav-bar {
+            width: fit-content;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 8px 25px;
+            position: sticky;
+            top: 65px;
+            z-index: 10000;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
         .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
         .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
         .nav-link:hover::after { width: 100%; }
@@ -56,6 +83,16 @@
         .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
         .stat-label { font-size: 14px; color: #888; font-weight: 700; }
 
+        /* يوتيوب */
+        .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
+        .yt-card { background: var(--card-bg); border-radius: 25px; overflow: hidden; border: 1px solid var(--border-color); text-decoration: none; display: block; transition: 0.3s; position: relative; }
+        .yt-card:hover { transform: scale(1.02); border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
+        .yt-thumbnail { width: 100%; height: 350px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+        .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
+        .play-btn::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 5px; }
+        .yt-details { padding: 25px; text-align: center; }
+        .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
+
         /* الأرشيف */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: rgba(26, 26, 26, 0.7); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; backdrop-filter: blur(10px); }
@@ -63,9 +100,24 @@
         .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
         .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
+        .tournament-details { display: none; }
+        .tournament-details.active { display: block; animation: fadeIn 0.5s ease-in; }
         .archive-body { display: none; }
         .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* الفرق والحلقات */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+        .team-card { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border-right: 4px solid var(--gold); }
+        .team-title { font-weight: 900; font-size: 14px; color: var(--gold); margin-bottom: 5px; }
+        .team-members { font-size: 13px; color: #ccc; }
+        .episodes-selector { display: flex; justify-content: center; gap: 15px; margin: 30px 0; border-top: 1px solid #333; padding-top: 30px; flex-wrap: wrap; }
+        .ep-node { width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888; }
+        .ep-node:hover, .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); transform: scale(1.05); }
+        .large-ep-card { width: 100%; max-width: 900px; margin: 0 auto; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; text-decoration: none; display: block; }
+        .large-ep-thumbnail { width: 100%; height: 450px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+        .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
+        .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
         /* العداد الرمضاني */
         .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
@@ -73,24 +125,40 @@
         .countdown-value { font-size: 32px; font-weight: 900; color: var(--gold); display: block; }
         .countdown-label { font-size: 12px; color: #aaa; font-weight: 700; }
 
-        /* مكتبة الألعاب - المقاس المربع المطلوب */
+        /* مكتبة الألعاب - المقاس المصحح */
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
         .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 185px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
+        .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
         .game-img { width: 100%; height: 105px; object-fit: cover; flex-shrink: 0; }
         .game-info { padding: 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
-
-        /* ركن التسلية */
-        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
+        .game-name { font-size: 13px; font-weight: 700; color: #fff; }
+        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; }
 
         /* الحسابات */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
+        .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
+
+        /* التسلية */
+        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 500px; }
+        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
 
         /* الاقتراحات */
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; backdrop-filter: blur(10px); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; }
         #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
+        
+        @media (max-width: 900px) {
+            .socials-grid { grid-template-columns: repeat(3, 1fr); }
+            .stats-grid { grid-template-columns: 1fr; }
+            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
+            .nav-link { font-size: 11px; }
+        }
     </style>
 </head>
 <body id="top-page">
@@ -141,20 +209,28 @@
             </div>
             <div id="archive-content-area" class="archive-main-content">
                 <div id="events-body" class="archive-body">
-                    <div style="display:flex; justify-content:center; margin-bottom:30px;">
-                        <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
-                    </div>
-                    <div id="tahadani-details" style="display:none;">
-                        <div class="episodes-selector" style="display:flex; justify-content:center; gap:10px; margin:20px 0;">
+                    <div style="display:flex; justify-content:center; margin-bottom:30px;"><button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button></div>
+                    <div id="tahadani-details" class="tournament-details">
+                        <div class="team-grid">
+                            <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                        </div>
+                        <div class="episodes-selector">
                             <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
                             <div class="ep-node" onclick="showEp('ep-4', this)">النهائي</div>
                         </div>
                         <div id="ep-display">
                             <div id="ep-1" class="archive-body active">
-                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" style="text-decoration:none; color:white; text-align:center;"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></a>
+                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
+                                </a>
                             </div>
                             <div id="ep-4" class="archive-body">
-                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" style="text-decoration:none; color:white; text-align:center;"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></a>
+                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -172,7 +248,6 @@
                         <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
                     </div>
                 </div>
-                <div id="highlights-body" class="archive-body"><p style="text-align:center; padding:40px; color:#666;">قريباً... 🏗️</p></div>
             </div>
         </div>
     </section>
@@ -180,8 +255,8 @@
     <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         <div class="games-grid reveal">
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg" class="game-img"><div class="game-info">Fateel - فتيل</div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info">Supraworld</div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div>
+            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
         </div>
     </div>
 
@@ -194,20 +269,18 @@
     </div>
 
     <section id="entertainment-section" class="archive-container reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 ركن التسلية مع صالح</h2>
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 ركن التسلية</h2>
         <div class="archive-wrapper">
             <div class="archive-tabs">
                 <button class="tab-btn" onclick="toggleGame('clicker')">🖱️ تحدي النقر</button>
-                <button class="tab-btn" onclick="toggleGame('runner')">🏃 مغامرة صالح</button>
             </div>
             <div id="game-area" class="archive-main-content">
                 <div id="clicker-game" class="archive-body" style="text-align:center;">
-                    <div id="clicker-canvas-container" class="game-canvas-area" style="height:350px; width:100%; max-width:500px;">
+                    <div id="clicker-canvas-container" class="game-canvas-area">
                         <button style="background:var(--gold); padding:15px; border-radius:10px; border:none; font-weight:900;" onclick="startClicker()">ابدأ اللعب</button>
                     </div>
-                    <div id="clicker-scores" class="high-score-board">🏆 التوب 3 الشخصي</div>
+                    <div id="clicker-scores" class="high-score-board">🏆 توب 3 سيظهر هنا</div>
                 </div>
-                <div id="runner-game" class="archive-body" style="text-align:center;"><p style="color:#666;">🏃 قريباً...</p></div>
             </div>
         </div>
     </section>
@@ -216,8 +289,8 @@
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
             <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST">
-                <input type="text" name="name" placeholder="الاسم" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:white;" required>
-                <textarea name="msg" placeholder="الاقتراح" rows="3" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:white;" required></textarea>
+                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
                 <button type="submit" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:10px; font-weight:900;">إرسال</button>
             </form>
         </div>
@@ -227,6 +300,10 @@
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
 
     <script>
+        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
+        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+
+        /* 1. الخلفية */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -237,15 +314,16 @@
             draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
         function handleParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(handleParticles); }
-        for (let i = 0; i < 80; i++) particles.push(new Particle());
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
+        /* 2. العداد */
         function updateCountdown() {
             const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
             const gap = ramadanDate - now;
-            if (gap <= 0) { document.getElementById('countdown-title').innerText = "الحلقة الأولى بدأت! 🔥"; return; }
+            if (gap <= 0) { document.getElementById('countdown-title').innerText = "بدأت الفعالية! 🔥"; return; }
             document.getElementById('days').innerText = Math.floor(gap / (1000 * 60 * 60 * 24));
             document.getElementById('hours').innerText = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById('minutes').innerText = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
@@ -253,25 +331,20 @@
         }
         setInterval(updateCountdown, 1000);
 
+        /* 3. الوظائف */
         function toggleMainArchive(type) {
             document.getElementById('archive-content-area').style.display = "block";
             document.querySelectorAll('.archive-body').forEach(b => b.classList.remove('active'));
             document.getElementById(type + '-body').classList.add('active');
         }
-
-        function showTournamentDetails(id) { document.getElementById(id).style.display = "block"; }
+        function showTournamentDetails(id) { document.getElementById(id).classList.toggle('active'); }
         function showEp(id, node) { document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-
-        function toggleGame(gameId) {
-            document.getElementById('game-area').style.display = "block";
-            document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
-            document.getElementById(gameId + '-game').classList.add('active');
-        }
+        function toggleGame(id) { document.getElementById('game-area').style.display = "block"; document.getElementById(id + '-game').classList.add('active'); }
 
         function startClicker() {
             let score = 0, time = 10;
             const container = document.getElementById('clicker-canvas-container');
-            container.innerHTML = `<div id="target" style="width:60px; height:60px; background:var(--gold); border-radius:50%; position:absolute; cursor:pointer;"></div><div style="position:absolute; top:10px; color:white;">السكور: <span id="s">0</span></div>`;
+            container.innerHTML = `<div id="target" style="width:50px; height:50px; background:var(--gold); border-radius:50%; position:absolute; cursor:pointer;"></div><div style="position:absolute; top:10px; color:white;">النقاط: <span id="s">0</span></div>`;
             const target = document.getElementById('target');
             const move = () => { target.style.top = Math.random() * 280 + 'px'; target.style.left = Math.random() * (container.clientWidth - 60) + 'px'; };
             target.onclick = () => { score++; document.getElementById('s').innerText = score; move(); };
@@ -284,9 +357,17 @@
             let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
-            document.getElementById('sub-count').innerText = "1,531";
-            document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active'); });
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            checkKick();
         };
+
+        async function checkKick() {
+            try {
+                const res = await fetch(`https://7pixels.net/api/kick/s4leeh`);
+                const data = await res.json();
+                if (data.livestream) { document.getElementById('live-bar-container').classList.add('is-live'); document.getElementById('live-text').innerText = "صالح لايف الآن! 🔥"; }
+            } catch (e) { document.getElementById('live-text').innerText = "Kick.com/S4leeh"; }
+        }
     </script>
 </body>
 </html>
