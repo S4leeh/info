@@ -192,6 +192,10 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
+        /* ستايلات قسم الألعاب التفاعلية المضافة */
+        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 550px; }
+        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 12px; color: var(--gold); text-align: center; }
+
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -233,6 +237,7 @@
         <a href="#archive-section" class="nav-link">الأرشيف</a>
         <a href="#games-library" class="nav-link">الألعاب</a>
         <a href="#my-socials" class="nav-link">حساباتي</a>
+        <a href="#entertainment-section" class="nav-link">ركن التسلية</a>
         <a href="#suggestions" class="nav-link">الاقتراحات</a>
     </nav>
 
@@ -382,6 +387,36 @@
         </div>
     </div>
 
+    <section id="entertainment-section" class="archive-container reveal">
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 ركن التسلية مع صالح</h2>
+        <div class="archive-wrapper">
+            <div class="archive-tabs">
+                <button class="tab-btn" onclick="toggleGame('clicker')">🖱️ تحدي النقر</button>
+                <button class="tab-btn" onclick="toggleGame('runner')">🏃 مغامرة صالح</button>
+                <button class="tab-btn" onclick="toggleGame('memory')">🧠 ذاكرة الشعارات</button>
+            </div>
+            
+            <div id="game-area" class="archive-main-content">
+                <div id="clicker-game" class="archive-body" style="text-align:center;">
+                    <div id="clicker-canvas-container" class="game-canvas-area">
+                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startClicker()">ابدأ اللعب</button>
+                    </div>
+                    <div id="clicker-scores" class="high-score-board">🏆 التوب 3 الشخصي سيظهر هنا</div>
+                </div>
+
+                <div id="runner-game" class="archive-body" style="text-align:center;">
+                    <div id="runner-canvas-container" class="game-canvas-area"><p style="color:#666;">🏃 قريباً... يتم تجهيز المغامرة</p></div>
+                    <div id="runner-scores" class="high-score-board">🏆 التوب 3 الشخصي سيظهر هنا</div>
+                </div>
+
+                <div id="memory-game" class="archive-body" style="text-align:center;">
+                    <div id="memory-canvas-container" class="game-canvas-area"><p style="color:#666;">🧠 قريباً... يتم تجهيز التحدي</p></div>
+                    <div id="memory-scores" class="high-score-board">🏆 التوب 3 الشخصي سيظهر هنا</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="suggestions" class="form-box reveal">
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
@@ -491,7 +526,41 @@
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 4. نظام الإرسال القديم */
+        /* 4. نظام الألعاب التفاعلية */
+        function toggleGame(gameId) {
+            document.getElementById('game-area').style.display = "block";
+            document.querySelectorAll('#game-area .archive-body').forEach(b => b.classList.remove('active'));
+            document.getElementById(gameId + '-game').classList.add('active');
+            updateTopScores(gameId);
+        }
+
+        function saveScore(gameId, score) {
+            let scores = JSON.parse(localStorage.getItem(gameId + '-scores')) || [];
+            scores.push(score);
+            scores.sort((a, b) => b - a);
+            scores = scores.slice(0, 3);
+            localStorage.setItem(gameId + '-scores', JSON.stringify(scores));
+            updateTopScores(gameId);
+        }
+
+        function updateTopScores(gameId) {
+            const scores = JSON.parse(localStorage.getItem(gameId + '-scores')) || [];
+            const display = document.getElementById(gameId + '-scores');
+            display.innerHTML = `🏆 توب 3: ` + scores.map((s, i) => `${i+1}. [ ${s} ]`).join(' | ') || "كن أول من يحقق رقماً قياسياً!";
+        }
+
+        function startClicker() {
+            let score = 0, time = 10;
+            const container = document.getElementById('clicker-canvas-container');
+            container.innerHTML = `<div id="target" style="width:60px; height:60px; background:var(--gold); border-radius:50%; position:absolute; cursor:pointer; box-shadow:0 0 20px var(--gold);"></div><div style="position:absolute; top:10px; color:white;">النقاط: <span id="s">0</span> | الوقت: <span id="t">10</span></div>`;
+            const target = document.getElementById('target');
+            const move = () => { target.style.top = Math.random() * 280 + 'px'; target.style.left = Math.random() * (container.clientWidth - 60) + 'px'; };
+            target.onclick = () => { score++; document.getElementById('s').innerText = score; move(); };
+            const timer = setInterval(() => { time--; if(document.getElementById('t')) document.getElementById('t').innerText = time; if(time <= 0) { clearInterval(timer); saveScore('clicker', score); container.innerHTML = `<button class="submit-btn" style="width:auto; padding:10px;" onclick="startClicker()">انتهى! نقاطك: ${score} - العب مرة ثانية</button>`; } }, 1000);
+            move();
+        }
+
+        /* 5. الأنظمة الأساسية */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
             document.getElementById("suggestion-container").style.display = "none";
@@ -512,8 +581,8 @@
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
         function updateStats() {
-            const start = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
+            const startExp = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
