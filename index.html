@@ -19,7 +19,7 @@
 
         /* --- نظام الماوس (اللوقو) --- */
         html, body, a, button, select, textarea, input, .ep-node, .game-card {
-            cursor: none !important; /* إخفاء الماوس الأصلي تماماً */
+            cursor: none !important;
         }
 
         #s4-cursor {
@@ -30,82 +30,41 @@
             background-repeat: no-repeat;
             position: fixed;
             pointer-events: none;
-            z-index: 1000000; /* فوق كل شيء */
+            z-index: 1000000;
             transform: translate(-50%, -50%);
             transition: width 0.2s, height 0.2s;
+            display: block;
         }
         
-        /* تكبير اللوقو قليلاً عند الوقوف على الأزرار */
         .cursor-hover {
             width: 45px !important;
             height: 45px !important;
             filter: drop-shadow(0 0 8px var(--gold));
         }
 
+        /* إخفاء الماوس المخصص في شاشات اللمس (الجوال) */
+        @media (pointer: coarse) {
+            #s4-cursor { display: none !important; }
+            html, body, a, button, input, textarea, select { cursor: auto !important; }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-
         html { scroll-behavior: smooth; }
-
         section, div[id] { scroll-margin-top: 130px; }
+        body { background-color: var(--bg-dark); color: #fff; padding-bottom: 0; overflow-x: hidden; position: relative; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: #fff;
-            padding-bottom: 0;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* حاوية الخلفية المتحركة */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%);
-        }
-
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%); }
         .reveal { opacity: 0; transform: translateX(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateX(0); }
 
-        /* شريط حالة البث */
-        .live-status-bar {
-            width: 100%;
-            background: rgba(5, 5, 5, 0.98);
-            border-bottom: 2px solid var(--border-color);
-            padding: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 10001;
-            display: flex;
-            justify-content: center;
-            text-decoration: none;
-        }
+        .live-status-bar { width: 100%; background: rgba(5, 5, 5, 0.98); border-bottom: 2px solid var(--border-color); padding: 12px; position: sticky; top: 0; z-index: 10001; display: flex; justify-content: center; text-decoration: none; }
         .status-content { display: flex; align-items: center; gap: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
         .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
         .status-text { color: #fff; font-weight: 900; font-size: 14px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* شريط التنقل */
-        .nav-bar {
-            width: fit-content;
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid var(--border-color);
-            padding: 8px 25px;
-            position: sticky;
-            top: 65px;
-            z-index: 10000;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
+        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 65px; z-index: 10000; margin: 0 auto; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
         .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
         .nav-link:hover::after { width: 100%; }
@@ -132,21 +91,18 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* الأرشيف */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: rgba(26, 26, 26, 0.7); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; backdrop-filter: blur(10px); }
         .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
         .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
         .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
         .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
-
         .tournament-details { display: none; }
         .tournament-details.active { display: block; animation: fadeIn 0.5s ease-in; }
         .archive-body { display: none; }
         .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ستايل العداد التنازلي الرمضاني */
         .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
         .countdown-box { background: rgba(0,0,0,0.4); border: 1px solid var(--gold); padding: 20px; border-radius: 15px; min-width: 100px; text-align: center; }
         .countdown-value { font-size: 32px; font-weight: 900; color: var(--gold); display: block; }
@@ -166,42 +122,13 @@
         .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
         .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
-        /* مكتبة الألعاب */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
-        
-        .game-card { 
-            background: rgba(26, 26, 26, 0.8); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            transition: 0.3s; 
-            height: 185px; 
-            display: flex; 
-            flex-direction: column; 
-            backdrop-filter: blur(5px); 
-        }
-        
+        .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 185px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
         .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-        
-        .game-img { 
-            width: 100%; 
-            height: 105px; 
-            object-fit: cover; 
-            flex-shrink: 0; 
-        }
-        
-        .game-info { 
-            padding: 10px; 
-            text-align: center; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            gap: 2px; 
-        }
-        
+        .game-img { width: 100%; height: 105px; object-fit: cover; flex-shrink: 0; }
+        .game-info { padding: 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
         .game-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 1px; }
         .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.2; }
 
@@ -209,34 +136,34 @@
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
 
-        /* الحسابات */
+        /* الحسابات - الشكل الأساسي */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
-        .social-item:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); transform: translateY(-5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
-        .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; }
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .submit-btn:hover { background: #fff; color: #000; }
-
         #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
         .honey { display: none; }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
-        footer p { color: #888; font-size: 14px; font-weight: 700; }
-        footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
-
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
-            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
+        
+        /* --- تعديلات الجوال (التجاوب) --- */
+        @media (max-width: 900px) { 
+            /* الإحصائيات تحت بعض */
+            .stats-grid { grid-template-columns: 1fr; } 
+            
+            /* الحسابات 3 في كل صف */
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            
+            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; } 
             .nav-link { font-size: 11px; }
+            .owner-name { font-size: 32px; }
             .large-ep-thumbnail { height: 250px; }
         }
     </style>
@@ -293,7 +220,6 @@
             </div>
 
             <div id="archive-content-area" class="archive-main-content">
-                
                 <div id="events-body" class="archive-body">
                     <div style="display:flex; justify-content:center; margin-bottom:30px;">
                         <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
@@ -429,7 +355,6 @@
             cursor.style.top = e.clientY + 'px';
         });
 
-        // جعل اللوقو يتفاعل عند الوقوف على عناصر قابلة للضغط
         const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card';
         document.querySelectorAll(hoverTags).forEach(item => {
             item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
@@ -478,7 +403,7 @@
             const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
             const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
             const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
+            if (dEl) dEl.innerText = d; if (hEl) hEl.innerText = h; if (mEl) mEl.innerText = m; if (sEl) sEl.innerText = s;
         }
         setInterval(updateCountdown, 1000);
 
