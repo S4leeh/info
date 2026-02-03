@@ -17,6 +17,15 @@
             --live-red: #ea1d2c;
         }
 
+        /* --- جعل الماوس هو اللوقو --- */
+        html, body {
+            cursor: url('logo.png'), auto;
+        }
+        
+        a, button, select, textarea, input, .ep-node, .game-card {
+            cursor: url('logo.png'), pointer;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
         html { scroll-behavior: smooth; }
@@ -514,8 +523,8 @@
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
         function updateStats() {
-            const start = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
+            const startExp = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
