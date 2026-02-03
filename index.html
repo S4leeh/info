@@ -207,9 +207,9 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
             .large-ep-thumbnail { height: 250px; }
@@ -491,9 +491,15 @@
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 4. تم إزالة منطق الإرسال القديم للسماح بالفتح في صفحة مستقلة */
+        /* 4. نظام الإرسال المحدث */
         const form = document.getElementById("suggestion-form");
-        // form.onsubmit = function() { ... }; // تم تعطيل هذه الدالة
+        form.onsubmit = function() {
+            // تنفيذ الإخفاء وإظهار الرسالة فور الضغط على الزر
+            setTimeout(() => {
+                document.getElementById("suggestion-container").style.display = "none";
+                document.getElementById("success-message").style.display = "block";
+            }, 100); // تأخير بسيط لضمان بدء عملية الإرسال للمتصفح
+        };
 
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
