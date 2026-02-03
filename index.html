@@ -18,7 +18,7 @@
         }
 
         /* --- نظام الماوس (اللوقو) --- */
-        html, body, a, button, select, textarea, input, .ep-node, .game-card {
+        html, body, a, button, select, textarea, input, .ep-node, .game-card, .social-item {
             cursor: none !important;
         }
 
@@ -32,20 +32,19 @@
             pointer-events: none;
             z-index: 1000000;
             transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s;
+            transition: width 0.15s ease-out, height 0.15s ease-out;
             display: block;
         }
         
         .cursor-hover {
-            width: 45px !important;
-            height: 45px !important;
-            filter: drop-shadow(0 0 8px var(--gold));
+            width: 50px !important;
+            height: 50px !important;
+            filter: drop-shadow(0 0 12px var(--gold)) !important;
         }
 
-        /* إخفاء الماوس المخصص في شاشات اللمس (الجوال) */
         @media (pointer: coarse) {
             #s4-cursor { display: none !important; }
-            html, body, a, button, input, textarea, select { cursor: auto !important; }
+            html, body, a, button, input, textarea, select, .social-item { cursor: auto !important; }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -136,7 +135,6 @@
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
 
-        /* الحسابات - الشكل الأساسي */
         .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
@@ -144,26 +142,25 @@
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
+        .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; }
         .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover { background: #fff; color: #000; }
+
         #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
         .honey { display: none; }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
-        
-        /* --- تعديلات الجوال (التجاوب) --- */
-        @media (max-width: 900px) { 
-            /* الإحصائيات تحت بعض */
-            .stats-grid { grid-template-columns: 1fr; } 
-            
-            /* الحسابات 3 في كل صف */
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            
-            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; } 
+        footer p { color: #888; font-size: 14px; font-weight: 700; }
+        footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .socials-grid { grid-template-columns: repeat(3, 1fr); }
+            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
-            .owner-name { font-size: 32px; }
             .large-ep-thumbnail { height: 250px; }
         }
     </style>
@@ -347,7 +344,7 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* 1. نظام تتبع الماوس باللوقو */
+        /* 1. نظام تتبع الماوس باللوقو مع التفاعل المحدث */
         const cursor = document.getElementById('s4-cursor');
         
         document.addEventListener('mousemove', e => {
@@ -355,11 +352,14 @@
             cursor.style.top = e.clientY + 'px';
         });
 
-        const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card';
-        document.querySelectorAll(hoverTags).forEach(item => {
-            item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-            item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-        });
+        function refreshCursorEvents() {
+            const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card, .social-item';
+            document.querySelectorAll(hoverTags).forEach(item => {
+                item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+            });
+        }
+        refreshCursorEvents();
 
         /* 2. نظام الخلفية المتحركة */
         const canvas = document.getElementById('bg-canvas');
@@ -424,23 +424,27 @@
                 document.getElementById('tahadani-details').classList.remove('active');
                 document.getElementById('tahadani-main-btn').classList.remove('active');
             }
+            refreshCursorEvents();
         }
         function showTournamentDetails(id) {
             const content = document.getElementById(id);
             const btn = document.getElementById('tahadani-main-btn');
             content.classList.toggle('active'); btn.classList.toggle('active');
             if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
+            refreshCursorEvents();
         }
         function showEp(epId, node) {
             document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
             document.getElementById(epId).classList.add('active'); node.classList.add('active');
+            refreshCursorEvents();
         }
         function toggleGames() {
             const area = document.getElementById('hidden-games-area');
             const btn = document.getElementById('show-more-btn');
             if (area.style.display === "block") { area.style.display = "none"; btn.innerText = "عرض المزيد من الألعاب"; }
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
+            refreshCursorEvents();
         }
 
         /* 5. نظام الإرسال المحدث */
