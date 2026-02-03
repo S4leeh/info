@@ -107,7 +107,7 @@
         .yt-details { padding: 25px; text-align: center; }
         .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
 
-        /* الأرشيف */
+        /* الأرشيف و القسم الترفيهي المشترك */
         .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
         .archive-wrapper { background: rgba(26, 26, 26, 0.7); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; backdrop-filter: blur(10px); }
         .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
@@ -141,7 +141,7 @@
         .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
         .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
-        /* مكتبة الألعاب */
+        /* مكتبة الألعاب - تم التعديل لتطابق المربع الأحمر */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
@@ -152,7 +152,7 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
-            height: 185px; 
+            height: 185px; /* الارتفاع المطلوب ليناسب المربع الأحمر */
             display: flex; 
             flex-direction: column; 
             backdrop-filter: blur(5px); 
@@ -162,7 +162,7 @@
         
         .game-img { 
             width: 100%; 
-            height: 105px; 
+            height: 105px; /* ارتفاع الصورة المناسب */
             object-fit: cover; 
             flex-shrink: 0; 
         }
@@ -192,6 +192,10 @@
         .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
         .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
 
+        /* ستايلات الألعاب التفاعلية */
+        .game-canvas-area { background: #000; border: 2px solid var(--gold); border-radius: 15px; margin: 20px auto; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; width: 100%; max-width: 550px; }
+        .high-score-board { margin-top: 15px; background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; font-size: 14px; color: var(--gold); text-align: center; }
+
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
         .form-group { margin-bottom: 18px; }
@@ -207,9 +211,9 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
             .large-ep-thumbnail { height: 250px; }
@@ -233,6 +237,7 @@
         <a href="#archive-section" class="nav-link">الأرشيف</a>
         <a href="#games-library" class="nav-link">الألعاب</a>
         <a href="#my-socials" class="nav-link">حساباتي</a>
+        <a href="#entertainment-section" class="nav-link">القسم الترفيهي</a>
         <a href="#suggestions" class="nav-link">الاقتراحات</a>
     </nav>
 
@@ -347,16 +352,7 @@
     <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card" onclick="openS4Run()" style="cursor:pointer">
-                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">S4leeh Run</div>
-                    <div class="game-note">لعبة المتصفح 🎮</div>
-                </div>
-            </div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div>
-        </div>
+        <div class="games-grid reveal"><div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div></div>
         <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
         <div class="games-grid reveal">
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
@@ -391,6 +387,34 @@
         </div>
     </div>
 
+    <section id="entertainment-section" class="archive-container reveal">
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 القسم الترفيهي</h2>
+        <div class="archive-wrapper">
+            <div class="archive-tabs">
+                <button id="clicker-tab" class="tab-btn" onclick="toggleEntertainment('clicker')">🖱️ تحدي النقر</button>
+                <button id="runner-tab" class="tab-btn" onclick="toggleEntertainment('runner')">🏃 مغامرة صالح</button>
+            </div>
+
+            <div id="entertainment-content-area" class="archive-main-content">
+                <div id="clicker-body" class="archive-body" style="text-align:center;">
+                    <p style="margin-bottom: 20px; color:#ccc;">اجمع أكبر عدد من النقاط في 10 ثواني!</p>
+                    <div id="clicker-canvas-container" class="game-canvas-area">
+                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startClicker()">ابدأ اللعب</button>
+                    </div>
+                    <div id="clicker-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
+                </div>
+
+                <div id="runner-body" class="archive-body" style="text-align:center;">
+                    <p style="margin-bottom: 20px; color:#ccc;">اقفز فوق أخوياك والوحوش للبقاء حياً!</p>
+                    <div id="runner-canvas-container" class="game-canvas-area">
+                        <button class="submit-btn" style="width:auto; padding:10px 40px;" onclick="startRunner()">ابدأ الركض (نقر للقفز)</button>
+                    </div>
+                    <div id="runner-scores" class="high-score-board">🏆 توب 3 الشخصي سيظهر هنا</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="suggestions" class="form-box reveal">
         <div id="suggestion-container">
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
@@ -414,16 +438,6 @@
 
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
 
-    <div id="s4-run-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99999;align-items:center;justify-content:center">
-      <div style="background:#000;border:2px solid var(--gold);border-radius:20px;padding:20px;position:relative;width:90%;max-width:650px">
-        <button onclick="closeS4Run()" style="position:absolute;top:-15px;left:-15px;width:40px;height:40px;border-radius:50%;border:none;background:var(--gold);font-weight:900;cursor:pointer;z-index:100000">✕</button>
-        <h3 style="text-align:center;color:var(--gold);margin-bottom:10px">🏃‍♂️ S4leeh Run</h3>
-        <canvas id="s4-run-canvas" width="600" height="200" style="background:#111;border-radius:10px;width:100%"></canvas>
-        <div id="s4-high-scores" style="text-align:center;color:var(--gold);font-size:12px;margin-top:10px">🏆 التوب 3 الشخصي سيظهر هنا</div>
-        <p style="text-align:center;color:#666;margin-top:8px;font-size:12px">المسافة أو النقر للقفز</p>
-      </div>
-    </div>
-
     <script>
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
@@ -434,25 +448,11 @@
         let particles = [];
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
-            }
+            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.1; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25; }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height; }
             draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        function handleParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
-            requestAnimationFrame(handleParticles);
-        }
+        function handleParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); } requestAnimationFrame(handleParticles); }
         for (let i = 0; i < 100; i++) particles.push(new Particle());
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
@@ -462,164 +462,90 @@
             const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
             const gap = ramadanDate - now;
-            if (gap <= 0) {
-                const timerTitle = document.getElementById('countdown-title');
-                if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
-                return;
-            }
-            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
-            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
+            if (gap <= 0) { document.getElementById('countdown-title').innerText = "الحلقة الأولى بدأت الآن! 🔥"; return; }
+            const d = Math.floor(gap / 86400000), h = Math.floor((gap % 86400000) / 3600000), m = Math.floor((gap % 3600000) / 60000), s = Math.floor((gap % 60000) / 1000);
+            document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
         }
         setInterval(updateCountdown, 1000);
 
         /* 3. وظائف الأرشيف */
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
-            const bodies = document.querySelectorAll('.archive-body');
-            const tabs = document.querySelectorAll('.tab-btn');
-            if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
-                area.style.display = "none";
-                tabs.forEach(t => t.classList.remove('active'));
-            } else {
-                area.style.display = "block";
-                bodies.forEach(b => b.classList.remove('active'));
-                tabs.forEach(t => t.classList.remove('active'));
-                document.getElementById(type + '-body').classList.add('active');
-                document.getElementById(type + '-tab').classList.add('active');
-                document.getElementById('tahadani-details').classList.remove('active');
-                document.getElementById('tahadani-main-btn').classList.remove('active');
-            }
+            const bodies = document.querySelectorAll('#archive-section .archive-body');
+            const tabs = document.querySelectorAll('#archive-section .tab-btn');
+            area.style.display = "block";
+            bodies.forEach(b => b.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            document.getElementById(type + '-body').classList.add('active');
+            document.getElementById(type + '-tab').classList.add('active');
         }
-        function showTournamentDetails(id) {
-            const content = document.getElementById(id);
-            const btn = document.getElementById('tahadani-main-btn');
-            content.classList.toggle('active'); btn.classList.toggle('active');
-            if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
-        }
-        function showEp(epId, node) {
-            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
-            document.getElementById(epId).classList.add('active'); node.classList.add('active');
-        }
-        function toggleGames() {
-            const area = document.getElementById('hidden-games-area');
-            const btn = document.getElementById('show-more-btn');
-            if (area.style.display === "block") { area.style.display = "none"; btn.innerText = "عرض المزيد من الألعاب"; }
-            else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
+        function showTournamentDetails(id) { document.getElementById(id).classList.toggle('active'); }
+        function showEp(epId, node) { document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active')); document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active')); document.getElementById(epId).classList.add('active'); node.classList.add('active'); }
+        function toggleGames() { const area = document.getElementById('hidden-games-area'); area.style.display = area.style.display === "block" ? "none" : "block"; }
+
+        /* 4. وظائف القسم الترفيهي */
+        function toggleEntertainment(type) {
+            const area = document.getElementById('entertainment-content-area');
+            const bodies = document.querySelectorAll('#entertainment-section .archive-body');
+            const tabs = document.querySelectorAll('#entertainment-section .tab-btn');
+            area.style.display = "block";
+            bodies.forEach(b => b.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            document.getElementById(type + '-body').classList.add('active');
+            document.getElementById(type + '-tab').classList.add('active');
+            updateTopScores(type);
         }
 
-        /* 4. نظام الإرسال القديم */
-        const form = document.getElementById("suggestion-form");
-        form.onsubmit = function() {
-            document.getElementById("suggestion-container").style.display = "none";
-            document.getElementById("success-message").style.display = "block";
+        function saveScore(id, s) { 
+            let sc = JSON.parse(localStorage.getItem(id)) || []; sc.push(s); sc.sort((a,b)=>b-a);
+            localStorage.setItem(id, JSON.stringify(sc.slice(0,3))); updateTopScores(id); 
+        }
+
+        function updateTopScores(id) { 
+            const sc = JSON.parse(localStorage.getItem(id)) || []; 
+            document.getElementById(id+'-scores').innerText = "🏆 توب 3 الشخصي: " + (sc.join(' | ') || "لا توجد نتائج"); 
+        }
+
+        function startClicker() {
+            let score = 0, time = 10, container = document.getElementById('clicker-canvas-container');
+            container.innerHTML = `<div id="tar" style="width:50px;height:50px;background:var(--gold);border-radius:50%;position:absolute;cursor:pointer;box-shadow:0 0 15px var(--gold);"></div><div style="position:absolute;top:10px;left:10px;">النقاط: <span id="cs">0</span></div>`;
+            const tar = document.getElementById('tar');
+            const move = () => { tar.style.top = Math.random()*250+'px'; tar.style.left = Math.random()*(container.clientWidth-50)+'px'; };
+            tar.onclick = () => { score++; document.getElementById('cs').innerText = score; move(); };
+            let t = setInterval(() => { time--; if(time<=0) { clearInterval(t); saveScore('clicker', score); container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startClicker()">انتهى! نقاطك: ${score}</button>`; } }, 1000);
+            move();
+        }
+
+        function startRunner() {
+            const container = document.getElementById('runner-canvas-container');
+            container.innerHTML = `<canvas id="rc" width="600" height="300" style="width:100%;"></canvas>`;
+            const rc = document.getElementById('rc'), rct = rc.getContext('2d');
+            let score = 0, py = 240, jump = false, g = 0.8, v = 0, obs = [], gameOn = true;
+            const salehSkin = new Image(); salehSkin.src = "https://minotar.net/avatar/Saleh/50";
+            const enemies = ["ISpitfire57", "twpywq", "Lonley", "Abo7abs"].map(name => { const img = new Image(); img.src = `https://minotar.net/helm/${name}/40`; return img; });
+            function draw() {
+                if (!gameOn) return; rct.clearRect(0,0,rc.width,rc.height); rct.fillStyle = "#333"; rct.fillRect(0, 290, 600, 10);
+                v += g; py += v; if (py > 240) { py = 240; v = 0; jump = false; }
+                rct.drawImage(salehSkin, 50, py, 50, 50);
+                if (Math.random() < 0.015 && (obs.length === 0 || obs[obs.length-1].x < 350)) obs.push({x:600, img: enemies[Math.floor(Math.random()*enemies.length)]});
+                obs.forEach((o, i) => {
+                    o.x -= 3.5; rct.drawImage(o.img, o.x, 250, 40, 40);
+                    if (o.x < 90 && o.x > 50 && py > 200) { gameOn = false; saveScore('runner', score); container.innerHTML = `<button class="submit-btn" style="width:auto;" onclick="startRunner()">خسرت! سكورك: ${score}</button>`; }
+                    if (o.x < -40) { obs.splice(i,1); score++; }
+                });
+                rct.fillStyle = "#fff"; rct.font = "bold 16px Cairo"; rct.fillText("النقاط: "+score, 10, 30); requestAnimationFrame(draw);
+            }
+            window.onkeydown = (e) => { if(e.code === "Space" && !jump) { v = -14; jump = true; } };
+            rc.onclick = () => { if(!jump) { v = -14; jump = true; } }; draw();
+        }
+
+        window.onload = () => {
+            const start = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear()-start.getFullYear(), m = now.getMonth()-start.getMonth();
+            if(m<0) { y--; m+=12; } document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+            updateCountdown();
+            fetch(`https://7pixels.net/api/kick/s4leeh`).then(r=>r.json()).then(d=>{ if(d.livestream) { document.getElementById('live-bar-container').classList.add('is-live'); document.getElementById('live-text').innerText="صالح فاتح بث مباشر الآن! 🔥"; } });
         };
-
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        revealElements.forEach(el => observer.observe(el));
-
-        async function updateYouTubeSubs() {
-            try {
-                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
-                const data = await res.json();
-                document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
-            } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
-        }
-        function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
-            if (m < 0) { y--; m += 12; }
-            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
-        }
-        async function checkKick() {
-            const container = document.getElementById('live-bar-container');
-            const txt = document.getElementById('live-text');
-            try {
-                const res = await fetch(`https://7pixels.net/api/kick/s4leeh`);
-                const data = await res.json();
-                if (data.livestream) { container.classList.add('is-live'); txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
-                else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
-            } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
-        }
-
-        /* ===== S4leeh Run Engine (MODIFIED) ===== */
-        const s4Canvas = document.getElementById("s4-run-canvas");
-        const s4Ctx = s4Canvas.getContext("2d");
-        let s4Y = 140, s4VY = 0, s4Gravity = 0.8, s4Obs = [], s4Score = 0, s4Running = false;
-        
-        const salehHead = new Image(); salehHead.src = "https://minotar.net/avatar/Saleh/40";
-        const enemyHeads = ["ISpitfire57", "twpywq", "Lonley", "Abo7abs"].map(name => {
-            const img = new Image(); img.src = `https://minotar.net/helm/${name}/35`; return img;
-        });
-
-        function openS4Run(){
-            document.getElementById("s4-run-modal").style.display="flex";
-            updateS4TopScores();
-            s4Reset();
-        }
-        function closeS4Run(){
-            document.getElementById("s4-run-modal").style.display="none";
-            s4Running=false;
-        }
-        function s4Reset(){
-            s4Y=140; s4VY=0; s4Obs=[]; s4Score=0; s4Running=true;
-            requestAnimationFrame(s4Loop);
-        }
-        function s4Loop(){
-            if(!s4Running) return;
-            s4Ctx.clearRect(0,0,600,200);
-            s4Ctx.fillStyle="#333"; s4Ctx.fillRect(0,180,600,20); // Floor
-
-            s4VY+=s4Gravity; s4Y+=s4VY;
-            if(s4Y>140){s4Y=140;s4VY=0}
-            s4Ctx.drawImage(salehHead, 50, s4Y, 40, 40);
-
-            // Condition for distance between obstacles
-            if(Math.random()<0.015 && (s4Obs.length === 0 || s4Obs[s4Obs.length-1].x < 350)) {
-                s4Obs.push({x:600, img: enemyHeads[Math.floor(Math.random()*enemyHeads.length)]});
-            }
-
-            s4Obs.forEach((o, i)=>{
-                o.x-=3.5; // Reasonable Speed
-                s4Ctx.drawImage(o.img, o.x, 145, 35, 35);
-                if(o.x<85 && o.x>45 && s4Y>110) s4GameOver();
-                if(o.x < -40) { s4Obs.splice(i, 1); s4Score += 10; }
-            });
-
-            s4Score++;
-            s4Ctx.fillStyle="#fff"; s4Ctx.font="bold 14px Cairo";
-            s4Ctx.fillText("النقاط: "+s4Score,10,25);
-            requestAnimationFrame(s4Loop);
-        }
-        function s4GameOver(){
-            s4Running=false;
-            saveS4Score(s4Score);
-            s4Ctx.fillStyle="rgba(0,0,0,0.7)"; s4Ctx.fillRect(0,0,600,200);
-            s4Ctx.fillStyle="red"; s4Ctx.font="bold 24px Cairo"; s4Ctx.textAlign="center";
-            s4Ctx.fillText("💥 انتهت اللعبة! سكورك: " + s4Score, 300, 100);
-            s4Ctx.fillStyle="white"; s4Ctx.font="14px Cairo";
-            s4Ctx.fillText("اضغط هنا للإعادة", 300, 140);
-            s4Canvas.onclick = () => { s4Canvas.onclick=null; s4Reset(); };
-        }
-        function saveS4Score(s) {
-            let sc = JSON.parse(localStorage.getItem('s4run-scores')) || [];
-            sc.push(s); sc.sort((a,b)=>b-a);
-            localStorage.setItem('s4run-scores', JSON.stringify(sc.slice(0,3)));
-            updateS4TopScores();
-        }
-        function updateS4TopScores() {
-            const sc = JSON.parse(localStorage.getItem('s4run-scores')) || [];
-            document.getElementById('s4-high-scores').innerText = "🏆 التوب 3: " + (sc.join(' | ') || "لا توجد نتائج");
-        }
-        window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && s4Y>=140) s4VY=-13; });
-        s4Canvas.addEventListener("touchstart",(e)=>{ e.preventDefault(); if(s4Y>=140) s4VY=-13; });
-
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
 </body>
 </html>
