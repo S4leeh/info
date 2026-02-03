@@ -17,14 +17,29 @@
             --live-red: #ea1d2c;
         }
 
-        /* --- تعديل الماوس للوقو --- */
-        html, body {
-            cursor: url('logo.png'), auto;
+        /* --- نظام الماوس (اللوقو) --- */
+        html, body, a, button, select, textarea, input, .ep-node, .game-card {
+            cursor: none !important; /* إخفاء الماوس الأصلي تماماً */
+        }
+
+        #s4-cursor {
+            width: 30px;
+            height: 30px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000000; /* فوق كل شيء */
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
         }
         
-        /* تغيير الماوس عند الوقوف على الروابط أو الأزرار ليبقى اللوقو موجوداً */
-        a, button, select, textarea, input, .ep-node, .game-card {
-            cursor: url('logo.png'), pointer;
+        /* تكبير اللوقو قليلاً عند الوقوف على الأزرار */
+        .cursor-hover {
+            width: 45px !important;
+            height: 45px !important;
+            filter: drop-shadow(0 0 8px var(--gold));
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -151,7 +166,7 @@
         .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
         .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
-        /* مكتبة الألعاب - تم التعديل لتطابق المربع الأحمر */
+        /* مكتبة الألعاب */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
@@ -162,7 +177,7 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
-            height: 185px; /* الارتفاع المطلوب ليناسب المربع الأحمر */
+            height: 185px; 
             display: flex; 
             flex-direction: column; 
             backdrop-filter: blur(5px); 
@@ -172,7 +187,7 @@
         
         .game-img { 
             width: 100%; 
-            height: 105px; /* ارتفاع الصورة المناسب */
+            height: 105px; 
             object-fit: cover; 
             flex-shrink: 0; 
         }
@@ -227,6 +242,8 @@
     </style>
 </head>
 <body id="top-page">
+
+    <div id="s4-cursor"></div>
 
     <canvas id="bg-canvas"></canvas>
 
@@ -306,28 +323,13 @@
                         <div id="ep-display">
                             <div id="ep-1" class="archive-body active">
                                 <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="play-btn"></div></div>
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
                                     <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
                                 </a>
                             </div>
-                            <div id="ep-2" class="archive-body">
-                                <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2></div>
-                                </a>
-                            </div>
-                            <div id="ep-3" class="archive-body">
-                                <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h2></div>
-                                </a>
-                            </div>
-                            <div id="ep-4" class="archive-body">
-                                <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="play-btn"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
-                                </a>
-                            </div>
+                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2></div></a></div>
+                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h2></div></a></div>
+                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div></a></div>
                         </div>
                     </div>
                 </div>
@@ -419,7 +421,22 @@
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
         const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        /* 1. نظام الخلفية المتحركة */
+        /* 1. نظام تتبع الماوس باللوقو */
+        const cursor = document.getElementById('s4-cursor');
+        
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // جعل اللوقو يتفاعل عند الوقوف على عناصر قابلة للضغط
+        const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card';
+        document.querySelectorAll(hoverTags).forEach(item => {
+            item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        /* 2. نظام الخلفية المتحركة */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -448,7 +465,7 @@
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
-        /* 2. العداد التنازلي لرمضان */
+        /* 3. العداد التنازلي لرمضان */
         function updateCountdown() {
             const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
             const now = new Date().getTime();
@@ -465,7 +482,7 @@
         }
         setInterval(updateCountdown, 1000);
 
-        /* 3. وظائف الأرشيف */
+        /* 4. وظائف الأرشيف */
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
@@ -501,7 +518,7 @@
             else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
         }
 
-        /* 4. نظام الإرسال المحدث */
+        /* 5. نظام الإرسال المحدث */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
             setTimeout(() => {
