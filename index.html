@@ -141,7 +141,7 @@
         .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
         .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
 
-        /* مكتبة الألعاب */
+        /* مكتبة الألعاب - تم التعديل لتطابق المربع الأحمر */
         .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
@@ -152,7 +152,7 @@
             overflow: hidden; 
             border: 1px solid var(--border-color); 
             transition: 0.3s; 
-            height: 185px; 
+            height: 185px; /* الارتفاع المطلوب ليناسب المربع الأحمر */
             display: flex; 
             flex-direction: column; 
             backdrop-filter: blur(5px); 
@@ -162,7 +162,7 @@
         
         .game-img { 
             width: 100%; 
-            height: 105px; 
+            height: 105px; /* ارتفاع الصورة المناسب */
             object-fit: cover; 
             flex-shrink: 0; 
         }
@@ -207,9 +207,9 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        @media (max-width: 900px) { 
-            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
-            .stats-grid { grid-template-columns: 1fr; } 
+        @media (max-width: 900px) { 
+            .socials-grid { grid-template-columns: repeat(3, 1fr); } 
+            .stats-grid { grid-template-columns: 1fr; } 
             .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
             .nav-link { font-size: 11px; }
             .large-ep-thumbnail { height: 250px; }
@@ -347,16 +347,7 @@
     <div id="games-library" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
         <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card" onclick="openS4Run()" style="cursor:pointer">
-                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">S4leeh Run</div>
-                    <div class="game-note">لعبة المتصفح 🎮</div>
-                </div>
-            </div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div>
-        </div>
+        <div class="games-grid reveal"><div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"><div class="game-info"><div class="game-name">Fateel - فتيل</div></div></div></div>
         <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
         <div class="games-grid reveal">
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
@@ -413,16 +404,6 @@
     </section>
 
     <footer><p>© جميع الحقوق محفوظة لـ <b>صالح | S4leeh</b> | 2026</p></footer>
-
-    <div id="s4-run-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99999;align-items:center;justify-content:center">
-      <div style="background:#000;border:2px solid var(--gold);border-radius:20px;padding:20px;position:relative;width:90%;max-width:650px">
-        <button onclick="closeS4Run()" style="position:absolute;top:-15px;left:-15px;width:40px;height:40px;border-radius:50%;border:none;background:var(--gold);font-weight:900;cursor:pointer;z-index:100000">✕</button>
-        <h3 style="text-align:center;color:var(--gold);margin-bottom:10px">🏃‍♂️ S4leeh Run</h3>
-        <canvas id="s4-run-canvas" width="600" height="200" style="background:#111;border-radius:10px;width:100%"></canvas>
-        <div id="s4-high-scores" style="text-align:center;color:var(--gold);font-size:12px;margin-top:10px">🏆 التوب 3 الشخصي سيظهر هنا</div>
-        <p style="text-align:center;color:#666;margin-top:8px;font-size:12px">المسافة أو النقر للقفز</p>
-      </div>
-    </div>
 
     <script>
         const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
@@ -531,8 +512,8 @@
             } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
         }
         function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
+            const start = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - start.getFullYear(); let m = now.getMonth() - start.getMonth();
             if (m < 0) { y--; m += 12; }
             document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
@@ -546,78 +527,6 @@
                 else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
             } catch (e) { txt.innerText = "Kick.com/S4leeh"; }
         }
-
-        /* ===== S4leeh Run Engine (MODIFIED) ===== */
-        const s4Canvas = document.getElementById("s4-run-canvas");
-        const s4Ctx = s4Canvas.getContext("2d");
-        let s4Y = 140, s4VY = 0, s4Gravity = 0.8, s4Obs = [], s4Score = 0, s4Running = false;
-        
-        const salehHead = new Image(); salehHead.src = "https://minotar.net/avatar/Saleh/40";
-        const enemyHeads = ["ISpitfire57", "twpywq", "Lonley", "Abo7abs"].map(name => {
-            const img = new Image(); img.src = `https://minotar.net/helm/${name}/35`; return img;
-        });
-
-        function openS4Run(){
-            document.getElementById("s4-run-modal").style.display="flex";
-            updateS4TopScores();
-            s4Reset();
-        }
-        function closeS4Run(){
-            document.getElementById("s4-run-modal").style.display="none";
-            s4Running=false;
-        }
-        function s4Reset(){
-            s4Y=140; s4VY=0; s4Obs=[]; s4Score=0; s4Running=true;
-            requestAnimationFrame(s4Loop);
-        }
-        function s4Loop(){
-            if(!s4Running) return;
-            s4Ctx.clearRect(0,0,600,200);
-            s4Ctx.fillStyle="#333"; s4Ctx.fillRect(0,180,600,20); // Floor
-
-            s4VY+=s4Gravity; s4Y+=s4VY;
-            if(s4Y>140){s4Y=140;s4VY=0}
-            s4Ctx.drawImage(salehHead, 50, s4Y, 40, 40);
-
-            // Condition for distance between obstacles
-            if(Math.random()<0.015 && (s4Obs.length === 0 || s4Obs[s4Obs.length-1].x < 350)) {
-                s4Obs.push({x:600, img: enemyHeads[Math.floor(Math.random()*enemyHeads.length)]});
-            }
-
-            s4Obs.forEach((o, i)=>{
-                o.x-=3.5; // Reasonable Speed
-                s4Ctx.drawImage(o.img, o.x, 145, 35, 35);
-                if(o.x<85 && o.x>45 && s4Y>110) s4GameOver();
-                if(o.x < -40) { s4Obs.splice(i, 1); s4Score += 10; }
-            });
-
-            s4Score++;
-            s4Ctx.fillStyle="#fff"; s4Ctx.font="bold 14px Cairo";
-            s4Ctx.fillText("النقاط: "+s4Score,10,25);
-            requestAnimationFrame(s4Loop);
-        }
-        function s4GameOver(){
-            s4Running=false;
-            saveS4Score(s4Score);
-            s4Ctx.fillStyle="rgba(0,0,0,0.7)"; s4Ctx.fillRect(0,0,600,200);
-            s4Ctx.fillStyle="red"; s4Ctx.font="bold 24px Cairo"; s4Ctx.textAlign="center";
-            s4Ctx.fillText("💥 انتهت اللعبة! سكورك: " + s4Score, 300, 100);
-            s4Ctx.fillStyle="white"; s4Ctx.font="14px Cairo";
-            s4Ctx.fillText("اضغط هنا للإعادة", 300, 140);
-            s4Canvas.onclick = () => { s4Canvas.onclick=null; s4Reset(); };
-        }
-        function saveS4Score(s) {
-            let sc = JSON.parse(localStorage.getItem('s4run-scores')) || [];
-            sc.push(s); sc.sort((a,b)=>b-a);
-            localStorage.setItem('s4run-scores', JSON.stringify(sc.slice(0,3)));
-            updateS4TopScores();
-        }
-        function updateS4TopScores() {
-            const sc = JSON.parse(localStorage.getItem('s4run-scores')) || [];
-            document.getElementById('s4-high-scores').innerText = "🏆 التوب 3: " + (sc.join(' | ') || "لا توجد نتائج");
-        }
-        window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && s4Y>=140) s4VY=-13; });
-        s4Canvas.addEventListener("touchstart",(e)=>{ e.preventDefault(); if(s4Y>=140) s4VY=-13; });
 
         window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
