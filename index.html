@@ -396,7 +396,7 @@
                         <option value="تحسين للموقع">تحسين للموقع</option>
                     </select>
                 </div>
-                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required></textarea></div>
+                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required title="عند الارسال، سيتم فتح صفحة مستقلة، كملها عشان يوصل الاقتراح"></textarea></div>
                 <button type="submit" class="submit-btn">إرسال الاقتراح</button>
             </form>
         </div>
@@ -494,11 +494,10 @@
         /* 4. نظام الإرسال المحدث */
         const form = document.getElementById("suggestion-form");
         form.onsubmit = function() {
-            // تنفيذ الإخفاء وإظهار الرسالة فور الضغط على الزر
             setTimeout(() => {
                 document.getElementById("suggestion-container").style.display = "none";
                 document.getElementById("success-message").style.display = "block";
-            }, 100); // تأخير بسيط لضمان بدء عملية الإرسال للمتصفح
+            }, 100);
         };
 
         const revealElements = document.querySelectorAll('.reveal');
