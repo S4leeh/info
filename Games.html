@@ -12,6 +12,7 @@
             --gold: #d4af37;
             --border-color: rgba(212, 175, 55, 0.2);
             --mc-dirt: #553b23;
+            --mc-grass: #5da140;
         }
 
         /* نظام الماوس اللوقو */
@@ -30,47 +31,45 @@
         .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 20px; z-index: 10000; margin: 0 auto; display: flex; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; }
         .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; }
 
-        .page-header { text-align: center; padding: 60px 20px; }
-        .page-header h1 { font-size: 40px; color: var(--gold); font-weight: 900; }
+        .page-header { text-align: center; padding: 40px 20px; }
+        .page-header h1 { font-size: 35px; color: var(--gold); font-weight: 900; }
 
-        /* منطقة اللعبة المحترفة */
-        .game-container { max-width: 900px; margin: 0 auto; padding: 20px; position: relative; }
+        /* منطقة اللعبة */
+        .game-container { max-width: 800px; margin: 0 auto; padding: 10px; position: relative; }
         #game-area {
-            width: 100%; height: 300px;
-            background: #444 url('https://wallpaperaccess.com/full/127118.jpg') repeat-x; /* خلفية عالم ماين كرافت */
-            background-size: cover;
+            width: 100%; height: 250px;
+            background: #87CEEB; /* لون السماء */
             border: 4px solid var(--gold); border-radius: 20px;
             position: relative; overflow: hidden; display: none;
-            border-bottom: 15px solid var(--mc-dirt); /* بلوكة الأرضية */
+            border-bottom: 20px solid var(--mc-dirt);
+            box-shadow: inset 0 -5px 0 var(--mc-grass); /* طبقة العشب */
         }
 
         #player {
-            width: 60px; height: 60px;
-            background-image: url('skin_s4leeh.png'); /* سكنك هنا */
-            background-size: contain; background-repeat: no-repeat;
+            width: 50px; height: 50px;
             position: absolute; bottom: 0; left: 50px;
-            image-rendering: pixelated; z-index: 10;
+            font-size: 40px; display: flex; align-items: center; justify-content: center;
+            z-index: 10;
         }
 
         .obstacle {
-            width: 55px; height: 55px;
+            width: 50px; height: 50px;
             position: absolute; bottom: 0; right: -60px;
-            background-size: contain; background-repeat: no-repeat;
-            image-rendering: pixelated;
+            font-size: 40px; display: flex; align-items: center; justify-content: center;
         }
 
-        #score { position: absolute; top: 20px; right: 30px; font-size: 24px; font-weight: 900; color: #fff; text-shadow: 2px 2px #000; }
+        #score { position: absolute; top: 15px; right: 20px; font-size: 20px; font-weight: 900; color: #000; z-index: 20; }
         
         .game-play-btn {
-            display: block; margin: 20px auto; padding: 15px 40px;
+            display: block; margin: 10px auto; padding: 12px 35px;
             background: var(--gold); border: none; border-radius: 10px;
-            font-weight: 900; font-size: 18px; transition: 0.3s;
+            font-weight: 900; font-size: 18px; transition: 0.3s; color: #000;
         }
 
         #game-over {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9); padding: 30px; border-radius: 20px;
-            text-align: center; display: none; z-index: 100;
+            background: rgba(0,0,0,0.9); padding: 25px; border-radius: 20px;
+            text-align: center; display: none; z-index: 100; width: 80%;
         }
     </style>
 </head>
@@ -83,17 +82,17 @@
     </nav>
 
     <header class="page-header">
-        <h1>مغامرة صالح</h1>
-        <p>ساعد صالح وسكنات الشباب في تجاوز الكريبرز والعقبات!</p>
+        <h1>مغامرة صالح 🏃‍♂️</h1>
+        <p>ساعد صالح في تجاوز العقبات! اضغط Space للقفز</p>
     </header>
 
     <div class="game-container">
-        <button id="start-btn" class="game-play-btn">ابدأ المغامرة الآن</button>
+        <button id="start-btn" class="game-play-btn">ابدأ اللعب الآن</button>
         <div id="game-area">
-            <div id="player"></div>
+            <div id="player">👨‍💻</div> 
             <div id="score">النقاط: 0</div>
             <div id="game-over">
-                <h2 style="color:var(--gold)">انتهت اللعبة!</h2>
+                <h2 style="color:var(--gold)">انتهت اللعبة! 💀</h2>
                 <button onclick="location.reload()" class="game-play-btn">إعادة المحاولة</button>
             </div>
         </div>
@@ -116,24 +115,24 @@
         let isJumping = false;
         let isGameOver = false;
 
-        // قائمة سكنات العقبات (خوياك والكريبر)
-        const obstacleSkins = ['creeper.png', 'zombie.png', 'bdr1_skin.png'];
+        // عقبات متنوعة (كريبر، زومبي، صخرة)
+        const obstacles = ['💣', '🧟', '🌵', '🕷️'];
 
         function startGame() {
             startBtn.style.display = 'none';
             gameArea.style.display = 'block';
             spawnObstacle();
             document.addEventListener('keydown', e => { if(e.code === 'Space') jump(); });
-            gameArea.addEventListener('touchstart', jump);
+            gameArea.onclick = jump; // دعم اللمس والجوال
         }
 
         function jump() {
             if (isJumping || isGameOver) return;
             isJumping = true;
             let pos = 0;
-            let timer = setInterval(() => {
+            let upTimer = setInterval(() => {
                 if (pos >= 120) {
-                    clearInterval(timer);
+                    clearInterval(upTimer);
                     let downTimer = setInterval(() => {
                         if (pos <= 0) {
                             clearInterval(downTimer);
@@ -143,7 +142,7 @@
                         player.style.bottom = pos + 'px';
                     }, 20);
                 }
-                pos += 5;
+                pos += 8;
                 player.style.bottom = pos + 'px';
             }, 20);
         }
@@ -153,24 +152,27 @@
             const obstacle = document.createElement('div');
             obstacle.classList.add('obstacle');
             
-            // سكن عشوائي للعقبة
-            const randomSkin = obstacleSkins[Math.floor(Math.random() * obstacleSkins.length)];
-            obstacle.style.backgroundImage = `url('${randomSkin}')`;
+            // اختيار عقبة عشوائية
+            obstacle.innerText = obstacles[Math.floor(Math.random() * obstacles.length)];
             
             gameArea.appendChild(obstacle);
 
-            let obstaclePos = -60;
+            let obstaclePos = 0;
             let moveTimer = setInterval(() => {
                 if (isGameOver) { clearInterval(moveTimer); return; }
                 
-                obstaclePos += 5;
+                obstaclePos += 7;
                 obstacle.style.right = obstaclePos + 'px';
 
-                // كشف التصادم
+                // كشف التصادم بدقة
                 let pRect = player.getBoundingClientRect();
                 let oRect = obstacle.getBoundingClientRect();
 
-                if (pRect.right > oRect.left && pRect.left < oRect.right && pRect.bottom > oRect.top) {
+                if (
+                    pRect.right > oRect.left + 10 && 
+                    pRect.left < oRect.right - 10 && 
+                    pRect.bottom > oRect.top + 10
+                ) {
                     isGameOver = true;
                     gameOverEl.style.display = 'block';
                 }
@@ -183,7 +185,9 @@
                 }
             }, 20);
 
-            setTimeout(spawnObstacle, Math.random() * 2000 + 1000);
+            // زيادة السرعة مع الوقت
+            let nextSpawn = Math.random() * 1500 + 800;
+            setTimeout(spawnObstacle, nextSpawn);
         }
 
         startBtn.onclick = startGame;
