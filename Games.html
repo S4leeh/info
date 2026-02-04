@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4leeh | منصة الألعاب</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1a1a1a;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --border-color: rgba(212, 175, 55, 0.2);
+            --kick-green: #53fc18;
+            --live-red: #ea1d2c;
+        }
+
+        /* --- نظام الماوس (اللوقو) --- */
+        html, body, a, button, select, textarea, input, .ep-node, .game-card, .social-item, .game-play-btn {
+            cursor: none !important;
+        }
+
+        #s4-cursor {
+            width: 30px;
+            height: 30px;
+            background-image: url('logo.png'); /* تأكد من أن ملف logo.png موجود في نفس المسار */
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000000;
+            transform: translate(-50%, -50%);
+            transition: width 0.15s ease-out, height 0.15s ease-out;
+            display: block;
+        }
+        
+        .cursor-hover {
+            width: 50px !important;
+            height: 50px !important;
+            filter: drop-shadow(0 0 12px var(--gold)) !important;
+        }
+
+        @media (pointer: coarse) {
+            #s4-cursor { display: none !important; }
+            html, body, a, button, input, textarea, select, .game-play-btn { cursor: auto !important; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-dark); color: #fff; padding-bottom: 0; overflow-x: hidden; position: relative; }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 20px; z-index: 10000; margin: 0 auto; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--gold); }
+
+        .page-header { text-align: center; padding: 80px 20px 40px; }
+        .page-header h1 { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 15px; }
+        .page-header p { color: #b0b0b0; font-size: 18px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+
+        .games-grid-container {
+            max-width: 1200px;
+            margin: 50px auto 100px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card-large {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s ease-out;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .game-card-large:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 0 35px var(--gold-glow);
+        }
+
+        .game-thumbnail {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        .game-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+        }
+
+        .game-info-large {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .game-info-large h2 {
+            font-size: 24px;
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+
+        .game-info-large p {
+            font-size: 15px;
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .game-play-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-weight: 900;
+            text-decoration: none;
+            transition: 0.3s ease-out;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .game-play-btn:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 25px var(--gold-glow);
+            transform: translateY(-3px);
+        }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
+        footer p { color: #888; font-size: 14px; font-weight: 700; }
+        footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+
+        /* لعبة مغامرة صالح */
+        #s4leeh-adventure-game {
+            width: 100%;
+            height: 300px; /* يمكن تغيير الارتفاع حسب الحاجة */
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            margin-top: 20px;
+            background-color: #333;
+            overflow: hidden;
+            position: relative;
+            display: none; /* مخفية في البداية */
+            cursor: pointer;
+        }
+        #s4leeh-adventure-game.active {
+            display: block; /* تظهر عند الضغط على زر اللعب */
+        }
+
+        #game-area {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #555; /* خلفية أرضية اللعبة */
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end; /* لجلوس اللاعب على الأرضية */
+        }
+
+        #player {
+            width: 50px;
+            height: 50px;
+            background-image: url('logo.png'); /* لوقو صالح كلاعب */
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            bottom: 0px; /* على الأرضية */
+            left: 50px;
+            transition: bottom 0.15s ease-out; /* حركة القفزة */
+            z-index: 10;
+        }
+
+        .obstacle {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background-color: var(--gold); /* لون العقبات */
+            bottom: 0px;
+            animation: moveObstacle 4s linear infinite; /* حركة العقبات */
+        }
+
+        @keyframes moveObstacle {
+            0% { right: -50px; } /* تبدأ من خارج الشاشة */
+            100% { right: 100%; } /* تتحرك لليسار حتى تختفي */
+        }
+        #score-display {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 900;
+            z-index: 20;
+        }
+        #game-over-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.8);
+            padding: 20px 40px;
+            border-radius: 10px;
+            color: var(--gold);
+            font-size: 30px;
+            font-weight: 900;
+            text-align: center;
+            display: none;
+            z-index: 30;
+        }
+        #restart-button {
+            background: var(--gold);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 700;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar { width: 95%; }
+            .nav-link { font-size: 11px; }
+            .page-header h1 { font-size: 35px; }
+            .page-header p { font-size: 15px; }
+            .games-grid-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .game-thumbnail { height: 150px; }
+            .game-info-large h2 { font-size: 20px; }
+            .game-info-large p { font-size: 13px; }
+            .game-play-btn { padding: 10px 20px; font-size: 14px; }
+            #s4leeh-adventure-game { height: 200px; }
+            #player { width: 40px; height: 40px; left: 30px;}
+            .obstacle { width: 25px; height: 50px; }
+            #score-display { font-size: 20px; }
+            #game-over-message { font-size: 24px; }
+            #restart-button { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="s4-cursor"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-link">الصفحة الرئيسية</a>
+        <a href="#available-games" class="nav-link">الألعاب المتاحة</a>
+        <a href="#upcoming-games" class="nav-link">ألعاب قادمة</a>
+    </nav>
+
+    <header class="page-header reveal">
+        <h1>منصة ألعاب S4leeh</h1>
+        <p>اكتشف عالم الألعاب الخاص بصالح، حيث المتعة والتحدي لا يتوقفان! استعد لمغامرات فريدة وتجارب حصرية مصممة لك.</p>
+    </header>
+
+    <section id="available-games" class="games-grid-container">
+        <div class="game-card-large reveal">
+            <div class="game-thumbnail" style="background-image: url('https://img.freepik.com/premium-vector/dinosaur-game-pixel-illustration_466432-845.jpg?w=740');"></div>
+            <div class="game-info-large">
+                <h2>مغامرة صالح</h2>
+                <p>استعد لمغامرة سريعة ومثيرة مع صالح! اختبر ردود فعلك وتجاوز العقبات في هذه اللعبة المستوحاة من كلاسيكية دينو الكروم. جمع النقاط وتحدى أصدقائك في تحقيق أعلى نتيجة!</p>
+                <button class="game-play-btn" onclick="startGame('s4leeh-adventure')">ابدأ اللعب</button>
+                <div id="s4leeh-adventure-game">
+                    <div id="game-area">
+                        <div id="player"></div>
+                        <div id="score-display">النقاط: 0</div>
+                        <div id="game-over-message">
+                            انتهت اللعبة!
+                            <button id="restart-button">إعادة اللعب</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-card-large reveal">
+            <div class="game-thumbnail" style="background-image: url('https://img.freepik.com/free-vector/pixel-art-style-background_23-2148763523.jpg?w=740');"></div>
+            <div class="game-info-large">
+                <h2>لعبة الألغاز الذهبية</h2>
+                <p>اختبر ذكائك ومهاراتك في حل الألغاز مع لعبة الألغاز الذهبية. انغمس في عوالم غامضة وحاول فك الشيفرات المعقدة لتصل إلى الكنز المخفي. قريباً جداً!</p>
+                <button class="game-play-btn" disabled style="background-color: #555; cursor: not-allowed;">قريباً</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="upcoming-games" class="games-grid-container" style="display: none;">
+        </section>
+
+
+    <footer><p>© جميع الحقوق محفوظة لـ <b>S4leeh.com | صالح</b> | 2026</p></footer>
+
+    <script>
+        // --- نظام الماوس (اللوقو) ---
+        const cursor = document.getElementById('s4-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        function refreshCursorEvents() {
+            const hoverTags = 'a, button, input, textarea, select, .game-play-btn'; // تحديث للعناصر التي تتفاعل مع المؤشر
+            document.querySelectorAll(hoverTags).forEach(item => {
+                item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+            });
+        }
+        refreshCursorEvents();
+
+        // --- نظام الخلفية المتحركة ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
+            }
+            draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        function handleParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
+            requestAnimationFrame(handleParticles);
+        }
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
+        initCanvas(); handleParticles();
+        window.addEventListener('resize', initCanvas);
+
+        // --- نظام الـ Reveal عند التمرير ---
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => observer.observe(el));
+
+        // --- لوجيك لعبة مغامرة صالح (Dino Chrome Style) ---
+        const player = document.getElementById('player');
+        const gameArea = document.getElementById('game-area');
+        const scoreDisplay = document.getElementById('score-display');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const restartButton = document.getElementById('restart-button');
+        
+        let isJumping = false;
+        let gameOver = false;
+        let score = 0;
+        let obstacleInterval;
+        let gameLoopInterval;
+
+        function jump() {
+            if (isJumping || gameOver) return;
+            isJumping = true;
+            let jumpHeight = 0;
+            const jumpInterval = setInterval(() => {
+                if (jumpHeight < 100) { // اقصى ارتفاع للقفزة
+                    jumpHeight += 5;
+                    player.style.bottom = jumpHeight + 'px';
+                } else {
+                    clearInterval(jumpInterval);
+                    const fallInterval = setInterval(() => {
+                        if (jumpHeight > 0) {
+                            jumpHeight -= 5;
+                            player.style.bottom = jumpHeight + 'px';
+                        } else {
+                            clearInterval(fallInterval);
+                            isJumping = false;
+                            player.style.bottom = '0px'; // تأكد أنه على الأرض
+                        }
+                    }, 20);
+                }
+            }, 20);
+        }
+
+        function createObstacle() {
+            if (gameOver) return;
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            gameArea.appendChild(obstacle);
+
+            let obstacleRight = -50; // تبدأ من خارج الشاشة من اليمين
+            const obstacleSpeed = 5; // سرعة العقبة
+            obstacle.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's'; // سرعة عشوائية للعقبات
+
+            const moveObstacleInterval = setInterval(() => {
+                if (gameOver) {
+                    clearInterval(moveObstacleInterval);
+                    obstacle.remove();
+                    return;
+                }
+                
+                const playerRect = player.getBoundingClientRect();
+                const obstacleRect = obstacle.getBoundingClientRect();
+
+                // كشف التصادم
+                if (
+                    playerRect.left < obstacleRect.right &&
+                    playerRect.right > obstacleRect.left &&
+                    playerRect.top < obstacleRect.bottom &&
+                    playerRect.bottom > obstacleRect.top
+                ) {
+                    endGame();
+                    clearInterval(moveObstacleInterval);
+                }
+
+                // حذف العقبة بعد خروجها من الشاشة وإضافة النقاط
+                if (obstacleRect.right < 0) {
+                    obstacle.remove();
+                    score++;
+                    scoreDisplay.innerText = `النقاط: ${score}`;
+                    clearInterval(moveObstacleInterval);
+                }
+            }, 10);
+        }
+
+        function startGame(gameId) {
+            if (gameId === 's4leeh-adventure') {
+                document.getElementById('s4leeh-adventure-game').classList.add('active');
+                
+                // إعادة تهيئة اللعبة
+                gameOver = false;
+                score = 0;
+                scoreDisplay.innerText = `النقاط: ${score}`;
+                gameOverMessage.style.display = 'none';
+                player.style.bottom = '0px';
+
+                // إزالة أي عقبات سابقة
+                document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+
+                // بدء اللعبة
+                obstacleInterval = setInterval(createObstacle, 1500 + Math.random() * 1000); // عقبة كل 1.5 إلى 2.5 ثانية
+                gameLoopInterval = setInterval(gameLoop, 20); // تحديث مستمر
+                document.addEventListener('keydown', handleKeyPress);
+                gameArea.addEventListener('touchstart', handleTouch); // للمس على الجوال
+            }
+        }
+
+        function endGame() {
+            gameOver = true;
+            clearInterval(obstacleInterval);
+            clearInterval(gameLoopInterval);
+            document.removeEventListener('keydown', handleKeyPress);
+            gameArea.removeEventListener('touchstart', handleTouch);
+            gameOverMessage.style.display = 'block';
+        }
+
+        restartButton.addEventListener('click', () => {
+            document.getElementById('s4leeh-adventure-game').classList.remove('active'); // إخفاء اللعبة
+            startGame('s4leeh-adventure'); // إعادة بدء اللعبة
+        });
+
+        function handleKeyPress(e) {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                jump();
+            }
+        }
+        function handleTouch(e) {
+            jump(); // القفز عند لمس شاشة اللعبة
+            e.preventDefault(); // منع التمرير في الجوال أثناء اللعب
+        }
+
+        function gameLoop() {
+            // هذا التكرار مخصص فقط لكشف التصادم وإضافة النقاط من حركة العقبات.
+            // حركة العقبات نفسها يتم إدارتها بالـ CSS animation
+            // وكل عقبة لها setInterval خاص بها لإزالة نفسها وإضافة النقاط بعد عبورها.
+        }
+
+
+        // تشغيل الوظائف عند تحميل الصفحة
+        window.onload = () => {
+            refreshCursorEvents();
+        };
+    </script>
+</body>
+</html>
