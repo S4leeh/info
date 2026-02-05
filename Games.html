@@ -18,7 +18,7 @@
         .high-scores { font-size: 14px; color: var(--gold); text-align: left; direction: ltr; }
 
         #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; display: none; }
-        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b38f2d; }
+        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b38f2d; pointer-events: auto; }
         .btn:hover { transform: translateY(-3px); background: white; }
 
         #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.7) url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') center/cover; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 110; }
@@ -57,19 +57,16 @@
 
     let gameState = 'START';
     let score = 0;
-    let baseSpeed = 3.5; // السرعة بعد التقليل بنسبة 30%
+    let baseSpeed = 3.5; 
     let gameSpeed = baseSpeed;
     let frame = 0;
     let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-    // تحميل سكن صالح 3D
     const player = { x: 100, y: 0, w: 90, h: 120, dy: 0, jumpPower: -16, gravity: 0.75, grounded: false, img: new Image() };
     player.img.src = 'https://minotar.net/armor/body/Saleh/100.png';
 
     const obstacles = [];
-    const friends = [
-        'ISpitfire57', 'twpywq', 'Lonely', 'Abo7abs', 'S3eedxx'
-    ];
+    const friends = ['ISpitfire57', 'twpywq', 'Lonely', 'Abo7abs', 'S3eedxx'];
 
     function updateHighScores() {
         highScores.push(score);
@@ -96,7 +93,7 @@
         document.getElementById('start-screen').style.display = 'none';
         displayHighScores();
         gameState = 'PLAYING';
-        animate();
+        requestAnimationFrame(animate);
     }
 
     function resetGame() {
@@ -107,16 +104,22 @@
         player.dy = 0;
         gameState = 'PLAYING';
         document.getElementById('overlay').style.display = 'none';
+        document.getElementById('currentScore').innerText = `النقاط: 0`;
     }
 
     function animate() {
         if (gameState !== 'PLAYING') return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // الخلفية
-        ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = var(--mc-grass); ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
-        ctx.fillStyle = var(--mc-dirt); ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+        // رسم الخلفية وإصلاح خطأ استدعاء الألوان
+        ctx.fillStyle = '#87CEEB'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#5da140'; // عشب
+        ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
+        
+        ctx.fillStyle = '#553b23'; // تراب
+        ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
 
         player.dy += player.gravity;
         player.y += player.dy;
@@ -167,8 +170,10 @@
     });
 
     window.addEventListener('touchstart', (e) => {
-        if (player.grounded) { player.dy = player.jumpPower; player.grounded = false; }
-        if (gameState === 'START') initGame();
+        if (gameState === 'PLAYING' && player.grounded) { 
+            player.dy = player.jumpPower; 
+            player.grounded = false; 
+        }
     });
 
     displayHighScores();
