@@ -12,10 +12,9 @@
         #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') repeat-x; background-size: cover; background-position: bottom; width: 95vw; max-width: 1000px; height: 400px; }
         canvas { display: block; width: 100%; height: 100%; }
         .ui-layer { position: absolute; top: 15px; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; z-index: 50; }
-        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gold); backdrop-filter: blur(5px); }
+        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gold); }
         #overlay, #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
         .btn { background: var(--gold); color: black; border: none; padding: 12px 35px; font-size: 20px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; pointer-events: auto; }
-        .btn:hover { transform: scale(1.05); background: white; }
     </style>
 </head>
 <body>
@@ -23,13 +22,13 @@
     <div id="game-wrap">
         <canvas id="gameCanvas"></canvas>
         <div class="ui-layer">
-            <div class="score-box"><div id="currentScore" style="font-size: 20px;">النقاط: 0</div></div>
+            <div class="score-box"><div id="currentScore">النقاط: 0</div></div>
             <div class="score-box" style="direction: ltr;"><div id="topScores" style="font-size: 14px; color: var(--gold);">--</div></div>
         </div>
 
         <div id="start-screen">
             <h1 style="color:var(--gold); margin-bottom:20px; font-size:45px; text-shadow: 3px 3px #000;">مغامرة صالح 3D</h1>
-            <p style="margin-bottom: 20px; font-weight: 700;">تجاوز الموبز وسكنات الشباب!</p>
+            <p style="margin-bottom: 20px;">التركيز على الموبز وسكنات الشباب</p>
             <button class="btn" onclick="initGame()">دخول اللعبة</button>
         </div>
 
@@ -46,46 +45,34 @@
     
     let gameState = 'START';
     let score = 0;
-    let baseSpeed = 3.8; // سرعة هادئة بنسبة 30%
+    let baseSpeed = 3.5; // سرعة هادئة بنسبة 30%
     let gameSpeed = baseSpeed;
     let frame = 0;
     let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-    // سكن صالح 3D Render حقيقي
-    const player = { x: 100, y: 0, w: 90, h: 120, dy: 0, jumpPower: -19, gravity: 0.8, grounded: false, img: new Image() };
+    const player = { x: 100, y: 0, w: 80, h: 110, dy: 0, jumpPower: -18, gravity: 0.75, grounded: false, img: new Image() };
     player.img.src = 'https://crafatar.com/renders/body/Saleh?scale=4&overlay';
 
     const obstacles = [];
-    
-    // تعريف الموبز وسكنات الشباب كعقبات عشوائية
     const obstacleTypes = [
-        { name: 'Creeper', img: 'https://crafatar.com/renders/body/Creeper?scale=4', weight: 0.4 }, 
-        { name: 'Zombie', img: 'https://crafatar.com/renders/body/Zombie?scale=4', weight: 0.3 },
-        { name: 'ISpitfire57', img: 'https://crafatar.com/renders/body/ISpitfire57?scale=4&overlay', weight: 0.1 },
-        { name: 'twpywq', img: 'https://crafatar.com/renders/body/twpywq?scale=4&overlay', weight: 0.1 },
-        { name: 'Lonely', img: 'https://crafatar.com/renders/body/Lonely?scale=4&overlay', weight: 0.05 },
-        { name: 'S3eedxx', img: 'https://crafatar.com/renders/body/S3eedxx?scale=4&overlay', weight: 0.05 }
+        { name: 'Creeper', color: '#53fc18', img: 'https://crafatar.com/renders/body/Creeper?scale=4', weight: 0.5 },
+        { name: 'Zombie', color: '#1e5a1e', img: 'https://crafatar.com/renders/body/Zombie?scale=4', weight: 0.2 },
+        { name: 'ISpitfire57', color: 'gold', img: 'https://crafatar.com/renders/body/ISpitfire57?scale=4&overlay', weight: 0.1 },
+        { name: 'twpywq', color: 'gold', img: 'https://crafatar.com/renders/body/twpywq?scale=4&overlay', weight: 0.1 },
+        { name: 'Lonely', color: 'gold', img: 'https://crafatar.com/renders/body/Lonely?scale=4&overlay', weight: 0.1 }
     ];
 
     function spawnObstacle() {
-        if (gameState !== 'PLAYING') return;
-        
-        // نظام اختيار عشوائي مبني على الوزن (الموبز أكثر تكراراً)
         let random = Math.random();
         let cumulativeWeight = 0;
         let selected = obstacleTypes[0];
-
         for (const type of obstacleTypes) {
             cumulativeWeight += type.weight;
-            if (random < cumulativeWeight) {
-                selected = type;
-                break;
-            }
+            if (random < cumulativeWeight) { selected = type; break; }
         }
-
         const img = new Image();
         img.src = selected.img;
-        obstacles.push({ x: canvas.width, y: canvas.height - 150, w: 80, h: 110, img: img, passed: false });
+        obstacles.push({ x: canvas.width, y: canvas.height - 140, w: 70, h: 110, img: img, color: selected.color, passed: false });
     }
 
     function initGame() {
@@ -98,47 +85,49 @@
 
     function resetGame() {
         score = 0; gameSpeed = baseSpeed; obstacles.length = 0;
-        player.y = canvas.height - 150; player.dy = 0;
+        player.y = canvas.height - 140; player.dy = 0;
         gameState = 'PLAYING';
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('currentScore').innerText = `النقاط: 0`;
     }
 
     function animate() {
         if (gameState !== 'PLAYING') return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // الأرضية
-        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
+        // رسم الأرضية
+        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 35, canvas.width, 5);
         ctx.fillStyle = '#553b23'; ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
 
         player.dy += player.gravity;
         player.y += player.dy;
-        if (player.y > canvas.height - 150) { player.y = canvas.height - 150; player.dy = 0; player.grounded = true; }
+        if (player.y > canvas.height - 140) { player.y = canvas.height - 140; player.dy = 0; player.grounded = true; }
 
-        if (player.img.complete) {
+        // رسم اللاعب (إما الصورة أو مربع ذهبي كبديل)
+        if (player.img.complete && player.img.naturalWidth !== 0) {
             ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
+        } else {
+            ctx.fillStyle = 'gold'; ctx.fillRect(player.x, player.y, player.w, player.h);
         }
 
-        // عشوائية الظهور
-        if (frame % Math.max(100, 180 - Math.floor(gameSpeed * 8)) === 0) spawnObstacle();
+        if (frame % 130 === 0) spawnObstacle();
 
         obstacles.forEach((obs, i) => {
             obs.x -= gameSpeed;
-            if (obs.img.complete) {
+            if (obs.img.complete && obs.img.naturalWidth !== 0) {
                 ctx.drawImage(obs.img, obs.x, obs.y, obs.w, obs.h);
+            } else {
+                ctx.fillStyle = obs.color; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
             }
 
-            // تصادم دقيق 3D
-            if (player.x + 30 < obs.x + obs.w - 30 && player.x + player.w - 30 > obs.x + 30 &&
+            // تصادم دقيق
+            if (player.x + 25 < obs.x + obs.w - 25 && player.x + player.w - 25 > obs.x + 25 &&
                 player.y + 20 < obs.y + obs.h - 10 && player.y + player.h - 10 > obs.y + 20) {
                 endGame();
             }
 
             if (!obs.passed && obs.x + obs.w < player.x) {
-                score += 14;
-                obs.passed = true;
-                gameSpeed += 0.05; 
+                score += 14; obs.passed = true;
+                gameSpeed += 0.04; 
                 document.getElementById('currentScore').innerText = `النقاط: ${score}`;
             }
         });
@@ -156,8 +145,7 @@
     }
 
     function updateHighScores() {
-        highScores.push(score);
-        highScores.sort((a, b) => b - a);
+        highScores.push(score); highScores.sort((a, b) => b - a);
         highScores = highScores.slice(0, 3);
         localStorage.setItem('s4leehTop3', JSON.stringify(highScores));
         displayHighScores();
