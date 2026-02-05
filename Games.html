@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S4leeh | مغامرة صالح</title>
+    <title>S4leeh | مغامرة صالح 3D</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --mc-dirt: #553b23; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background: #121212; color: white; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
         
-        #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB; width: 95vw; max-width: 1000px; height: 400px; }
-        canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+        #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB; width: 95vw; max-width: 1000px; height: 400px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: 100%; image-rendering: auto; }
 
-        .ui-layer { position: absolute; top: 15px; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; }
-        .score-box { background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--gold); }
+        .ui-layer { position: absolute; top: 15px; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; z-index: 50; }
+        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gold); backdrop-filter: blur(5px); }
         .high-scores { font-size: 14px; color: var(--gold); }
 
-        #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; display: none; }
-        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 20px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.2s; }
-        .btn:hover { transform: scale(1.1); background: white; }
+        #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; display: none; }
+        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b38f2d; }
+        .btn:hover { transform: translateY(-3px); background: white; box-shadow: 0 8px 0 #ddd; }
 
         #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.7) url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') center/cover; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 110; }
     </style>
@@ -31,23 +31,24 @@
         
         <div class="ui-layer">
             <div class="score-box">
-                <div id="currentScore">النقاط: 0</div>
+                <div id="currentScore" style="font-size: 20px; font-weight: 900;">النقاط: 0</div>
             </div>
             <div class="score-box high-scores">
-                <div>أفضل النتائج:</div>
+                <div style="margin-bottom: 5px;">🏆 أفضل 3 نتائج:</div>
                 <div id="topScores">--</div>
             </div>
         </div>
 
         <div id="start-screen">
-            <h1 style="color:var(--gold); margin-bottom:20px; font-size:40px; text-shadow: 3px 3px #000;">مغامرة صالح</h1>
-            <button class="btn" onclick="initGame()">ابدأ اللعب</button>
+            <h1 style="color:var(--gold); margin-bottom:20px; font-size:50px; text-shadow: 4px 4px #000; letter-spacing: 2px;">مغامرة صالح 3D</h1>
+            <p style="margin-bottom: 30px; font-size: 18px; color: #eee;">ساعد صالح في تجاوز سكنات الشباب!</p>
+            <button class="btn" onclick="initGame()">دخول اللعبة</button>
         </div>
 
         <div id="overlay">
-            <h2 style="color:var(--gold); font-size:40px; margin-bottom:10px;">انتهت اللعبة!</h2>
-            <p id="finalScoreMsg" style="margin-bottom:20px; font-size:20px;"></p>
-            <button class="btn" onclick="resetGame()">إعادة المحاولة</button>
+            <h2 style="color:var(--gold); font-size:45px; margin-bottom:15px; text-shadow: 2px 2px #000;">انتهت الرحلة!</h2>
+            <p id="finalScoreMsg" style="margin-bottom:25px; font-size:24px; font-weight: 700;"></p>
+            <button class="btn" onclick="resetGame()">العودة للمحاولة</button>
         </div>
     </div>
 
@@ -56,28 +57,26 @@
     const ctx = canvas.getContext('2d');
     const pointsPerObstacle = 14;
 
-    // إعدادات اللعبة
+    // إعدادات اللعبة المعدلة
     let gameState = 'START';
     let score = 0;
-    let gameSpeed = 5;
+    let baseSpeed = 3.5; // تم تقليل السرعة الأساسية بنسبة 30%
+    let gameSpeed = baseSpeed;
     let frame = 0;
     
-    // الأرقام القياسية
     let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-    // الكائنات
-    const player = { x: 80, y: 0, w: 60, h: 80, dy: 0, jumpPower: -15, gravity: 0.8, grounded: false, img: new Image() };
-    player.img.src = 'https://minotar.net/armor/body/Saleh/100.png';
+    // اللاعب بتصميم 3D Render
+    const player = { x: 100, y: 0, w: 90, h: 120, dy: 0, jumpPower: -16, gravity: 0.75, grounded: false, img: new Image() };
+    player.img.src = 'https://crafatar.com/renders/body/Saleh?scale=4&overlay'; // صالح 3D
 
     const obstacles = [];
     const obstacleTypes = [
-        { name: 'Creeper', img: 'https://minotar.net/armor/body/Creeper/80.png' },
-        { name: 'Zombie', img: 'https://minotar.net/armor/body/Zombie/80.png' },
-        { name: 'ISpitfire57', img: 'https://minotar.net/armor/body/ISpitfire57/80.png' },
-        { name: 'twpywq', img: 'https://minotar.net/armor/body/twpywq/80.png' },
-        { name: 'Lonely', img: 'https://minotar.net/armor/body/Lonely/80.png' },
-        { name: 'Abo7abs', img: 'https://minotar.net/armor/body/Abo7abs/80.png' },
-        { name: 'S3eedxx', img: 'https://minotar.net/armor/body/S3eedxx/80.png' }
+        { name: 'ISpitfire57', img: 'https://crafatar.com/renders/body/ISpitfire57?scale=4&overlay' },
+        { name: 'twpywq', img: 'https://crafatar.com/renders/body/twpywq?scale=4&overlay' },
+        { name: 'Lonely', img: 'https://crafatar.com/renders/body/Lonely?scale=4&overlay' },
+        { name: 'Abo7abs', img: 'https://crafatar.com/renders/body/Abo7abs?scale=4&overlay' },
+        { name: 'S3eedxx', img: 'https://crafatar.com/renders/body/S3eedxx?scale=4&overlay' }
     ];
 
     function updateHighScores() {
@@ -96,7 +95,8 @@
         const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
         const img = new Image();
         img.src = type.img;
-        obstacles.push({ x: canvas.width, y: canvas.height - 110, w: 50, h: 80, img: img, passed: false });
+        // وضع العوائق بدقة أكبر
+        obstacles.push({ x: canvas.width, y: canvas.height - 140, w: 75, h: 110, img: img, passed: false });
     }
 
     function initGame() {
@@ -110,9 +110,9 @@
 
     function resetGame() {
         score = 0;
-        gameSpeed = 5;
+        gameSpeed = baseSpeed;
         obstacles.length = 0;
-        player.y = canvas.height - 110;
+        player.y = canvas.height - 150;
         player.dy = 0;
         gameState = 'PLAYING';
         document.getElementById('overlay').style.display = 'none';
@@ -122,36 +122,40 @@
         if (gameState !== 'PLAYING') return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // الخلفية (سماء وأرضية)
+        // رسم الخلفية
         ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 30, canvas.width, 10);
-        ctx.fillStyle = '#553b23'; ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
+        ctx.fillStyle = '#553b23'; ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
 
-        // الجاذبية والقفز
+        // حركة اللاعب
         player.dy += player.gravity;
         player.y += player.dy;
-        if (player.y > canvas.height - 110) { player.y = canvas.height - 110; player.dy = 0; player.grounded = true; }
+        if (player.y > canvas.height - 150) { 
+            player.y = canvas.height - 150; 
+            player.dy = 0; 
+            player.grounded = true; 
+        }
 
         ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
 
-        // العوائق
-        if (frame % Math.max(70, 150 - Math.floor(gameSpeed * 5)) === 0) spawnObstacle();
+        // التحكم في ظهور العوائق بناءً على السرعة الجديدة
+        if (frame % Math.max(90, 180 - Math.floor(gameSpeed * 8)) === 0) spawnObstacle();
 
         obstacles.forEach((obs, i) => {
             obs.x -= gameSpeed;
             ctx.drawImage(obs.img, obs.x, obs.y, obs.w, obs.h);
 
-            // تصادم
-            if (player.x < obs.x + obs.w - 10 && player.x + player.w > obs.x + 10 &&
-                player.y < obs.y + obs.h - 10 && player.y + player.h > obs.y + 10) {
+            // تصادم دقيق
+            if (player.x + 20 < obs.x + obs.w - 20 && player.x + player.w - 20 > obs.x + 20 &&
+                player.y + 10 < obs.y + obs.h - 10 && player.y + player.h - 10 > obs.y + 10) {
                 endGame();
             }
 
-            // تخطي العائق
+            // نظام النقاط (كل عائق بـ 14 نقطة)
             if (!obs.passed && obs.x + obs.w < player.x) {
                 score += pointsPerObstacle;
                 obs.passed = true;
-                gameSpeed += 0.1;
+                gameSpeed += 0.05; // زيادة السرعة بشكل تدريجي وبسيط جداً
                 document.getElementById('currentScore').innerText = `النقاط: ${score}`;
             }
         });
@@ -164,10 +168,11 @@
     function endGame() {
         gameState = 'OVER';
         updateHighScores();
-        document.getElementById('finalScoreMsg').innerText = `حققت ${score} نقطة!`;
+        document.getElementById('finalScoreMsg').innerText = `حققت ${score} نقطة في مغامرتك!`;
         document.getElementById('overlay').style.display = 'flex';
     }
 
+    // التحكم بالقفز
     window.addEventListener('keydown', (e) => {
         if ((e.code === 'Space' || e.code === 'ArrowUp') && player.grounded) {
             player.dy = player.jumpPower;
@@ -175,9 +180,12 @@
         }
     });
 
-    // دعم اللمس للجوال
-    window.addEventListener('touchstart', () => {
-        if (player.grounded) { player.dy = player.jumpPower; player.grounded = false; }
+    window.addEventListener('touchstart', (e) => {
+        if (player.grounded) { 
+            player.dy = player.jumpPower; 
+            player.grounded = false; 
+        }
+        if (gameState === 'START') initGame();
     });
 
     displayHighScores();
