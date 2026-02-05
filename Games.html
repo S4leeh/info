@@ -1,189 +1,186 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>Saleh – Minecraft Runner</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-    margin: 0;
-    background: #7ec0ee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial;
-}
-canvas {
-    border: 4px solid #000;
-    image-rendering: pixelated;
-    background: linear-gradient(#7ec0ee, #6ab04c);
-}
-.hud {
-    position: absolute;
-    top: 10px;
-    background: rgba(255,255,255,0.85);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4leeh | مغامرة صالح</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --mc-dirt: #553b23; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: #121212; color: white; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        
+        #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB; width: 95vw; max-width: 1000px; height: 400px; }
+        canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+
+        .ui-layer { position: absolute; top: 15px; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; }
+        .score-box { background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--gold); }
+        .high-scores { font-size: 14px; color: var(--gold); }
+
+        #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; display: none; }
+        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 20px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .btn:hover { transform: scale(1.1); background: white; }
+
+        #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.7) url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') center/cover; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 110; }
+    </style>
 </head>
 <body>
 
-<div class="hud" id="hud">Loading...</div>
-<canvas id="game" width="900" height="300"></canvas>
+    <div id="game-wrap">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="ui-layer">
+            <div class="score-box">
+                <div id="currentScore">النقاط: 0</div>
+            </div>
+            <div class="score-box high-scores">
+                <div>أفضل النتائج:</div>
+                <div id="topScores">--</div>
+            </div>
+        </div>
+
+        <div id="start-screen">
+            <h1 style="color:var(--gold); margin-bottom:20px; font-size:40px; text-shadow: 3px 3px #000;">مغامرة صالح</h1>
+            <button class="btn" onclick="initGame()">ابدأ اللعب</button>
+        </div>
+
+        <div id="overlay">
+            <h2 style="color:var(--gold); font-size:40px; margin-bottom:10px;">انتهت اللعبة!</h2>
+            <p id="finalScoreMsg" style="margin-bottom:20px; font-size:20px;"></p>
+            <button class="btn" onclick="resetGame()">إعادة المحاولة</button>
+        </div>
+    </div>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const pointsPerObstacle = 14;
 
-const GROUND = 235;
-let speed = 3.5; // أبطأ شوي
-let gravity = 0.8;
-let score = 0;
-let gameOver = false;
-let started = false;
+    // إعدادات اللعبة
+    let gameState = 'START';
+    let score = 0;
+    let gameSpeed = 5;
+    let frame = 0;
+    
+    // الأرقام القياسية
+    let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-function loadImage(src) {
-    return new Promise(resolve => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = src;
-        img.onload = () => resolve(img);
-    });
-}
+    // الكائنات
+    const player = { x: 80, y: 0, w: 60, h: 80, dy: 0, jumpPower: -15, gravity: 0.8, grounded: false, img: new Image() };
+    player.img.src = 'https://minotar.net/armor/body/Saleh/100.png';
 
-// ⬇️ تحميل كل الصور
-Promise.all([
-    loadImage("https://mc-heads.net/body/Saleh/32"),
-    loadImage("https://mc-heads.net/mob/creeper"),
-    loadImage("https://mc-heads.net/mob/zombie"),
-    loadImage("https://mc-heads.net/mob/skeleton"),
-    loadImage("https://mc-heads.net/block/dirt"),
-    loadImage("https://mc-heads.net/block/cobblestone"),
-    loadImage("https://mc-heads.net/block/stone"),
-    loadImage("https://mc-heads.net/block/lava_still")
-]).then(startGame);
-
-let playerSkin, obstaclesData;
-
-function startGame(images) {
-    document.getElementById("hud").innerText = "Score: 0";
-
-    playerSkin = images[0];
-
-    obstaclesData = [
-        { img: images[1], w: 40, h: 40 },
-        { img: images[2], w: 40, h: 40 },
-        { img: images[3], w: 40, h: 40 },
-        { img: images[4], w: 32, h: 32 },
-        { img: images[5], w: 32, h: 32 },
-        { img: images[6], w: 32, h: 32 },
-        { img: images[7], w: 32, h: 32 }
+    const obstacles = [];
+    const obstacleTypes = [
+        { name: 'Creeper', img: 'https://minotar.net/armor/body/Creeper/80.png' },
+        { name: 'Zombie', img: 'https://minotar.net/armor/body/Zombie/80.png' },
+        { name: 'ISpitfire57', img: 'https://minotar.net/armor/body/ISpitfire57/80.png' },
+        { name: 'twpywq', img: 'https://minotar.net/armor/body/twpywq/80.png' },
+        { name: 'Lonely', img: 'https://minotar.net/armor/body/Lonely/80.png' },
+        { name: 'Abo7abs', img: 'https://minotar.net/armor/body/Abo7abs/80.png' },
+        { name: 'S3eedxx', img: 'https://minotar.net/armor/body/S3eedxx/80.png' }
     ];
 
-    started = true;
-    loop();
-}
-
-// 🧑 اللاعب
-const player = {
-    x: 80,
-    y: GROUND,
-    w: 32,
-    h: 64,
-    vy: 0,
-    jump() {
-        if (this.y === GROUND) this.vy = -14;
-    },
-    update() {
-        this.vy += gravity;
-        this.y += this.vy;
-        if (this.y > GROUND) {
-            this.y = GROUND;
-            this.vy = 0;
-        }
-    },
-    draw() {
-        ctx.drawImage(playerSkin, this.x, this.y - this.h, this.w, this.h);
+    function updateHighScores() {
+        highScores.push(score);
+        highScores.sort((a, b) => b - a);
+        highScores = highScores.slice(0, 3);
+        localStorage.setItem('s4leehTop3', JSON.stringify(highScores));
+        displayHighScores();
     }
-};
 
-const skinNames = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx"];
-let obstacles = [];
-let spawnTimer = 0;
+    function displayHighScores() {
+        document.getElementById('topScores').innerHTML = highScores.map((s, i) => `#${i+1}: ${s}`).join(' | ');
+    }
 
-function spawnObstacle() {
-    if (Math.random() < 0.3) {
-        const name = skinNames[Math.floor(Math.random()*skinNames.length)];
-        loadImage(`https://mc-heads.net/body/${name}/32`).then(img=>{
-            obstacles.push({ x: canvas.width, y: GROUND, w:32, h:64, img });
+    function spawnObstacle() {
+        const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+        const img = new Image();
+        img.src = type.img;
+        obstacles.push({ x: canvas.width, y: canvas.height - 110, w: 50, h: 80, img: img, passed: false });
+    }
+
+    function initGame() {
+        canvas.width = 1000;
+        canvas.height = 400;
+        document.getElementById('start-screen').style.display = 'none';
+        displayHighScores();
+        gameState = 'PLAYING';
+        animate();
+    }
+
+    function resetGame() {
+        score = 0;
+        gameSpeed = 5;
+        obstacles.length = 0;
+        player.y = canvas.height - 110;
+        player.dy = 0;
+        gameState = 'PLAYING';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function animate() {
+        if (gameState !== 'PLAYING') return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // الخلفية (سماء وأرضية)
+        ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 30, canvas.width, 10);
+        ctx.fillStyle = '#553b23'; ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+        // الجاذبية والقفز
+        player.dy += player.gravity;
+        player.y += player.dy;
+        if (player.y > canvas.height - 110) { player.y = canvas.height - 110; player.dy = 0; player.grounded = true; }
+
+        ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
+
+        // العوائق
+        if (frame % Math.max(70, 150 - Math.floor(gameSpeed * 5)) === 0) spawnObstacle();
+
+        obstacles.forEach((obs, i) => {
+            obs.x -= gameSpeed;
+            ctx.drawImage(obs.img, obs.x, obs.y, obs.w, obs.h);
+
+            // تصادم
+            if (player.x < obs.x + obs.w - 10 && player.x + player.w > obs.x + 10 &&
+                player.y < obs.y + obs.h - 10 && player.y + player.h > obs.y + 10) {
+                endGame();
+            }
+
+            // تخطي العائق
+            if (!obs.passed && obs.x + obs.w < player.x) {
+                score += pointsPerObstacle;
+                obs.passed = true;
+                gameSpeed += 0.1;
+                document.getElementById('currentScore').innerText = `النقاط: ${score}`;
+            }
         });
-    } else {
-        const o = obstaclesData[Math.floor(Math.random()*obstaclesData.length)];
-        obstacles.push({ x: canvas.width, y: GROUND, ...o });
-    }
-}
 
-function collide(a,b){
-    return a.x < b.x + b.w &&
-           a.x + a.w > b.x &&
-           a.y > b.y - b.h &&
-           a.y - a.h < b.y;
-}
-
-function loop() {
-    if (!started) return;
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle = "#5c4033";
-    ctx.fillRect(0, GROUND + 2, canvas.width, 60);
-
-    player.update();
-    player.draw();
-
-    spawnTimer++;
-    if (spawnTimer > 110) {
-        spawnObstacle();
-        spawnTimer = 0;
-        speed += 0.02;
+        if (obstacles.length > 10) obstacles.shift();
+        frame++;
+        requestAnimationFrame(animate);
     }
 
-    obstacles.forEach((o,i)=>{
-        o.x -= speed;
-        ctx.drawImage(o.img, o.x, o.y - o.h, o.w, o.h);
+    function endGame() {
+        gameState = 'OVER';
+        updateHighScores();
+        document.getElementById('finalScoreMsg').innerText = `حققت ${score} نقطة!`;
+        document.getElementById('overlay').style.display = 'flex';
+    }
 
-        if (collide(player,o)) gameOver = true;
-        if (o.x + o.w < 0) {
-            obstacles.splice(i,1);
-            score += 14;
+    window.addEventListener('keydown', (e) => {
+        if ((e.code === 'Space' || e.code === 'ArrowUp') && player.grounded) {
+            player.dy = player.jumpPower;
+            player.grounded = false;
         }
     });
 
-    document.getElementById("hud").innerHTML = `Score: ${score}`;
+    // دعم اللمس للجوال
+    window.addEventListener('touchstart', () => {
+        if (player.grounded) { player.dy = player.jumpPower; player.grounded = false; }
+    });
 
-    if (!gameOver) {
-        requestAnimationFrame(loop);
-    } else {
-        ctx.fillStyle="rgba(0,0,0,0.6)";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle="#fff";
-        ctx.font="20px Arial";
-        ctx.fillText("Game Over",390,150);
-        ctx.font="14px Arial";
-        ctx.fillText("Press SPACE to restart",350,180);
-    }
-}
-
-document.addEventListener("keydown", e=>{
-    if (e.code==="Space") {
-        if (gameOver) location.reload();
-        else player.jump();
-    }
-});
+    displayHighScores();
 </script>
-
 </body>
 </html>
