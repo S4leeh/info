@@ -18,7 +18,7 @@
         .high-scores { font-size: 14px; color: var(--gold); text-align: left; direction: ltr; }
 
         #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; display: none; }
-        .btn { background: var(--gold); color: black; border: none; padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b38f2d; pointer-events: auto; }
+        .btn { background: var(--gold); color: black; border: none; padding: 12px 35px; font-size: 20px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b38f2d; pointer-events: auto; }
         .btn:hover { transform: translateY(-3px); background: white; }
 
         #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.7) url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') center/cover; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 110; }
@@ -30,7 +30,7 @@
         <canvas id="gameCanvas"></canvas>
         <div class="ui-layer">
             <div class="score-box">
-                <div id="currentScore" style="font-size: 20px; font-weight: 900;">النقاط: 0</div>
+                <div id="currentScore" style="font-size: 18px; font-weight: 900;">النقاط: 0</div>
             </div>
             <div class="score-box high-scores">
                 <div style="margin-bottom: 5px; text-align: right; direction: rtl;">🏆 أفضل 3 نتائج:</div>
@@ -39,13 +39,13 @@
         </div>
 
         <div id="start-screen">
-            <h1 style="color:var(--gold); margin-bottom:20px; font-size:50px; text-shadow: 4px 4px #000;">مغامرة صالح 3D</h1>
+            <h1 style="color:var(--gold); margin-bottom:20px; font-size:45px; text-shadow: 4px 4px #000;">مغامرة صالح 3D</h1>
             <button class="btn" onclick="initGame()">دخول اللعبة</button>
         </div>
 
         <div id="overlay">
-            <h2 style="color:var(--gold); font-size:45px; margin-bottom:15px;">انتهت الرحلة!</h2>
-            <p id="finalScoreMsg" style="margin-bottom:25px; font-size:24px; font-weight: 700;"></p>
+            <h2 style="color:var(--gold); font-size:35px; margin-bottom:15px;">انتهت الرحلة!</h2>
+            <p id="finalScoreMsg" style="margin-bottom:20px; font-size:22px; font-weight: 700;"></p>
             <button class="btn" onclick="resetGame()">إعادة المحاولة</button>
         </div>
     </div>
@@ -62,8 +62,9 @@
     let frame = 0;
     let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-    const player = { x: 100, y: 0, w: 90, h: 120, dy: 0, jumpPower: -16, gravity: 0.75, grounded: false, img: new Image() };
-    player.img.src = 'https://minotar.net/armor/body/Saleh/100.png';
+    // جلب سكن صالح بوضعية الـ Render (3D)
+    const player = { x: 100, y: 0, w: 80, h: 100, dy: 0, jumpPower: -18, gravity: 0.8, grounded: false, img: new Image() };
+    player.img.src = 'https://crafatar.com/renders/body/Saleh?scale=4&overlay';
 
     const obstacles = [];
     const friends = ['ISpitfire57', 'twpywq', 'Lonely', 'Abo7abs', 'S3eedxx'];
@@ -83,8 +84,8 @@
     function spawnObstacle() {
         const friend = friends[Math.floor(Math.random() * friends.length)];
         const img = new Image();
-        img.src = `https://minotar.net/armor/body/${friend}/100.png`;
-        obstacles.push({ x: canvas.width, y: canvas.height - 150, w: 80, h: 120, img: img, passed: false });
+        img.src = `https://crafatar.com/renders/body/${friend}?scale=4&overlay`;
+        obstacles.push({ x: canvas.width, y: canvas.height - 130, w: 70, h: 100, img: img, passed: false });
     }
 
     function initGame() {
@@ -100,7 +101,7 @@
         score = 0;
         gameSpeed = baseSpeed;
         obstacles.length = 0;
-        player.y = canvas.height - 150;
+        player.y = canvas.height - 130;
         player.dy = 0;
         gameState = 'PLAYING';
         document.getElementById('overlay').style.display = 'none';
@@ -111,25 +112,25 @@
         if (gameState !== 'PLAYING') return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // رسم الخلفية وإصلاح خطأ استدعاء الألوان
+        // رسم الخلفية
         ctx.fillStyle = '#87CEEB'; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.fillStyle = '#5da140'; // عشب
-        ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
-        
-        ctx.fillStyle = '#553b23'; // تراب
+        ctx.fillStyle = '#5da140'; 
+        ctx.fillRect(0, canvas.height - 35, canvas.width, 5);
+        ctx.fillStyle = '#553b23'; 
         ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
 
+        // فيزياء القفز
         player.dy += player.gravity;
         player.y += player.dy;
-        if (player.y > canvas.height - 150) { player.y = canvas.height - 150; player.dy = 0; player.grounded = true; }
+        if (player.y > canvas.height - 130) { player.y = canvas.height - 130; player.dy = 0; player.grounded = true; }
 
         if (player.img.complete) {
             ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
         }
 
-        if (frame % Math.max(100, 200 - Math.floor(gameSpeed * 10)) === 0) spawnObstacle();
+        // التحكم في المسافة بين العوائق
+        if (frame % Math.max(110, 220 - Math.floor(gameSpeed * 10)) === 0) spawnObstacle();
 
         obstacles.forEach((obs, i) => {
             obs.x -= gameSpeed;
@@ -137,15 +138,16 @@
                 ctx.drawImage(obs.img, obs.x, obs.y, obs.w, obs.h);
             }
 
+            // تصادم "عادل" (صندوق تصادم أصغر من الصورة)
             if (player.x + 25 < obs.x + obs.w - 25 && player.x + player.w - 25 > obs.x + 25 &&
-                player.y + 15 < obs.y + obs.h - 15 && player.y + player.h - 15 > obs.y + 15) {
+                player.y + 20 < obs.y + obs.h - 10 && player.y + player.h - 10 > obs.y + 20) {
                 endGame();
             }
 
             if (!obs.passed && obs.x + obs.w < player.x) {
                 score += pointsPerObstacle;
                 obs.passed = true;
-                gameSpeed += 0.04; 
+                gameSpeed += 0.03; 
                 document.getElementById('currentScore').innerText = `النقاط: ${score}`;
             }
         });
