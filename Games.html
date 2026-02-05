@@ -22,7 +22,7 @@ canvas {
 .hud {
     position: absolute;
     top: 10px;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.85);
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 14px;
@@ -31,7 +31,7 @@ canvas {
 </head>
 <body>
 
-<div class="hud" id="hud"></div>
+<div class="hud" id="hud">Loading...</div>
 <canvas id="game" width="900" height="300"></canvas>
 
 <script>
@@ -39,20 +39,55 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 const GROUND = 235;
-let speed = 3.8; // ⬅️ تم تقليل السرعة
+let speed = 3.5; // أبطأ شوي
 let gravity = 0.8;
 let score = 0;
 let gameOver = false;
+let started = false;
 
-function loadImg(url) {
-    const img = new Image();
-    img.src = url;
-    return img;
+function loadImage(src) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = src;
+        img.onload = () => resolve(img);
+    });
 }
 
-// 🎮 PLAYER (Minecraft Skin)
-const playerSkin = loadImg("https://mc-heads.net/body/Saleh/32");
+// ⬇️ تحميل كل الصور
+Promise.all([
+    loadImage("https://mc-heads.net/body/Saleh/32"),
+    loadImage("https://mc-heads.net/mob/creeper"),
+    loadImage("https://mc-heads.net/mob/zombie"),
+    loadImage("https://mc-heads.net/mob/skeleton"),
+    loadImage("https://mc-heads.net/block/dirt"),
+    loadImage("https://mc-heads.net/block/cobblestone"),
+    loadImage("https://mc-heads.net/block/stone"),
+    loadImage("https://mc-heads.net/block/lava_still")
+]).then(startGame);
 
+let playerSkin, obstaclesData;
+
+function startGame(images) {
+    document.getElementById("hud").innerText = "Score: 0";
+
+    playerSkin = images[0];
+
+    obstaclesData = [
+        { img: images[1], w: 40, h: 40 },
+        { img: images[2], w: 40, h: 40 },
+        { img: images[3], w: 40, h: 40 },
+        { img: images[4], w: 32, h: 32 },
+        { img: images[5], w: 32, h: 32 },
+        { img: images[6], w: 32, h: 32 },
+        { img: images[7], w: 32, h: 32 }
+    ];
+
+    started = true;
+    loop();
+}
+
+// 🧑 اللاعب
 const player = {
     x: 80,
     y: GROUND,
@@ -75,71 +110,32 @@ const player = {
     }
 };
 
-// 🧱 Minecraft Obstacles (REAL ASSETS)
-const obstaclesData = [
-    { name: "Creeper", img: loadImg("https://mc-heads.net/mob/creeper"), w: 40, h: 40 },
-    { name: "Zombie", img: loadImg("https://mc-heads.net/mob/zombie"), w: 40, h: 40 },
-    { name: "Skeleton", img: loadImg("https://mc-heads.net/mob/skeleton"), w: 40, h: 40 },
-    { name: "Dirt", img: loadImg("https://mc-heads.net/block/dirt"), w: 32, h: 32 },
-    { name: "Cobblestone", img: loadImg("https://mc-heads.net/block/cobblestone"), w: 32, h: 32 },
-    { name: "Stone", img: loadImg("https://mc-heads.net/block/stone"), w: 32, h: 32 },
-    { name: "Lava", img: loadImg("https://mc-heads.net/block/lava_still"), w: 32, h: 32 }
-];
-
-// 🧑‍🚀 Player Skin Obstacles
-const skinNames = [
-    "ISpitfire57",
-    "twpywq",
-    "Lonely",
-    "Abo7abs",
-    "S3eedxx"
-];
-
+const skinNames = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx"];
 let obstacles = [];
+let spawnTimer = 0;
 
 function spawnObstacle() {
     if (Math.random() < 0.3) {
-        const name = skinNames[Math.floor(Math.random() * skinNames.length)];
-        obstacles.push({
-            x: canvas.width + 20,
-            y: GROUND,
-            w: 32,
-            h: 64,
-            img: loadImg(`https://mc-heads.net/body/${name}/32`),
-            name
+        const name = skinNames[Math.floor(Math.random()*skinNames.length)];
+        loadImage(`https://mc-heads.net/body/${name}/32`).then(img=>{
+            obstacles.push({ x: canvas.width, y: GROUND, w:32, h:64, img });
         });
     } else {
-        const o = obstaclesData[Math.floor(Math.random() * obstaclesData.length)];
-        obstacles.push({
-            x: canvas.width + 20,
-            y: GROUND,
-            ...o
-        });
+        const o = obstaclesData[Math.floor(Math.random()*obstaclesData.length)];
+        obstacles.push({ x: canvas.width, y: GROUND, ...o });
     }
 }
 
-function collide(a, b) {
+function collide(a,b){
     return a.x < b.x + b.w &&
            a.x + a.w > b.x &&
            a.y > b.y - b.h &&
            a.y - a.h < b.y;
 }
 
-function getScores() {
-    return JSON.parse(localStorage.getItem("mc_scores")) || [0,0,0];
-}
-
-function saveScore() {
-    let s = getScores();
-    s.push(score);
-    s.sort((a,b)=>b-a);
-    s = s.slice(0,3);
-    localStorage.setItem("mc_scores", JSON.stringify(s));
-}
-
-let spawnTimer = 0;
-
 function loop() {
+    if (!started) return;
+
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     ctx.fillStyle = "#5c4033";
@@ -149,48 +145,44 @@ function loop() {
     player.draw();
 
     spawnTimer++;
-    if (spawnTimer > 120) {
+    if (spawnTimer > 110) {
         spawnObstacle();
         spawnTimer = 0;
-        speed += 0.03;
+        speed += 0.02;
     }
 
-    obstacles.forEach((o, i) => {
+    obstacles.forEach((o,i)=>{
         o.x -= speed;
         ctx.drawImage(o.img, o.x, o.y - o.h, o.w, o.h);
 
-        if (collide(player, o)) gameOver = true;
+        if (collide(player,o)) gameOver = true;
         if (o.x + o.w < 0) {
             obstacles.splice(i,1);
             score += 14;
         }
     });
 
-    document.getElementById("hud").innerHTML =
-        `Score: ${score}<br>Top 3: ${getScores().join(" | ")}`;
+    document.getElementById("hud").innerHTML = `Score: ${score}`;
 
     if (!gameOver) {
         requestAnimationFrame(loop);
     } else {
-        saveScore();
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
+        ctx.fillStyle="rgba(0,0,0,0.6)";
         ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#fff";
-        ctx.font = "22px Arial";
-        ctx.fillText("Game Over", 380, 140);
-        ctx.font = "14px Arial";
-        ctx.fillText("Press SPACE to Restart", 350, 170);
+        ctx.fillStyle="#fff";
+        ctx.font="20px Arial";
+        ctx.fillText("Game Over",390,150);
+        ctx.font="14px Arial";
+        ctx.fillText("Press SPACE to restart",350,180);
     }
 }
 
-document.addEventListener("keydown", e => {
-    if (e.code === "Space") {
+document.addEventListener("keydown", e=>{
+    if (e.code==="Space") {
         if (gameOver) location.reload();
         else player.jump();
     }
 });
-
-loop();
 </script>
 
 </body>
