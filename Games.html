@@ -9,69 +9,84 @@
         :root { --gold: #d4af37; --mc-dirt: #553b23; --mc-grass: #5da140; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background: #121212; color: white; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-        #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') repeat-x; background-size: cover; background-position: bottom; width: 95vw; max-width: 1000px; height: 400px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        #game-wrap { position: relative; border: 4px solid var(--gold); border-radius: 15px; overflow: hidden; background: #87CEEB url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') repeat-x; background-size: cover; background-position: bottom; width: 95vw; max-width: 1000px; height: 400px; }
         canvas { display: block; width: 100%; height: 100%; }
         .ui-layer { position: absolute; top: 15px; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; z-index: 50; }
-        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gold); backdrop-filter: blur(5px); }
-        .high-scores { font-size: 14px; color: var(--gold); text-align: left; direction: ltr; }
+        .score-box { background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gold); }
         #overlay, #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
         .btn { background: var(--gold); color: black; border: none; padding: 12px 35px; font-size: 20px; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; pointer-events: auto; }
-        .btn:hover { transform: scale(1.05); background: white; }
+        #loading-msg { color: var(--gold); margin-top: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
+
     <div id="game-wrap">
         <canvas id="gameCanvas"></canvas>
         <div class="ui-layer">
-            <div class="score-box"><div id="currentScore" style="font-size: 18px;">النقاط: 0</div></div>
-            <div class="score-box high-scores"><div id="topScores">--</div></div>
+            <div class="score-box"><div id="currentScore">النقاط: 0</div></div>
+            <div class="score-box" style="direction: ltr;"><div id="topScores" style="font-size: 14px; color: var(--gold);">--</div></div>
         </div>
+
         <div id="start-screen">
             <h1 style="color:var(--gold); margin-bottom:20px; font-size:45px; text-shadow: 3px 3px #000;">مغامرة صالح 3D</h1>
-            <p style="margin-bottom: 20px; font-weight: 700;">تجاوز الموبز وسكنات الشباب!</p>
-            <button class="btn" onclick="initGame()">دخول اللعبة</button>
+            <button id="main-btn" class="btn" onclick="initGame()" disabled>جاري التحميل...</button>
+            <div id="loading-msg">نجهز السكنات والموبز...</div>
         </div>
+
         <div id="overlay" style="display:none;">
             <h2 style="color:var(--gold); font-size:35px; margin-bottom:15px;">انتهت الرحلة! 💀</h2>
-            <p id="finalScoreMsg" style="margin-bottom:25px; font-size:22px; font-weight: 700;"></p>
+            <p id="finalScoreMsg" style="margin-bottom:25px; font-size:24px; font-weight: 700;"></p>
             <button class="btn" onclick="resetGame()">إعادة المحاولة</button>
         </div>
     </div>
+
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    
     let gameState = 'START';
     let score = 0;
-    let baseSpeed = 3.8; 
+    let baseSpeed = 3.5; 
     let gameSpeed = baseSpeed;
     let frame = 0;
     let highScores = JSON.parse(localStorage.getItem('s4leehTop3')) || [0, 0, 0];
 
-    const player = { x: 100, y: 0, w: 90, h: 120, dy: 0, jumpPower: -20, gravity: 0.8, grounded: false, img: new Image() };
-    player.img.src = 'https://crafatar.com/renders/body/Saleh?scale=4&overlay';
-
-    const obstacles = [];
-    const obstacleTypes = [
-        { name: 'Creeper', img: 'https://crafatar.com/renders/body/Creeper?scale=4', weight: 0.4 }, 
-        { name: 'Zombie', img: 'https://crafatar.com/renders/body/Zombie?scale=4', weight: 0.3 },
-        { name: 'ISpitfire57', img: 'https://crafatar.com/renders/body/ISpitfire57?scale=4&overlay', weight: 0.1 },
-        { name: 'twpywq', img: 'https://crafatar.com/renders/body/twpywq?scale=4&overlay', weight: 0.1 },
-        { name: 'Lonely', img: 'https://crafatar.com/renders/body/Lonely?scale=4&overlay', weight: 0.05 },
-        { name: 'Abo7abs', img: 'https://crafatar.com/renders/body/Abo7abs?scale=4&overlay', weight: 0.05 }
+    // مصفوفة الصور للتحميل المسبق
+    const images = {};
+    const toLoad = [
+        { name: 'player', url: 'https://minotar.net/armor/body/Saleh/100.png' },
+        { name: 'Creeper', url: 'https://minotar.net/armor/body/Creeper/100.png' },
+        { name: 'Zombie', url: 'https://minotar.net/armor/body/Zombie/100.png' },
+        { name: 'ISpitfire57', url: 'https://minotar.net/armor/body/ISpitfire57/100.png' },
+        { name: 'twpywq', url: 'https://minotar.net/armor/body/twpywq/100.png' },
+        { name: 'Lonely', url: 'https://minotar.net/armor/body/Lonely/100.png' },
+        { name: 'Abo7abs', url: 'https://minotar.net/armor/body/Abo7abs/100.png' },
+        { name: 'S3eedxx', url: 'https://minotar.net/armor/body/S3eedxx/100.png' }
     ];
 
-    function spawnObstacle() {
-        if (gameState !== 'PLAYING') return;
-        let random = Math.random();
-        let cumulativeWeight = 0;
-        let selected = obstacleTypes[0];
-        for (const type of obstacleTypes) {
-            cumulativeWeight += type.weight;
-            if (random < cumulativeWeight) { selected = type; break; }
-        }
+    let loadedCount = 0;
+    toLoad.forEach(item => {
         const img = new Image();
-        img.src = selected.img;
-        obstacles.push({ x: canvas.width, y: canvas.height - 150, w: 80, h: 110, img: img, passed: false });
+        img.src = item.url;
+        img.onload = () => {
+            loadedCount++;
+            images[item.name] = img;
+            if (loadedCount === toLoad.length) {
+                const btn = document.getElementById('main-btn');
+                btn.disabled = false;
+                btn.innerText = "دخول اللعبة";
+                document.getElementById('loading-msg').innerText = "جاهز للمغامرة!";
+            }
+        };
+    });
+
+    const player = { x: 100, y: 0, w: 80, h: 110, dy: 0, jumpPower: -18, gravity: 0.75, grounded: false };
+    const obstacles = [];
+
+    function spawnObstacle() {
+        const friendList = ['Creeper', 'Zombie', 'ISpitfire57', 'twpywq', 'Lonely', 'Abo7abs', 'S3eedxx'];
+        const randomName = friendList[Math.floor(Math.random() * friendList.length)];
+        obstacles.push({ x: canvas.width, y: canvas.height - 140, w: 75, h: 110, name: randomName, passed: false });
     }
 
     function initGame() {
@@ -84,57 +99,54 @@
 
     function resetGame() {
         score = 0; gameSpeed = baseSpeed; obstacles.length = 0;
-        player.y = canvas.height - 150; player.dy = 0;
+        player.y = canvas.height - 140; player.dy = 0;
         gameState = 'PLAYING';
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('currentScore').innerText = `النقاط: 0`;
     }
 
     function animate() {
         if (gameState !== 'PLAYING') return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 40, canvas.width, 10);
+        
+        // الأرضية
+        ctx.fillStyle = '#5da140'; ctx.fillRect(0, canvas.height - 35, canvas.width, 5);
         ctx.fillStyle = '#553b23'; ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
 
         player.dy += player.gravity;
         player.y += player.dy;
-        if (player.y > canvas.height - 150) { player.y = canvas.height - 150; player.dy = 0; player.grounded = true; }
+        if (player.y > canvas.height - 140) { player.y = canvas.height - 140; player.dy = 0; player.grounded = true; }
 
-        if (player.img.complete) { ctx.drawImage(player.img, player.x, player.y, player.w, player.h); }
+        ctx.drawImage(images['player'], player.x, player.y, player.w, player.h);
 
-        if (frame % Math.max(100, 180 - Math.floor(gameSpeed * 8)) === 0) spawnObstacle();
+        if (frame % 130 === 0) spawnObstacle();
 
         obstacles.forEach((obs, i) => {
             obs.x -= gameSpeed;
-            if (obs.img.complete) { ctx.drawImage(obs.img, obs.x, obs.y, obs.w, obs.h); }
+            ctx.drawImage(images[obs.name], obs.x, obs.y, obs.w, obs.h);
 
-            if (player.x + 30 < obs.x + obs.w - 30 && player.x + player.w - 30 > obs.x + 30 &&
+            if (player.x + 25 < obs.x + obs.w - 25 && player.x + player.w - 25 > obs.x + 25 &&
                 player.y + 20 < obs.y + obs.h - 10 && player.y + player.h - 10 > obs.y + 20) {
-                endGame();
+                gameState = 'OVER';
+                document.getElementById('overlay').style.display = 'flex';
+                document.getElementById('finalScoreMsg').innerText = `حققت ${score} نقطة!`;
+                updateHighScores();
             }
+
             if (!obs.passed && obs.x + obs.w < player.x) {
                 score += 14; obs.passed = true;
-                gameSpeed += 0.05; 
+                gameSpeed += 0.04; 
                 document.getElementById('currentScore').innerText = `النقاط: ${score}`;
             }
         });
-        if (obstacles.length > 10) obstacles.shift();
+
         frame++;
         requestAnimationFrame(animate);
-    }
-
-    function endGame() {
-        gameState = 'OVER';
-        updateHighScores();
-        document.getElementById('finalScoreMsg').innerText = `حققت ${score} نقطة!`;
-        document.getElementById('overlay').style.display = 'flex';
     }
 
     function updateHighScores() {
         highScores.push(score); highScores.sort((a, b) => b - a);
         highScores = highScores.slice(0, 3);
         localStorage.setItem('s4leehTop3', JSON.stringify(highScores));
-        displayHighScores();
     }
 
     function displayHighScores() {
@@ -142,9 +154,7 @@
     }
 
     window.addEventListener('keydown', (e) => {
-        if ((e.code === 'Space' || e.code === 'ArrowUp') && player.grounded) {
-            player.dy = player.jumpPower; player.grounded = false;
-        }
+        if (e.code === 'Space' && player.grounded) { player.dy = player.jumpPower; player.grounded = false; }
     });
 </script>
 </body>
