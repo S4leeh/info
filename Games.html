@@ -109,7 +109,7 @@ load("Lava","https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/30/L
 /* ========= التحكم ========= */
 document.addEventListener("keydown",e=>{
   if(e.code==="Space" && !player.jump && state==="PLAY"){
-    player.vy=-14;
+    player.vy=-18;
     player.jump=true;
   }
 });
@@ -153,7 +153,7 @@ function loop(){
   ctx.fillRect(0,GROUND,canvas.width,canvas.height-GROUND);
 
   // لاعب
-  player.vy+=0.7;
+  player.vy+=0.45;
   player.y+=player.vy;
   if(player.y>=GROUND-player.h){
     player.y=GROUND-player.h;
