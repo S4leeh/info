@@ -1,197 +1,203 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S4leeh | منصة الألعاب</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #121212;
-            --gold: #d4af37;
-            --mc-dirt: #553b23;
-            --mc-grass: #5da140;
-        }
+<meta charset="UTF-8" />
+<title>Saleh – Minecraft Runner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+    body {
+        margin: 0;
+        background: #87ceeb;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
 
-        /* نظام الماوس اللوقو */
-        html, body, button, .game-play-btn { cursor: none !important; }
-        #s4-cursor {
-            width: 30px; height: 30px;
-            background-image: url('logo.png');
-            background-size: contain; background-repeat: no-repeat;
-            position: fixed; pointer-events: none; z-index: 1000000;
-            transform: translate(-50%, -50%);
-        }
+    canvas {
+        background: linear-gradient(#87ceeb, #6bbf59);
+        border: 4px solid #000;
+        image-rendering: pixelated;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-dark); color: #fff; overflow-x: hidden; }
-
-        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid rgba(212, 175, 55, 0.2); padding: 8px 25px; position: sticky; top: 20px; z-index: 10000; margin: 0 auto; display: flex; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; }
-        .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; }
-
-        .page-header { text-align: center; padding: 40px 20px; }
-        .page-header h1 { font-size: 35px; color: var(--gold); font-weight: 900; }
-
-        .game-container { max-width: 800px; margin: 0 auto; padding: 10px; position: relative; }
-        #game-area {
-            width: 100%; height: 300px;
-            background: #87CEEB url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png') repeat-x;
-            background-size: cover; background-position: bottom;
-            border: 4px solid var(--gold); border-radius: 20px;
-            position: relative; overflow: hidden; display: none;
-            border-bottom: 25px solid var(--mc-dirt);
-            box-shadow: inset 0 -8px 0 var(--mc-grass);
-        }
-
-        #player {
-            width: 70px; height: 70px;
-            position: absolute; bottom: 0; left: 50px;
-            background-size: contain; background-repeat: no-repeat;
-            image-rendering: pixelated; z-index: 10;
-        }
-
-        .obstacle {
-            width: 65px; height: 65px;
-            position: absolute; bottom: 0; right: -70px;
-            background-size: contain; background-repeat: no-repeat;
-            image-rendering: pixelated;
-        }
-
-        #score { position: absolute; top: 15px; right: 20px; font-size: 22px; font-weight: 900; color: #fff; text-shadow: 2px 2px #000; z-index: 20; }
-        
-        .game-play-btn {
-            display: block; margin: 10px auto; padding: 12px 35px;
-            background: var(--gold); border: none; border-radius: 10px;
-            font-weight: 900; font-size: 18px; transition: 0.3s; color: #000;
-        }
-
-        #game-over {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.95); padding: 30px; border-radius: 20px;
-            text-align: center; display: none; z-index: 100; width: 80%; border: 2px solid var(--gold);
-        }
-    </style>
+    .hud {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #000;
+        font-size: 16px;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 12px;
+        border-radius: 8px;
+    }
+</style>
 </head>
 <body>
-    <div id="s4-cursor"></div>
 
-    <nav class="nav-bar">
-        <a href="index.html" class="nav-link">الرئيسية</a>
-        <a href="#" class="nav-link" style="color:var(--gold)">منطقة الألعاب</a>
-    </nav>
+<div class="hud" id="hud"></div>
+<canvas id="game" width="900" height="300"></canvas>
 
-    <header class="page-header">
-        <h1>مغامرة صالح ⛏️</h1>
-        <p>تجاوز سكنات الشباب وجمع النقاط! (اضغط Space للقفز)</p>
-    </header>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-    <div class="game-container">
-        <button id="start-btn" class="game-play-btn">ابدأ اللعب الآن</button>
-        <div id="game-area">
-            <div id="player"></div> 
-            <div id="score">النقاط: 0</div>
-            <div id="game-over">
-                <h2 style="color:var(--gold); margin-bottom: 15px;">انتهت اللعبة! 💀</h2>
-                <button onclick="location.reload()" class="game-play-btn">إعادة المحاولة</button>
-            </div>
-        </div>
-    </div>
+const GROUND = 230;
+let speed = 6;
+let gravity = 0.8;
+let score = 0;
+let gameOver = false;
 
-    <script>
-        const cursor = document.getElementById('s4-cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
+const player = {
+    x: 80,
+    y: GROUND,
+    w: 32,
+    h: 48,
+    vy: 0,
+    jump() {
+        if (this.y === GROUND) this.vy = -14;
+    },
+    update() {
+        this.vy += gravity;
+        this.y += this.vy;
+        if (this.y > GROUND) {
+            this.y = GROUND;
+            this.vy = 0;
+        }
+    },
+    draw() {
+        ctx.fillStyle = "#4CAF50"; // Minecraft-style green
+        ctx.fillRect(this.x, this.y - this.h, this.w, this.h);
+        ctx.fillStyle = "#000";
+        ctx.fillText("Saleh", this.x - 2, this.y - this.h - 4);
+    }
+};
 
-        const player = document.getElementById('player');
-        const gameArea = document.getElementById('game-area');
-        const scoreEl = document.getElementById('score');
-        const startBtn = document.getElementById('start-btn');
-        const gameOverEl = document.getElementById('game-over');
+const obstacleTypes = [
+    { name: "Creeper", color: "#2ecc71", w: 30, h: 50 },
+    { name: "Zombie", color: "#1abc9c", w: 30, h: 48 },
+    { name: "Skeleton", color: "#ecf0f1", w: 28, h: 48, arrow: true },
+    { name: "Dirt", color: "#8B4513", w: 32, h: 32 },
+    { name: "Cobblestone", color: "#7f8c8d", w: 32, h: 32 },
+    { name: "Stone", color: "#95a5a6", w: 32, h: 32 },
+    { name: "Lava", color: "#e74c3c", w: 34, h: 20 }
+];
 
-        // سحب سكن صالح (Saleh) مباشرة
-        player.style.backgroundImage = "url('https://minotar.net/armor/body/Saleh/70.png')";
+const skinNames = [
+    "ISpitfire57",
+    "twpywq",
+    "Lonely",
+    "Abo7abs",
+    "S3eedxx"
+];
 
-        let score = 0;
-        let isJumping = false;
-        let isGameOver = false;
+let obstacles = [];
 
-        // أسماء الشباب لسحب سكناتهم
-        const friends = ['ISpitfire57', 'twpywq', 'Lonely', 'S3eedxx'];
+function spawnObstacle() {
+    let isSkin = Math.random() < 0.25;
+    let type = isSkin
+        ? { name: skinNames[Math.floor(Math.random()*skinNames.length)], color:"#9b59b6", w:30, h:48 }
+        : obstacleTypes[Math.floor(Math.random()*obstacleTypes.length)];
 
-        function startGame() {
-            startBtn.style.display = 'none';
-            gameArea.style.display = 'block';
-            spawnObstacle();
-            document.addEventListener('keydown', e => { if(e.code === 'Space' || e.key === ' ') jump(); });
-            gameArea.onclick = jump; 
+    obstacles.push({
+        x: canvas.width + 20,
+        y: GROUND,
+        ...type
+    });
+}
+
+function collision(a, b) {
+    return (
+        a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y > b.y - b.h &&
+        a.y - a.h < b.y
+    );
+}
+
+function drawGround() {
+    ctx.fillStyle = "#654321";
+    ctx.fillRect(0, GROUND + 2, canvas.width, 60);
+}
+
+function updateScore() {
+    document.getElementById("hud").innerHTML =
+        `Score: ${score}<br>
+        Top 3: ${getHighScores().join(" | ")}`;
+}
+
+function saveScore() {
+    let scores = getHighScores();
+    scores.push(score);
+    scores.sort((a,b)=>b-a);
+    scores = scores.slice(0,3);
+    localStorage.setItem("mc_runner_scores", JSON.stringify(scores));
+}
+
+function getHighScores() {
+    return JSON.parse(localStorage.getItem("mc_runner_scores")) || [0,0,0];
+}
+
+let spawnTimer = 0;
+
+function loop() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    drawGround();
+    player.update();
+    player.draw();
+
+    spawnTimer++;
+    if (spawnTimer > 90) {
+        spawnObstacle();
+        spawnTimer = 0;
+        speed += 0.05;
+    }
+
+    obstacles.forEach((o, i) => {
+        o.x -= speed;
+        ctx.fillStyle = o.color;
+        ctx.fillRect(o.x, o.y - o.h, o.w, o.h);
+        ctx.fillStyle = "#000";
+        ctx.fillText(o.name, o.x - 4, o.y - o.h - 4);
+
+        if (collision(player, o)) {
+            gameOver = true;
         }
 
-        function jump() {
-            if (isJumping || isGameOver) return;
-            isJumping = true;
-            let pos = 0;
-            let upTimer = setInterval(() => {
-                if (pos >= 130) {
-                    clearInterval(upTimer);
-                    let downTimer = setInterval(() => {
-                        if (pos <= 0) {
-                            clearInterval(downTimer);
-                            isJumping = false;
-                        }
-                        pos -= 5;
-                        player.style.bottom = pos + 'px';
-                    }, 18);
-                }
-                pos += 8;
-                player.style.bottom = pos + 'px';
-            }, 18);
+        if (o.x + o.w < 0) {
+            obstacles.splice(i,1);
+            score += 14;
         }
+    });
 
-        function spawnObstacle() {
-            if (isGameOver) return;
-            const obstacle = document.createElement('div');
-            obstacle.classList.add('obstacle');
-            
-            const randomFriend = friends[Math.floor(Math.random() * friends.length)];
-            // سحب سكنات الشباب
-            obstacle.style.backgroundImage = `url('https://minotar.net/armor/body/${randomFriend}/65.png')`;
-            
-            gameArea.appendChild(obstacle);
+    updateScore();
 
-            let obstaclePos = 0;
-            let moveTimer = setInterval(() => {
-                if (isGameOver) { clearInterval(moveTimer); return; }
-                
-                obstaclePos += 7.5; 
-                obstacle.style.right = obstaclePos + 'px';
+    if (!gameOver) {
+        requestAnimationFrame(loop);
+    } else {
+        saveScore();
+        ctx.fillStyle = "rgba(0,0,0,0.6)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#fff";
+        ctx.font = "24px Arial";
+        ctx.fillText("Game Over", 380, 140);
+        ctx.font = "16px Arial";
+        ctx.fillText("Press Space to Restart", 350, 170);
+    }
+}
 
-                let pRect = player.getBoundingClientRect();
-                let oRect = obstacle.getBoundingClientRect();
+document.addEventListener("keydown", e => {
+    if (e.code === "Space") {
+        if (gameOver) location.reload();
+        else player.jump();
+    }
+});
 
-                if (
-                    pRect.right > oRect.left + 15 && 
-                    pRect.left < oRect.right - 15 && 
-                    pRect.bottom > oRect.top + 10
-                ) {
-                    isGameOver = true;
-                    gameOverEl.style.display = 'block';
-                }
+loop();
+</script>
 
-                if (obstaclePos > gameArea.offsetWidth + 100) {
-                    obstacle.remove();
-                    score++;
-                    scoreEl.innerText = `النقاط: ${score}`;
-                    clearInterval(moveTimer);
-                }
-            }, 20);
-
-            setTimeout(spawnObstacle, Math.random() * 1200 + 900);
-        }
-
-        startBtn.onclick = startGame;
-    </script>
 </body>
 </html>
