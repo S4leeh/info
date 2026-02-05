@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Saleh – Minecraft Runner</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    body {
-        margin: 0;
-        background: #87ceeb;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    canvas {
-        background: linear-gradient(#87ceeb, #6bbf59);
-        border: 4px solid #000;
-        image-rendering: pixelated;
-    }
-
-    .hud {
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: #000;
-        font-size: 16px;
-        background: rgba(255,255,255,0.7);
-        padding: 6px 12px;
-        border-radius: 8px;
-    }
+body {
+    margin: 0;
+    background: #7ec0ee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial;
+}
+canvas {
+    border: 4px solid #000;
+    image-rendering: pixelated;
+    background: linear-gradient(#7ec0ee, #6ab04c);
+}
+.hud {
+    position: absolute;
+    top: 10px;
+    background: rgba(255,255,255,0.8);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
 </style>
 </head>
 <body>
@@ -44,17 +38,26 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-const GROUND = 230;
-let speed = 6;
+const GROUND = 235;
+let speed = 3.8; // ⬅️ تم تقليل السرعة
 let gravity = 0.8;
 let score = 0;
 let gameOver = false;
+
+function loadImg(url) {
+    const img = new Image();
+    img.src = url;
+    return img;
+}
+
+// 🎮 PLAYER (Minecraft Skin)
+const playerSkin = loadImg("https://mc-heads.net/body/Saleh/32");
 
 const player = {
     x: 80,
     y: GROUND,
     w: 32,
-    h: 48,
+    h: 64,
     vy: 0,
     jump() {
         if (this.y === GROUND) this.vy = -14;
@@ -68,23 +71,22 @@ const player = {
         }
     },
     draw() {
-        ctx.fillStyle = "#4CAF50"; // Minecraft-style green
-        ctx.fillRect(this.x, this.y - this.h, this.w, this.h);
-        ctx.fillStyle = "#000";
-        ctx.fillText("Saleh", this.x - 2, this.y - this.h - 4);
+        ctx.drawImage(playerSkin, this.x, this.y - this.h, this.w, this.h);
     }
 };
 
-const obstacleTypes = [
-    { name: "Creeper", color: "#2ecc71", w: 30, h: 50 },
-    { name: "Zombie", color: "#1abc9c", w: 30, h: 48 },
-    { name: "Skeleton", color: "#ecf0f1", w: 28, h: 48, arrow: true },
-    { name: "Dirt", color: "#8B4513", w: 32, h: 32 },
-    { name: "Cobblestone", color: "#7f8c8d", w: 32, h: 32 },
-    { name: "Stone", color: "#95a5a6", w: 32, h: 32 },
-    { name: "Lava", color: "#e74c3c", w: 34, h: 20 }
+// 🧱 Minecraft Obstacles (REAL ASSETS)
+const obstaclesData = [
+    { name: "Creeper", img: loadImg("https://mc-heads.net/mob/creeper"), w: 40, h: 40 },
+    { name: "Zombie", img: loadImg("https://mc-heads.net/mob/zombie"), w: 40, h: 40 },
+    { name: "Skeleton", img: loadImg("https://mc-heads.net/mob/skeleton"), w: 40, h: 40 },
+    { name: "Dirt", img: loadImg("https://mc-heads.net/block/dirt"), w: 32, h: 32 },
+    { name: "Cobblestone", img: loadImg("https://mc-heads.net/block/cobblestone"), w: 32, h: 32 },
+    { name: "Stone", img: loadImg("https://mc-heads.net/block/stone"), w: 32, h: 32 },
+    { name: "Lava", img: loadImg("https://mc-heads.net/block/lava_still"), w: 32, h: 32 }
 ];
 
+// 🧑‍🚀 Player Skin Obstacles
 const skinNames = [
     "ISpitfire57",
     "twpywq",
@@ -96,48 +98,43 @@ const skinNames = [
 let obstacles = [];
 
 function spawnObstacle() {
-    let isSkin = Math.random() < 0.25;
-    let type = isSkin
-        ? { name: skinNames[Math.floor(Math.random()*skinNames.length)], color:"#9b59b6", w:30, h:48 }
-        : obstacleTypes[Math.floor(Math.random()*obstacleTypes.length)];
-
-    obstacles.push({
-        x: canvas.width + 20,
-        y: GROUND,
-        ...type
-    });
+    if (Math.random() < 0.3) {
+        const name = skinNames[Math.floor(Math.random() * skinNames.length)];
+        obstacles.push({
+            x: canvas.width + 20,
+            y: GROUND,
+            w: 32,
+            h: 64,
+            img: loadImg(`https://mc-heads.net/body/${name}/32`),
+            name
+        });
+    } else {
+        const o = obstaclesData[Math.floor(Math.random() * obstaclesData.length)];
+        obstacles.push({
+            x: canvas.width + 20,
+            y: GROUND,
+            ...o
+        });
+    }
 }
 
-function collision(a, b) {
-    return (
-        a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y > b.y - b.h &&
-        a.y - a.h < b.y
-    );
+function collide(a, b) {
+    return a.x < b.x + b.w &&
+           a.x + a.w > b.x &&
+           a.y > b.y - b.h &&
+           a.y - a.h < b.y;
 }
 
-function drawGround() {
-    ctx.fillStyle = "#654321";
-    ctx.fillRect(0, GROUND + 2, canvas.width, 60);
-}
-
-function updateScore() {
-    document.getElementById("hud").innerHTML =
-        `Score: ${score}<br>
-        Top 3: ${getHighScores().join(" | ")}`;
+function getScores() {
+    return JSON.parse(localStorage.getItem("mc_scores")) || [0,0,0];
 }
 
 function saveScore() {
-    let scores = getHighScores();
-    scores.push(score);
-    scores.sort((a,b)=>b-a);
-    scores = scores.slice(0,3);
-    localStorage.setItem("mc_runner_scores", JSON.stringify(scores));
-}
-
-function getHighScores() {
-    return JSON.parse(localStorage.getItem("mc_runner_scores")) || [0,0,0];
+    let s = getScores();
+    s.push(score);
+    s.sort((a,b)=>b-a);
+    s = s.slice(0,3);
+    localStorage.setItem("mc_scores", JSON.stringify(s));
 }
 
 let spawnTimer = 0;
@@ -145,35 +142,32 @@ let spawnTimer = 0;
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    drawGround();
+    ctx.fillStyle = "#5c4033";
+    ctx.fillRect(0, GROUND + 2, canvas.width, 60);
+
     player.update();
     player.draw();
 
     spawnTimer++;
-    if (spawnTimer > 90) {
+    if (spawnTimer > 120) {
         spawnObstacle();
         spawnTimer = 0;
-        speed += 0.05;
+        speed += 0.03;
     }
 
     obstacles.forEach((o, i) => {
         o.x -= speed;
-        ctx.fillStyle = o.color;
-        ctx.fillRect(o.x, o.y - o.h, o.w, o.h);
-        ctx.fillStyle = "#000";
-        ctx.fillText(o.name, o.x - 4, o.y - o.h - 4);
+        ctx.drawImage(o.img, o.x, o.y - o.h, o.w, o.h);
 
-        if (collision(player, o)) {
-            gameOver = true;
-        }
-
+        if (collide(player, o)) gameOver = true;
         if (o.x + o.w < 0) {
             obstacles.splice(i,1);
             score += 14;
         }
     });
 
-    updateScore();
+    document.getElementById("hud").innerHTML =
+        `Score: ${score}<br>Top 3: ${getScores().join(" | ")}`;
 
     if (!gameOver) {
         requestAnimationFrame(loop);
@@ -182,10 +176,10 @@ function loop() {
         ctx.fillStyle = "rgba(0,0,0,0.6)";
         ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#fff";
-        ctx.font = "24px Arial";
+        ctx.font = "22px Arial";
         ctx.fillText("Game Over", 380, 140);
-        ctx.font = "16px Arial";
-        ctx.fillText("Press Space to Restart", 350, 170);
+        ctx.font = "14px Arial";
+        ctx.fillText("Press SPACE to Restart", 350, 170);
     }
 }
 
