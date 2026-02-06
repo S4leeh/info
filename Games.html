@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S4leeh Minecraft Runner - Fixed</title>
+<title>S4leeh Minecraft Runner - V2</title>
 <style>
     html,body{ margin:0; padding:0; background:#0a0a0a; font-family: sans-serif; touch-action: none; overflow: hidden; }
     #game-wrap { position: relative; width: fit-content; margin: 20px auto; }
-    canvas{ display:block; background: #87CEEB; border:4px solid #d4af37; border-radius:15px; max-width: 95vw; height: auto; }
-    .ui{ position:absolute; color:#fff; background:rgba(0,0,0,0.7); padding:8px 15px; border-radius:10px; border:1px solid #d4af37; font-weight:bold; z-index: 10; font-size: 14px; }
-    #score{top:10px; right:10px;}
-    #top3{top:10px; left:10px; direction: ltr;}
-    #msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 100; color: #d4af37; text-align: center; border-radius: 15px; flex-direction: column; }
-    button { padding: 12px 30px; font-size: 18px; background: #d4af37; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+    canvas{ display:block; background: #87CEEB; border:4px solid #d4af37; border-radius:15px; max-width: 95vw; height: auto; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+    .ui{ position:absolute; color:#fff; background:rgba(0,0,0,0.8); padding:8px 15px; border-radius:10px; border:1px solid #d4af37; font-weight:bold; z-index: 10; }
+    #score{top:15px; right:15px;}
+    #top3{top:15px; left:15px; direction: ltr; font-size: 12px;}
+    #msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); z-index: 100; color: #d4af37; text-align: center; border-radius: 15px; flex-direction: column; padding: 20px; }
+    button { padding: 15px 40px; font-size: 20px; background: #d4af37; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; color: #000; transition: 0.2s; }
+    button:hover { transform: scale(1.1); background: #fff; }
 </style>
 </head>
 <body>
@@ -24,8 +25,8 @@
     <canvas id="game" width="1000" height="400"></canvas>
 
     <div id="msg">
-        <h2 id="msg-text">جاري تحميل السكنات...</h2>
-        <button id="start-btn" style="display:none;" onclick="startGame()">ابدأ اللعب</button>
+        <h2 id="msg-text">جاري تجهيز العالم...</h2>
+        <button id="start-btn" style="display:none;" onclick="startGame()">ابدأ المغامرة</button>
     </div>
 </div>
 
@@ -33,24 +34,28 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const GROUND = 330;
+
+// متغيرات اللعبة الأساسية
 let state = "LOADING";
 let score = 0;
-let speed = 4;
+let baseSpeed = 4.5;
+let speed = baseSpeed;
 let frame = 0;
+let nextSpawnFrame = 100; // للتحكم في العشوائية
 let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
 
-// إعدادات اللاعب والعوائق
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false, img: new Image() };
 let obstacles = [];
 const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona"];
 
-// تحميل الصور مع معالجة الأخطاء
+// الأصول (الموبز والبلوكات)
 const assets = {};
 const toLoad = [
     { n: "Saleh", u: "https://minotar.net/armor/body/Saleh/100.png" },
     { n: "Creeper", u: "https://minotar.net/armor/body/Creeper/100.png" },
     { n: "Zombie", u: "https://minotar.net/armor/body/Zombie/100.png" },
-    { n: "Dirt", u: "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/img/dirt.png" }
+    { n: "Dirt", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2f/Dirt.png" },
+    { n: "Lava", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/30/Lava.png" }
 ];
 
 let loaded = 0;
@@ -58,48 +63,62 @@ toLoad.forEach(item => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = item.u;
-    img.onload = () => { loaded++; checkReady(); };
-    img.onerror = () => { loaded++; checkReady(); }; // تخطي الخطأ لضمان عمل اللعبة
+    img.onload = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
+    img.onerror = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
     assets[item.n] = img;
 });
-player.img = assets["Saleh"];
 
-function checkReady() {
-    if(loaded >= toLoad.length) {
-        document.getElementById("msg-text").innerText = "جاهز للمغامرة!";
-        document.getElementById("start-btn").style.display = "block";
-    }
+function showStartButton() {
+    document.getElementById("msg-text").innerText = "جاهز يا صالح؟";
+    document.getElementById("start-btn").style.display = "block";
 }
 
 function startGame() {
+    // تصفير كامل للقيم عند البداية أو الإعادة
+    score = 0;
+    speed = baseSpeed;
+    frame = 0;
+    obstacles = [];
+    player.y = GROUND - player.h;
+    player.vy = 0;
+    player.jump = false;
+    nextSpawnFrame = 80; 
+
     document.getElementById("msg").style.display = "none";
     state = "PLAY";
-    loop();
+    if (loaded >= toLoad.length) loop(); 
 }
 
 function doJump() {
     if(!player.jump && state === "PLAY") {
-        player.vy = -17;
+        player.vy = -18;
         player.jump = true;
     }
 }
 
-// التحكم
 document.addEventListener("keydown", e => { if(e.code==="Space") doJump(); });
 document.addEventListener("touchstart", e => { e.preventDefault(); doJump(); }, {passive: false});
 
 function spawn() {
-    const t = Math.random();
-    let o = { x: canvas.width + 100, passed: false };
-    if(t < 0.6) {
+    const rand = Math.random();
+    let o = { x: canvas.width + 150, passed: false };
+
+    if(rand < 0.4) { // موبز (40%)
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
-        Object.assign(o, { type: m, w: 70, h: 100, y: GROUND-100 });
-    } else {
+        Object.assign(o, { type: "Img", img: assets[m], w: 75, h: 105, y: GROUND-105 });
+    } else if(rand < 0.7) { // بلوكات (30%)
+        const b = Math.random() > 0.5 ? "Dirt" : "Lava";
+        Object.assign(o, { type: "Img", img: assets[b], w: 60, h: 60, y: GROUND-60 });
+    } else { // شباب (30%)
         const s = skins[Math.floor(Math.random()*skins.length)];
-        Object.assign(o, { type: "Skin", name: s, w: 70, h: 100, y: GROUND-100, img: new Image() });
-        o.img.src = `https://minotar.net/armor/body/${s}/100.png`;
+        const skinImg = new Image();
+        skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
+        Object.assign(o, { type: "Img", img: skinImg, w: 75, h: 105, y: GROUND-105 });
     }
     obstacles.push(o);
+    
+    // تحديد وقت الظهور القادم بشكل عشوائي (بين 70 و 150 إطار) لجعلها غير متوقعة
+    nextSpawnFrame = frame + Math.floor(Math.random() * 80) + 70;
 }
 
 function loop() {
@@ -112,54 +131,56 @@ function loop() {
     ctx.fillStyle = "#5b3a1d"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
     ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 10);
 
-    // فيزياء اللاعب
-    player.vy += 0.7;
+    // فيزياء صالح
+    player.vy += 0.75;
     player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
-    // رسم اللاعب (صورة أو مربع ذهبي احتياطي)
-    if(player.img.complete && player.img.naturalWidth !== 0) {
-        ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
-    } else {
-        ctx.fillStyle = "#d4af37"; ctx.fillRect(player.x, player.y, player.w, player.h);
-    }
+    // رسم صالح
+    ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
 
-    if(frame % 120 === 0) spawn();
+    // عشوائية الظهور
+    if(frame >= nextSpawnFrame) spawn();
 
     obstacles.forEach((o, i) => {
         o.x -= speed;
-        const img = o.type === "Skin" ? o.img : assets[o.type];
-        
-        if(img && img.complete && img.naturalWidth !== 0) {
-            ctx.drawImage(img, o.x, o.y, o.w, o.h);
-        } else {
-            ctx.fillStyle = o.type === "Creeper" ? "#53fc18" : "#fff";
-            ctx.fillRect(o.x, o.y, o.w, o.h);
+        if(o.img && o.img.complete) {
+            ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
         }
 
-        if(!o.passed && o.x + o.w < player.x) { score += 14; o.passed = true; speed += 0.05; }
+        // زيادة النقاط والسرعة
+        if(!o.passed && o.x + o.w < player.x) { 
+            score += 14; o.passed = true; 
+            speed += 0.08; // زيادة السرعة تدريجياً لجعلها أصعب
+        }
         
-        // تصادم
-        if(player.x+20 < o.x+o.w-20 && player.x+player.w-20 > o.x+20 && player.y+10 < o.y+o.h-10 && player.y+player.h-10 > o.y+10) {
-            state = "OVER";
-            document.getElementById("msg").style.display = "flex";
-            document.getElementById("msg-text").innerText = "انتهت اللعبة! النقاط: " + score;
-            document.getElementById("start-btn").innerText = "إعادة المحاولة";
-            updateHighScores();
+        // تصادم دقيق
+        if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
+           player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
+            gameOver();
         }
     });
 
-    obstacles = obstacles.filter(o => o.x > -100);
+    obstacles = obstacles.filter(o => o.x > -200);
     document.getElementById("score").innerText = "النقاط: " + score;
     document.getElementById("top3").innerText = `#1: ${highScores[0]} | #2: ${highScores[1]} | #3: ${highScores[2]}`;
     requestAnimationFrame(loop);
 }
 
-function updateHighScores() {
-    highScores.push(score); highScores.sort((a,b)=>b-a);
+function gameOver() {
+    state = "OVER";
+    document.getElementById("msg").style.display = "flex";
+    document.getElementById("msg-text").innerText = "💀 سقط صالح! \n نقاطك: " + score;
+    document.getElementById("start-btn").innerText = "إعادة المحاولة";
+    
+    highScores.push(score);
+    highScores.sort((a,b)=>b-a);
     highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
 }
+
+// تشغيل اللعبة لأول مرة
+window.onload = () => { if(loaded >= toLoad.length) showStartButton(); };
 </script>
 </body>
 </html>
