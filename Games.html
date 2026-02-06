@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S4leeh | مغامرة صالح</title>
+<title>S4leeh | مغامرة صالح - وضع الليل</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
 <style>
-    :root { --gold: #d4af37; --bg-dark: #0a0a0a; }
+    :root { --gold: #d4af37; --bg-dark: #0a0a0a; --night-sky: #1a1a2e; }
     html, body { 
         margin: 0; padding: 0; background: var(--bg-dark); 
         font-family: 'Cairo', sans-serif; touch-action: none; 
@@ -15,7 +15,7 @@
     .brand-header {
         text-align: center;
         padding: 10px 0;
-        background: rgba(20, 20, 20, 0.8);
+        background: rgba(10, 10, 20, 0.9);
         border-bottom: 2px solid rgba(212, 175, 55, 0.2);
     }
     .logo { width: 60px; height: auto; margin-bottom: 5px; }
@@ -30,19 +30,19 @@
     }
     canvas { 
         display: block; 
-        background: #87CEEB; 
+        background: var(--night-sky); 
         border: 4px solid var(--gold); 
         border-radius: 15px; 
         width: 95vw; 
         height: auto; 
         max-height: 65vh;
-        box-shadow: 0 0 30px rgba(0,0,0,0.8); 
+        box-shadow: 0 0 40px rgba(0,0,0,0.9); 
         image-rendering: pixelated;
     }
     .ui { 
         position: absolute; 
         color: #fff; 
-        background: rgba(0,0,0,0.8); 
+        background: rgba(0,0,0,0.85); 
         padding: 5px 12px; 
         border-radius: 8px; 
         border: 1px solid var(--gold); 
@@ -59,7 +59,7 @@
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        background: rgba(0,0,0,0.85); 
+        background: rgba(0,0,0,0.9); 
         z-index: 100; 
         color: var(--gold); 
         text-align: center; 
@@ -69,10 +69,10 @@
         width: 90%;
         margin: auto;
     }
-    #msg-text { font-size: 20px; margin-bottom: 10px; line-height: 1.4; }
-    #death-reason { font-size: 16px; color: #ff4d4d; margin-bottom: 15px; font-weight: 700; }
+    #msg-text { font-size: 22px; margin-bottom: 5px; font-weight: 900; }
+    #death-reason { font-size: 16px; color: #ff4d4d; margin-bottom: 15px; font-weight: 700; background: rgba(255,0,0,0.1); padding: 5px 15px; border-radius: 20px; }
     button { 
-        padding: 12px 30px; 
+        padding: 12px 35px; 
         font-size: 18px; 
         background: var(--gold); 
         border: none; 
@@ -95,7 +95,6 @@
     @media (max-width: 600px) {
         .game-title { font-size: 18px; }
         #msg-text { font-size: 18px; }
-        button { padding: 10px 25px; font-size: 16px; }
     }
 </style>
 </head>
@@ -111,9 +110,9 @@
     <div id="top3" class="ui">#1: 0 | #2: 0 | #3: 0</div>
     <canvas id="game" width="850" height="420"></canvas>
     <div id="msg">
-        <h2 id="msg-text">جاري تجهيز العالم...</h2>
+        <h2 id="msg-text">جاري تجهيز عالم صالح...</h2>
         <p id="death-reason"></p>
-        <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة</button>
+        <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة 🌙</button>
     </div>
 </div>
 
@@ -130,7 +129,7 @@ let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
 
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
-const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_","Quack__27","Raheeb_","KMA77"];
+const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_"];
 
 const assets = {};
 const toLoad = [
@@ -154,7 +153,7 @@ toLoad.forEach(item => {
 });
 
 function showStartButton() {
-    document.getElementById("msg-text").innerText = "جاهز لخوض مغامرة صالح؟";
+    document.getElementById("msg-text").innerText = "جاهز للمغامرة الليلية؟";
     document.getElementById("death-reason").innerText = "";
     document.getElementById("start-btn").style.display = "block";
 }
@@ -194,14 +193,14 @@ function spawn() {
     const rand = Math.random();
     let o = { x: canvas.width + 120, passed: false, name: "" };
 
-    if(rand < 0.35) { // موبز
+    if(rand < 0.35) { 
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
         Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105, name: m });
-    } else if(rand < 0.70) { // بلوكات
+    } else if(rand < 0.70) { 
         const blocks = ["Dirt", "Lava", "Stone", "Cobblestone"];
         const b = blocks[Math.floor(Math.random() * blocks.length)];
         Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60, name: b });
-    } else { // شباب
+    } else { 
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
@@ -211,7 +210,7 @@ function spawn() {
     
     obstacles.push(o);
     const minSafeGap = 55; 
-    const randomExtraGap = Math.floor(Math.random() * 80); 
+    const randomExtraGap = Math.floor(Math.random() * 85); 
     nextSpawnFrame = frame + minSafeGap + randomExtraGap;
 }
 
@@ -220,15 +219,36 @@ function loop() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "#5b3a1d"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
-    ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 12);
+    // --- رسم الليل ---
+    // سماء ليلية داكنة
+    ctx.fillStyle = "#0f0f1b"; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // رسم نجوم بسيطة
+    ctx.fillStyle = "white";
+    if (frame % 2 === 0) { // النجوم لا ترسم كل فريم للأداء
+        ctx.fillRect(100, 50, 2, 2); ctx.fillRect(300, 80, 2, 2);
+        ctx.fillRect(500, 40, 2, 2); ctx.fillRect(700, 90, 2, 2);
+    }
+    
+    // قمر
+    ctx.fillStyle = "#f5f5f5";
+    ctx.beginPath();
+    ctx.arc(750, 60, 25, 0, Math.PI * 2);
+    ctx.fill();
+
+    // أرضية ليلية
+    ctx.fillStyle = "#2d1d0f"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
+    ctx.fillStyle = "#2a4d1a"; ctx.fillRect(0, GROUND, canvas.width, 12);
 
     player.vy += 0.85; 
     player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
+    // إضافة "توهج" بسيط لصالح في الليل
+    ctx.shadowBlur = 10; ctx.shadowColor = "rgba(212, 175, 55, 0.3)";
     if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
+    ctx.shadowBlur = 0;
 
     if(frame >= nextSpawnFrame) spawn();
 
@@ -240,13 +260,12 @@ function loop() {
         }
 
         if(!o.passed && o.x + o.w < player.x) { 
-            score += 14; o.passed = true; 
-            speed += 0.05; 
+            score += 14; o.passed = true; speed += 0.05; 
         }
         
         if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
            player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
-            gameOver(o.name); // إرسال اسم القاتل
+            gameOver(o.name);
             return;
         }
         if(o.x < -150) obstacles.splice(i, 1);
@@ -260,12 +279,8 @@ function loop() {
 function gameOver(killerName) {
     state = "OVER";
     document.getElementById("msg").style.display = "flex";
-    document.getElementById("msg-text").innerHTML = "💀 انتهت المغامرة!<br>نقاطك: " + score;
-    
-    // إظهار سبب الوفاة
-    const reasonEl = document.getElementById("death-reason");
-    reasonEl.innerText = "سبب موتك هو: " + killerName;
-    
+    document.getElementById("msg-text").innerHTML = "💀 سقط صالح في ظلام الليل!<br>نقاطك: " + score;
+    document.getElementById("death-reason").innerText = "السبب: " + killerName;
     document.getElementById("start-btn").innerText = "إعادة المحاولة";
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
