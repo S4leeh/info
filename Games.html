@@ -6,15 +6,15 @@
 <title>S4leeh | مغامرة صالح</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
 <style>
+    /* --- التنسيق العام --- */
     :root { --gold: #d4af37; --bg-dark: #0a0a0a; }
-    
     html, body { 
         margin: 0; padding: 0; background: var(--bg-dark); 
         font-family: 'Cairo', sans-serif; touch-action: none; 
         overflow: hidden; color: white; height: 100%; width: 100%;
     }
 
-    /* الهوية البصرية - الشعار والاسم */
+    /* --- الهوية البصرية --- */
     .brand-header {
         text-align: center;
         padding: 10px 0;
@@ -24,6 +24,7 @@
     .logo { width: 60px; height: auto; margin-bottom: 5px; }
     .game-title { font-size: 22px; font-weight: 900; color: var(--gold); margin: 0; }
 
+    /* --- حاوية اللعبة --- */
     #game-wrap { 
         position: relative; 
         width: 100%; 
@@ -42,8 +43,11 @@
         height: auto; 
         max-height: 65vh;
         box-shadow: 0 0 30px rgba(0,0,0,0.8); 
+        /* تحسين الأداء الرسومي للجوال */
+        image-rendering: pixelated;
     }
 
+    /* --- واجهة المستخدم (النقاط) --- */
     .ui { 
         position: absolute; 
         color: #fff; 
@@ -54,11 +58,12 @@
         font-weight: bold; 
         z-index: 10; 
         font-size: 14px;
+        backdrop-filter: blur(4px);
     }
     #score { top: 10px; right: 10px; }
     #top3 { top: 10px; left: 10px; direction: ltr; font-size: 11px; }
 
-    /* تحسين الرسائل المنبثقة للجوال */
+    /* --- رسائل اللعبة (بداية / نهاية) --- */
     #msg { 
         position: absolute; 
         inset: 0; 
@@ -75,7 +80,6 @@
         width: 90%;
         margin: auto;
     }
-
     #msg-text { font-size: 20px; margin-bottom: 10px; line-height: 1.4; }
 
     button { 
@@ -90,7 +94,7 @@
         transition: 0.3s;
         z-index: 101;
     }
-    button:active { transform: scale(0.9); }
+    button:active { transform: scale(0.95); }
 
     .nav-back {
         display: block;
@@ -101,6 +105,7 @@
         font-size: 13px;
     }
 
+    /* استعلامات الوسائط للجوال */
     @media (max-width: 600px) {
         .game-title { font-size: 18px; }
         #msg-text { font-size: 18px; }
@@ -119,7 +124,7 @@
     <div id="score" class="ui">النقاط: 0</div>
     <div id="top3" class="ui">#1: 0 | #2: 0 | #3: 0</div>
     
-    <canvas id="game" width="1000" height="450"></canvas>
+    <canvas id="game" width="850" height="420"></canvas>
 
     <div id="msg">
         <h2 id="msg-text">جاري تجهيز العالم...</h2>
@@ -130,29 +135,31 @@
 <a href="index.html" class="nav-back">العودة للرئيسية</a>
 
 <script>
+/* ========= الإعدادات الأساسية والأداء ========= */
 const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-const GROUND = 360;
+const ctx = canvas.getContext("2d", { alpha: false }); // تحسين الأداء
+ctx.imageSmoothingEnabled = false;
 
+const GROUND = 340;
 let state = "LOADING";
 let score = 0;
-let baseSpeed = 5; 
+let baseSpeed = 5.5; 
 let speed = baseSpeed;
 let frame = 0;
 let nextSpawnFrame = 100; 
 let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
 
-const player = { x:80, y:GROUND-110, w:80, h:110, vy:0, jump:false };
+const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
 const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_"];
 
+/* ========= تحميل الأصول (Assets) ========= */
 const assets = {};
 const toLoad = [
     { n: "Saleh", u: "https://minotar.net/armor/body/Saleh/100.png" },
     { n: "Creeper", u: "https://minotar.net/armor/body/Creeper/100.png" },
     { n: "Zombie", u: "https://minotar.net/armor/body/Zombie/100.png" },
-    { n: "Dirt", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2f/Dirt.png" },
-    { n: "Lava", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/30/Lava.png" }
+    { n: "Dirt", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2f/Dirt.png" }
 ];
 
 let loaded = 0;
@@ -170,8 +177,9 @@ function showStartButton() {
     document.getElementById("start-btn").style.display = "block";
 }
 
+/* ========= منطق اللعب (Logic) ========= */
 function startGame(e) {
-    if (e) e.stopPropagation(); 
+    if (e) e.stopPropagation(); // منع تداخل اللمس مع القفز عند البداية
     
     score = 0;
     speed = baseSpeed;
@@ -189,17 +197,16 @@ function startGame(e) {
 
 function doJump() {
     if(!player.jump && state === "PLAY") {
-        player.vy = -19;
+        player.vy = -18.5;
         player.jump = true;
     }
 }
 
+// التحكم: كيبورد + لمس
 document.addEventListener("keydown", e => { 
     if(e.code === "Space") {
         if(state === "PLAY") doJump();
-        else if(state === "OVER" || (state === "LOADING" && loaded >= toLoad.length)) {
-            startGame();
-        }
+        else if(state === "OVER" || (state === "LOADING" && loaded >= toLoad.length)) startGame();
     }
 });
 
@@ -214,22 +221,20 @@ window.addEventListener("touchstart", e => {
 
 function spawn() {
     const rand = Math.random();
-    let o = { x: canvas.width + 150, passed: false };
-    if(rand < 0.4) { 
+    let o = { x: canvas.width + 120, passed: false };
+    if(rand < 0.5) { 
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
-        Object.assign(o, { type: "Img", img: assets[m], w: 80, h: 110, y: GROUND-110 });
-    } else if(rand < 0.7) { 
-        const b = Math.random() > 0.5 ? "Dirt" : "Lava";
-        Object.assign(o, { type: "Img", img: assets[b], w: 60, h: 60, y: GROUND-60 });
+        Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105 });
     } else { 
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
         skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
-        Object.assign(o, { type: "Img", img: skinImg, w: 80, h: 110, y: GROUND-110 });
+        Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105 });
     }
     obstacles.push(o);
-    nextSpawnFrame = frame + Math.floor(Math.random() * 90) + 80;
+    // نظام عشوائية ذكي لظهور العقبات
+    nextSpawnFrame = frame + Math.floor(Math.random() * 70) + 75;
 }
 
 function loop() {
@@ -237,11 +242,13 @@ function loop() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // الخلفية والأرضية
     ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "#5b3a1d"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
-    ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 15);
+    ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 12);
 
-    player.vy += 0.8; 
+    // فيزياء صالح
+    player.vy += 0.85; 
     player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
@@ -249,7 +256,9 @@ function loop() {
 
     if(frame >= nextSpawnFrame) spawn();
 
-    obstacles.forEach((o, i) => {
+    // إدارة العقبات والتصادم
+    for(let i = obstacles.length - 1; i >= 0; i--) {
+        let o = obstacles[i];
         o.x -= speed;
         if(o.img && o.img.complete) {
             ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
@@ -257,16 +266,20 @@ function loop() {
 
         if(!o.passed && o.x + o.w < player.x) { 
             score += 14; o.passed = true; 
-            speed += 0.05; 
+            speed += 0.04; // زيادة السرعة تدريجياً
         }
         
+        // كشف التصادم (Hitbox دقيق)
         if(player.x+20 < o.x+o.w-20 && player.x+player.w-20 > o.x+20 && 
            player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
             gameOver();
+            return;
         }
-    });
+        
+        // إزالة العقبات خارج الشاشة
+        if(o.x < -150) obstacles.splice(i, 1);
+    }
 
-    obstacles = obstacles.filter(o => o.x > -200);
     document.getElementById("score").innerText = "النقاط: " + score;
     document.getElementById("top3").innerText = `#1: ${highScores[0]} | #2: ${highScores[1]} | #3: ${highScores[2]}`;
     requestAnimationFrame(loop);
@@ -275,7 +288,7 @@ function loop() {
 function gameOver() {
     state = "OVER";
     document.getElementById("msg").style.display = "flex";
-    document.getElementById("msg-text").innerHTML = "<span style='font-size:40px'>💀</span><br>انتهت المغامرة!<br>نقاطك: " + score;
+    document.getElementById("msg-text").innerHTML = "💀 انتهت المغامرة!<br>نقاطك: " + score;
     document.getElementById("start-btn").innerText = "إعادة المحاولة";
     
     highScores.push(score);
