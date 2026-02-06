@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>S4leeh Minecraft Runner</title>
 
 <style>
@@ -10,6 +11,9 @@ html,body{
   padding:0;
   background:#111;
   font-family:Arial, sans-serif;
+  /* منع التمرير واللمس الافتراضي المتعب في الجوال */
+  touch-action: none;
+  overflow: hidden;
 }
 canvas{
   display:block;
@@ -17,6 +21,9 @@ canvas{
   background:#87CEEB;
   border:6px solid #d4af37;
   border-radius:20px;
+  /* جعل الكانفاس مرن ليناسب شاشات الجوال */
+  max-width: 95%;
+  height: auto;
 }
 .ui{
   position:absolute;
@@ -26,6 +33,7 @@ canvas{
   border-radius:10px;
   border:2px solid #d4af37;
   font-weight:bold;
+  z-index: 10;
 }
 #score{top:20px;right:30px;}
 #top3{top:20px;left:30px;}
@@ -36,6 +44,7 @@ canvas{
   align-items:center;
   justify-content:center;
   background:rgba(0,0,0,.7);
+  z-index: 100;
 }
 #over div{
   background:#222;
@@ -44,6 +53,15 @@ canvas{
   border:3px solid #d4af37;
   color:#fff;
   text-align:center;
+}
+button{
+  padding: 10px 25px;
+  font-size: 18px;
+  background: #d4af37;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -71,7 +89,7 @@ const ctx = canvas.getContext("2d");
 const GROUND = 360;
 let state = "PLAY";
 let frame = 0;
-let speed = 3.2; // سرعة خفيفة
+let speed = 3.2; 
 let score = 0;
 let safeTime = 60;
 
@@ -106,13 +124,28 @@ load("Cobblestone","https://static.wikia.nocookie.net/minecraft_gamepedia/images
 load("Stone","https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1d/Stone.png");
 load("Lava","https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/30/Lava.png");
 
-/* ========= التحكم ========= */
-document.addEventListener("keydown",e=>{
-  if(e.code==="Space" && !player.jump && state==="PLAY"){
+/* ========= وظيفة القفز ========= */
+function doJump() {
+  if(!player.jump && state==="PLAY"){
     player.vy=-19;
     player.jump=true;
   }
+}
+
+/* ========= التحكم (بي سي + جوال) ========= */
+// دعم الكيبورد
+document.addEventListener("keydown",e=>{
+  if(e.code==="Space") doJump();
 });
+
+// دعم اللمس للجوال
+document.addEventListener("touchstart", e => {
+  // منع السلوك الافتراضي مثل الزوم
+  if (state === "PLAY") {
+      e.preventDefault();
+      doJump();
+  }
+}, {passive: false});
 
 /* ========= العوائق ========= */
 function spawnObstacle(){
@@ -167,7 +200,9 @@ function loop(){
 
   obstacles.forEach(o=>{
     o.x-=speed;
-    ctx.drawImage(o.img,o.x,o.y,o.w,o.h);
+    if(o.img.complete) {
+        ctx.drawImage(o.img,o.x,o.y,o.w,o.h);
+    }
 
     if(!o.passed && o.x+o.w<player.x){
       score+=14;
@@ -201,7 +236,17 @@ function gameOver(){
 }
 
 function restart(){
-  location.reload();
+  // إعادة التعيين بدلاً من reload لسرعة الاستجابة في الجوال
+  state = "PLAY";
+  score = 0;
+  frame = 0;
+  obstacles = [];
+  safeTime = 60;
+  player.y = GROUND - player.h;
+  player.vy = 0;
+  player.jump = false;
+  document.getElementById("over").style.display = "none";
+  loop();
 }
 
 loop();
