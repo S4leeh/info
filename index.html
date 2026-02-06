@@ -153,7 +153,7 @@
         .honey { display: none; }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
-        footer p { color: #888; font-size: 14 tax; font-weight: 700; }
+        footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
         @media (max-width: 900px) {
@@ -189,11 +189,12 @@
     <header class="reveal">
         <img src="logo.png" class="logo" alt="S4leeh">
         <h1 class="owner-name">صالح</h1>
-<p class="bio">
-    صانع محتوى في اليوتيوب و ستريمر في منصة كيك
-    <br>
-    تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي
-</p>    </header>
+        <p class="bio">
+            صانع محتوى في اليوتيوب و ستريمر في منصة كيك
+            <br>
+            تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي
+        </p>
+    </header>
 
     <section class="stats-grid reveal">
         <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
@@ -489,14 +490,21 @@
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
             const proxyUrl = 'https://api.allorigins.win/get?url=';
-            const targetUrl = encodeURIComponent('https://7pixels.net/api/kick/s4leeh');
+            const targetUrl = encodeURIComponent('https://kick.com/api/v1/channels/s4leeh');
             try {
                 const res = await fetch(proxyUrl + targetUrl);
                 const dataRaw = await res.json();
                 const data = JSON.parse(dataRaw.contents);
-                if (data.livestream) { container.classList.add('is-live'); txt.innerText = "صالح فاتح بث مباشر الآن! 🔥"; }
-                else { container.classList.remove('is-live'); txt.innerText = "البث المباشر مغلق حالياً"; }
-            } catch (e) { txt.innerText = "فشل التحقق من البث"; }
+                if (data.livestream) {
+                    container.classList.add('is-live');
+                    txt.innerText = "صالح فاتح بث مباشر الآن! 🔥";
+                } else {
+                    container.classList.remove('is-live');
+                    txt.innerText = "البث المباشر مغلق حالياً";
+                }
+            } catch (e) {
+                txt.innerText = "فشل التحقق من البث";
+            }
         }
 
         window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
