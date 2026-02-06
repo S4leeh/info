@@ -3,66 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S4leeh Minecraft Runner</title>
+<title>S4leeh Minecraft Runner - Pro Edition</title>
 
 <style>
 html,body{
   margin:0;
   padding:0;
-  background:#111;
-  font-family:Arial, sans-serif;
-  /* منع التمرير واللمس الافتراضي المتعب في الجوال */
+  background:#0a0a0a;
+  font-family: 'Cairo', sans-serif;
   touch-action: none;
   overflow: hidden;
 }
 canvas{
   display:block;
   margin:20px auto;
-  background:#87CEEB;
-  border:6px solid #d4af37;
-  border-radius:20px;
-  /* جعل الكانفاس مرن ليناسب شاشات الجوال */
+  background: #87CEEB; /* سيتم تغييره بالرسم */
+  border:4px solid #d4af37;
+  border-radius:15px;
   max-width: 95%;
   height: auto;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
 }
 .ui{
   position:absolute;
   color:#fff;
-  background:#222;
-  padding:8px 14px;
-  border-radius:10px;
+  background:rgba(26, 26, 26, 0.9);
+  padding:10px 18px;
+  border-radius:12px;
   border:2px solid #d4af37;
-  font-weight:bold;
+  font-weight:900;
   z-index: 10;
+  backdrop-filter: blur(5px);
 }
 #score{top:20px;right:30px;}
-#top3{top:20px;left:30px;}
+#top3{top:20px;left:30px; direction: ltr;}
 #over{
   position:fixed;
   inset:0;
   display:none;
   align-items:center;
   justify-content:center;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,0.85);
   z-index: 100;
 }
 #over div{
-  background:#222;
-  padding:30px;
-  border-radius:20px;
+  background:#1a1a1a;
+  padding:40px;
+  border-radius:25px;
   border:3px solid #d4af37;
   color:#fff;
   text-align:center;
+  box-shadow: 0 0 50px #000;
 }
 button{
-  padding: 10px 25px;
-  font-size: 18px;
+  padding: 12px 35px;
+  font-size: 20px;
   background: #d4af37;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 900;
+  color: #000;
+  transition: 0.3s;
 }
+button:hover { background: #fff; transform: scale(1.1); }
 </style>
 </head>
 
@@ -75,9 +79,9 @@ button{
 
 <div id="over">
   <div>
-    <h2>💀 انتهت اللعبة</h2>
-    <p id="final"></p>
-    <button onclick="restart()">إعادة</button>
+    <h2 style="color:#d4af37; font-size:35px;">💀 انتهت الرحلة</h2>
+    <p id="final" style="font-size:20px; margin:20px 0;"></p>
+    <button onclick="restart()">إعادة المحاولة</button>
   </div>
 </div>
 
@@ -89,117 +93,148 @@ const ctx = canvas.getContext("2d");
 const GROUND = 360;
 let state = "PLAY";
 let frame = 0;
-let speed = 3.2; 
+let speed = 4.5; 
 let score = 0;
 let safeTime = 60;
 
+// سكنات الشباب 3D
 const skinNames = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona"];
 let obstacles = [];
 
 let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
 
-/* ========= اللاعب ========= */
+/* ========= اللاعب (Saleh 3D) ========= */
 const player = {
   x:120,
-  y:GROUND-110,
-  w:80,
-  h:110,
+  y:GROUND-130,
+  w:95, // تكبير الحجم قليلاً للتناسب مع الـ 3D
+  h:130,
   vy:0,
   jump:false,
   img:new Image()
 };
-player.img.src = "https://minotar.net/armor/body/Saleh/100.png";
+player.img.src = "https://crafatar.com/renders/body/Saleh?scale=4&overlay";
 
-/* ========= الصور ========= */
+/* ========= الأصول وتحميل الصور ========= */
 const assets = {};
 function load(name,url){
   assets[name]=new Image();
   assets[name].src=url;
 }
-load("Creeper","https://minotar.net/armor/body/Creeper/100.png");
-load("Zombie","https://minotar.net/armor/body/Zombie/100.png");
-load("Skeleton","https://minotar.net/armor/body/Skeleton/100.png");
+// تحميل الموبز بوضعية 3D
+load("Creeper","https://crafatar.com/renders/body/Creeper?scale=4");
+load("Zombie","https://crafatar.com/renders/body/Zombie?scale=4");
+load("Skeleton","https://crafatar.com/renders/body/Skeleton?scale=4");
+// بلوكات الأرضية
 load("Dirt","https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2f/Dirt.png");
-load("Cobblestone","https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Cobblestone.png");
-load("Stone","https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1d/Stone.png");
 load("Lava","https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/30/Lava.png");
 
-/* ========= وظيفة القفز ========= */
+/* ========= نظام الخلفية المتحركة (Parallax) ========= */
+let bgOffset = 0;
+function drawBackground() {
+    // السماء
+    ctx.fillStyle = "#87CEEB";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // شمس بسيطة
+    ctx.fillStyle = "#FFF587";
+    ctx.beginPath();
+    ctx.arc(900, 80, 40, 0, Math.PI * 2);
+    ctx.fill();
+
+    // السحب (تتحرك ببطء)
+    bgOffset -= 0.5;
+    if(bgOffset <= -canvas.width) bgOffset = 0;
+    
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fillRect(bgOffset + 200, 100, 120, 40);
+    ctx.fillRect(bgOffset + 800, 150, 150, 50);
+    ctx.fillRect(bgOffset + canvas.width + 200, 100, 120, 40);
+}
+
+/* ========= التحكم ========= */
 function doJump() {
   if(!player.jump && state==="PLAY"){
-    player.vy=-19;
+    player.vy=-20; // قفزة أقوى لتناسب الحجم الجديد
     player.jump=true;
   }
 }
 
-/* ========= التحكم (بي سي + جوال) ========= */
-// دعم الكيبورد
-document.addEventListener("keydown",e=>{
-  if(e.code==="Space") doJump();
-});
-
-// دعم اللمس للجوال
+document.addEventListener("keydown",e=>{ if(e.code==="Space") doJump(); });
 document.addEventListener("touchstart", e => {
-  // منع السلوك الافتراضي مثل الزوم
-  if (state === "PLAY") {
-      e.preventDefault();
-      doJump();
-  }
+  if (state === "PLAY") { e.preventDefault(); doJump(); }
 }, {passive: false});
 
-/* ========= العوائق ========= */
+/* ========= نظام العوائق ========= */
 function spawnObstacle(){
   let o={x:canvas.width+200,passed:false};
   const t=Math.random();
 
-  if(t<0.4){
+  if(t<0.45){
+    // موبز
     const m=["Creeper","Zombie","Skeleton"][Math.floor(Math.random()*3)];
-    Object.assign(o,{img:assets[m],w:80,h:110,y:GROUND-110});
-  }else if(t<0.7){
-    const b=["Dirt","Cobblestone","Stone","Lava"][Math.floor(Math.random()*4)];
-    Object.assign(o,{img:assets[b],w:50,h:50,y:GROUND-50});
+    Object.assign(o,{img:assets[m],w:85,h:120,y:GROUND-120, type:'mob'});
+  }else if(t<0.65){
+    // بلوكات (لافا أو درت)
+    const b=Math.random() > 0.5 ? "Dirt" : "Lava";
+    Object.assign(o,{img:assets[b],w:60,h:60,y:GROUND-60, type:'block'});
   }else{
+    // سكنات الشباب 3D
     const n=skinNames[Math.floor(Math.random()*skinNames.length)];
     o.img=new Image();
-    o.img.src=`https://minotar.net/armor/body/${n}/100.png`;
-    Object.assign(o,{w:80,h:110,y:GROUND-110});
+    o.img.src=`https://crafatar.com/renders/body/${n}?scale=4&overlay`;
+    Object.assign(o,{w:85,h:120,y:GROUND-120, type:'skin'});
   }
   obstacles.push(o);
 }
 
-/* ========= تصادم ========= */
+/* ========= كشف التصادم ========= */
 function collide(a,b){
-  return a.x<b.x+b.w &&
-         a.x+a.w>b.x &&
-         a.y<b.y+b.h &&
-         a.y+a.h>b.y;
+  // تقليص صندوق التصادم قليلاً (Hitbox) ليكون اللعب عادلاً
+  const paddingX = 20;
+  const paddingY = 10;
+  return a.x + paddingX < b.x + b.w - paddingX &&
+         a.x + a.w - paddingX > b.x + paddingX &&
+         a.y + paddingY < b.y + b.h - paddingY &&
+         a.y + a.h - paddingY > b.y + paddingY;
 }
 
-/* ========= الحلقة ========= */
+/* ========= الحلقة الرئيسية ========= */
 function loop(){
   if(state!=="PLAY")return;
   frame++;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // أرضية
-  ctx.fillStyle="#5b3a1d";
-  ctx.fillRect(0,GROUND,canvas.width,canvas.height-GROUND);
+  drawBackground();
 
-  // لاعب
-  player.vy+=0.42;
+  // رسم الأرضية (بلوكات Dirt متكررة)
+  for(let i=0; i<canvas.width; i+=50) {
+      ctx.drawImage(assets["Dirt"], i, GROUND, 50, 50);
+  }
+
+  // فيزياء اللاعب
+  player.vy+=0.8; // جاذبية أقوى قليلاً
   player.y+=player.vy;
   if(player.y>=GROUND-player.h){
     player.y=GROUND-player.h;
     player.vy=0;
     player.jump=false;
   }
+  
+  // تأثير ظل بسيط تحت اللاعب
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.beginPath();
+  ctx.ellipse(player.x + player.w/2, GROUND, 30, 10, 0, 0, Math.PI*2);
+  ctx.fill();
+
   ctx.drawImage(player.img,player.x,player.y,player.w,player.h);
 
-  // عوائق
-  if(frame%140===0)spawnObstacle();
+  // إدارة العوائق
+  if(frame % Math.floor(120 - speed) === 0) spawnObstacle();
 
   obstacles.forEach(o=>{
     o.x-=speed;
+    
     if(o.img.complete) {
         ctx.drawImage(o.img,o.x,o.y,o.w,o.h);
     }
@@ -207,6 +242,7 @@ function loop(){
     if(!o.passed && o.x+o.w<player.x){
       score+=14;
       o.passed=true;
+      speed += 0.05; // زيادة السرعة تدريجياً
     }
 
     if(safeTime<=0 && collide(player,o)){
@@ -224,7 +260,7 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-/* ========= نهاية ========= */
+/* ========= نهاية وإعادة ========= */
 function gameOver(){
   state="OVER";
   document.getElementById("over").style.display="flex";
@@ -236,10 +272,10 @@ function gameOver(){
 }
 
 function restart(){
-  // إعادة التعيين بدلاً من reload لسرعة الاستجابة في الجوال
   state = "PLAY";
   score = 0;
   frame = 0;
+  speed = 4.5;
   obstacles = [];
   safeTime = 60;
   player.y = GROUND - player.h;
@@ -249,7 +285,8 @@ function restart(){
   loop();
 }
 
-loop();
+// البدء بعد تحميل الصور الأساسية
+window.onload = () => { loop(); };
 </script>
 
 </body>
