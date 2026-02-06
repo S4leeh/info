@@ -70,6 +70,7 @@
         margin: auto;
     }
     #msg-text { font-size: 20px; margin-bottom: 10px; line-height: 1.4; }
+    #death-reason { font-size: 16px; color: #ff4d4d; margin-bottom: 15px; font-weight: 700; }
     button { 
         padding: 12px 30px; 
         font-size: 18px; 
@@ -111,6 +112,7 @@
     <canvas id="game" width="850" height="420"></canvas>
     <div id="msg">
         <h2 id="msg-text">جاري تجهيز العالم...</h2>
+        <p id="death-reason"></p>
         <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة</button>
     </div>
 </div>
@@ -153,6 +155,7 @@ toLoad.forEach(item => {
 
 function showStartButton() {
     document.getElementById("msg-text").innerText = "جاهز لخوض مغامرة صالح؟";
+    document.getElementById("death-reason").innerText = "";
     document.getElementById("start-btn").style.display = "block";
 }
 
@@ -162,6 +165,7 @@ function startGame(e) {
     player.y = GROUND - player.h; player.vy = 0; player.jump = false;
     nextSpawnFrame = 80; 
     document.getElementById("msg").style.display = "none";
+    document.getElementById("death-reason").innerText = "";
     state = "PLAY";
     requestAnimationFrame(loop);
 }
@@ -188,30 +192,26 @@ window.addEventListener("touchstart", e => {
 
 function spawn() {
     const rand = Math.random();
-    let o = { x: canvas.width + 120, passed: false };
+    let o = { x: canvas.width + 120, passed: false, name: "" };
 
     if(rand < 0.35) { // موبز
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
-        Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105 });
+        Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105, name: m });
     } else if(rand < 0.70) { // بلوكات
         const blocks = ["Dirt", "Lava", "Stone", "Cobblestone"];
         const b = blocks[Math.floor(Math.random() * blocks.length)];
-        Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60 });
+        Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60, name: b });
     } else { // شباب
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
         skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
-        Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105 });
+        Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105, name: s });
     }
     
     obstacles.push(o);
-
-    // --- نظام المسافة الآمنة الجديد ---
-    // نحسب أدنى مسافة يحتاجها اللاعب للقفز والهبوط (تقريباً 45-55 إطار بناءً على الجاذبية والسرعة)
     const minSafeGap = 55; 
-    const randomExtraGap = Math.floor(Math.random() * 80); // مسافة إضافية عشوائية لزيادة التحدي
-    
+    const randomExtraGap = Math.floor(Math.random() * 80); 
     nextSpawnFrame = frame + minSafeGap + randomExtraGap;
 }
 
@@ -244,10 +244,9 @@ function loop() {
             speed += 0.05; 
         }
         
-        // تصادم (صندوق تصادم أصغر قليلاً ليكون عادلاً)
         if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
            player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
-            gameOver();
+            gameOver(o.name); // إرسال اسم القاتل
             return;
         }
         if(o.x < -150) obstacles.splice(i, 1);
@@ -258,10 +257,15 @@ function loop() {
     requestAnimationFrame(loop);
 }
 
-function gameOver() {
+function gameOver(killerName) {
     state = "OVER";
     document.getElementById("msg").style.display = "flex";
     document.getElementById("msg-text").innerHTML = "💀 انتهت المغامرة!<br>نقاطك: " + score;
+    
+    // إظهار سبب الوفاة
+    const reasonEl = document.getElementById("death-reason");
+    reasonEl.innerText = "سبب موتك هو: " + killerName;
+    
     document.getElementById("start-btn").innerText = "إعادة المحاولة";
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
