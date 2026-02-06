@@ -11,33 +11,26 @@
     html, body { 
         margin: 0; padding: 0; background: var(--bg-dark); 
         font-family: 'Cairo', sans-serif; touch-action: none; 
-        overflow-x: hidden; color: white;
+        overflow: hidden; color: white; height: 100%; width: 100%;
     }
 
     /* الهوية البصرية - الشعار والاسم */
     .brand-header {
         text-align: center;
-        padding: 20px 0;
+        padding: 10px 0;
         background: rgba(20, 20, 20, 0.8);
         border-bottom: 2px solid rgba(212, 175, 55, 0.2);
     }
-    .logo {
-        width: 80px;
-        height: auto;
-        margin-bottom: 10px;
-    }
-    .game-title {
-        font-size: 28px;
-        font-weight: 900;
-        color: var(--gold);
-        margin: 0;
-        text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    }
+    .logo { width: 60px; height: auto; margin-bottom: 5px; }
+    .game-title { font-size: 22px; font-weight: 900; color: var(--gold); margin: 0; }
 
     #game-wrap { 
         position: relative; 
-        width: fit-content; 
-        margin: 30px auto; 
+        width: 100%; 
+        max-width: 1000px;
+        margin: 10px auto;
+        display: flex;
+        justify-content: center;
     }
     
     canvas { 
@@ -45,8 +38,9 @@
         background: #87CEEB; 
         border: 4px solid var(--gold); 
         border-radius: 15px; 
-        max-width: 95vw; 
+        width: 95vw; 
         height: auto; 
+        max-height: 65vh;
         box-shadow: 0 0 30px rgba(0,0,0,0.8); 
     }
 
@@ -54,54 +48,64 @@
         position: absolute; 
         color: #fff; 
         background: rgba(0,0,0,0.8); 
-        padding: 8px 15px; 
-        border-radius: 10px; 
+        padding: 5px 12px; 
+        border-radius: 8px; 
         border: 1px solid var(--gold); 
         font-weight: bold; 
         z-index: 10; 
-        backdrop-filter: blur(5px);
+        font-size: 14px;
     }
-    #score { top: 15px; right: 15px; }
-    #top3 { top: 15px; left: 15px; direction: ltr; font-size: 12px; }
+    #score { top: 10px; right: 10px; }
+    #top3 { top: 10px; left: 10px; direction: ltr; font-size: 11px; }
 
+    /* تحسين الرسائل المنبثقة للجوال */
     #msg { 
         position: absolute; 
         inset: 0; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        background: rgba(0,0,0,0.9); 
+        background: rgba(0,0,0,0.85); 
         z-index: 100; 
         color: var(--gold); 
         text-align: center; 
         border-radius: 15px; 
         flex-direction: column; 
-        padding: 20px; 
+        padding: 20px;
+        width: 90%;
+        margin: auto;
     }
 
+    #msg-text { font-size: 20px; margin-bottom: 10px; line-height: 1.4; }
+
     button { 
-        padding: 15px 40px; 
-        font-size: 20px; 
+        padding: 12px 30px; 
+        font-size: 18px; 
         background: var(--gold); 
         border: none; 
         border-radius: 8px; 
         cursor: pointer; 
         font-weight: 900; 
-        margin-top: 20px; 
         color: #000; 
-        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: 0.3s;
+        z-index: 101;
     }
-    button:hover { transform: scale(1.1); background: #fff; }
+    button:active { transform: scale(0.9); }
 
     .nav-back {
         display: block;
         text-align: center;
-        margin-top: 20px;
+        margin-top: 5px;
         color: #888;
         text-decoration: none;
-        font-size: 14px;
+        font-size: 13px;
     }
-    .nav-back:hover { color: var(--gold); }
+
+    @media (max-width: 600px) {
+        .game-title { font-size: 18px; }
+        #msg-text { font-size: 18px; }
+        button { padding: 10px 25px; font-size: 16px; }
+    }
 </style>
 </head>
 <body>
@@ -115,11 +119,11 @@
     <div id="score" class="ui">النقاط: 0</div>
     <div id="top3" class="ui">#1: 0 | #2: 0 | #3: 0</div>
     
-    <canvas id="game" width="1000" height="400"></canvas>
+    <canvas id="game" width="1000" height="450"></canvas>
 
     <div id="msg">
         <h2 id="msg-text">جاري تجهيز العالم...</h2>
-        <button id="start-btn" style="display:none;" onclick="startGame()">ابدأ المغامرة</button>
+        <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة</button>
     </div>
 </div>
 
@@ -128,17 +132,17 @@
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
-const GROUND = 330;
+const GROUND = 360;
 
 let state = "LOADING";
 let score = 0;
-let baseSpeed = 4.5;
+let baseSpeed = 5; 
 let speed = baseSpeed;
 let frame = 0;
 let nextSpawnFrame = 100; 
 let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
 
-const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false, img: new Image() };
+const player = { x:80, y:GROUND-110, w:80, h:110, vy:0, jump:false };
 let obstacles = [];
 const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_"];
 
@@ -166,7 +170,9 @@ function showStartButton() {
     document.getElementById("start-btn").style.display = "block";
 }
 
-function startGame() {
+function startGame(e) {
+    if (e) e.stopPropagation(); 
+    
     score = 0;
     speed = baseSpeed;
     frame = 0;
@@ -178,37 +184,52 @@ function startGame() {
 
     document.getElementById("msg").style.display = "none";
     state = "PLAY";
-    if (loaded >= toLoad.length) loop(); 
+    requestAnimationFrame(loop);
 }
 
 function doJump() {
     if(!player.jump && state === "PLAY") {
-        player.vy = -18;
+        player.vy = -19;
         player.jump = true;
     }
 }
 
-document.addEventListener("keydown", e => { if(e.code==="Space") doJump(); });
-document.addEventListener("touchstart", e => { e.preventDefault(); doJump(); }, {passive: false});
+document.addEventListener("keydown", e => { 
+    if(e.code === "Space") {
+        if(state === "PLAY") doJump();
+        else if(state === "OVER" || (state === "LOADING" && loaded >= toLoad.length)) {
+            startGame();
+        }
+    }
+});
+
+window.addEventListener("touchstart", e => { 
+    if (state === "PLAY") {
+        if (e.target.tagName !== 'BUTTON') {
+            e.preventDefault(); 
+            doJump();
+        }
+    }
+}, {passive: false});
 
 function spawn() {
     const rand = Math.random();
     let o = { x: canvas.width + 150, passed: false };
-
     if(rand < 0.4) { 
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
-        Object.assign(o, { type: "Img", img: assets[m], w: 75, h: 105, y: GROUND-105 });
+        Object.assign(o, { type: "Img", img: assets[m], w: 80, h: 110, y: GROUND-110 });
     } else if(rand < 0.7) { 
         const b = Math.random() > 0.5 ? "Dirt" : "Lava";
         Object.assign(o, { type: "Img", img: assets[b], w: 60, h: 60, y: GROUND-60 });
     } else { 
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
+        skinImg.crossOrigin = "anonymous";
         skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
-        Object.assign(o, { type: "Img", img: skinImg, w: 75, h: 105, y: GROUND-105 });
+        Object.assign(o, { type: "Img", img: skinImg, w: 80, h: 110, y: GROUND-110 });
     }
     obstacles.push(o);
-    nextSpawnFrame = frame + Math.floor(Math.random() * 80) + 70;
+    nextSpawnFrame = frame + Math.floor(Math.random() * 90) + 80;
 }
 
 function loop() {
@@ -218,13 +239,13 @@ function loop() {
 
     ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "#5b3a1d"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
-    ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 10);
+    ctx.fillStyle = "#5da140"; ctx.fillRect(0, GROUND, canvas.width, 15);
 
-    player.vy += 0.75;
+    player.vy += 0.8; 
     player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
-    ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
+    if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
 
     if(frame >= nextSpawnFrame) spawn();
 
@@ -236,10 +257,10 @@ function loop() {
 
         if(!o.passed && o.x + o.w < player.x) { 
             score += 14; o.passed = true; 
-            speed += 0.08; 
+            speed += 0.05; 
         }
         
-        if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
+        if(player.x+20 < o.x+o.w-20 && player.x+player.w-20 > o.x+20 && 
            player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
             gameOver();
         }
