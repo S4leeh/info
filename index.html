@@ -321,14 +321,41 @@
     </div>
 
     <section id="s4leeh-game" class="content-section reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:20px; font-weight:800;">🎮 لعبة مغامرة صالح</h2>
-        <a href="Games.html" class="yt-card">
-            <div class="yt-thumbnail" style="background-image: url('https://www.minecraft.net/content/dam/archive/64016664d471584c3167a505c6e83262-Surface.png'); background-size: cover;">
-                <div class="play-btn"></div>
-            </div>
-            <div class="yt-details">
-                <p style="color:#ccc; font-size:16px; line-height:1.6;">يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول ؟</p>
-                <p style="color:var(--gold); font-weight:900; margin-top:15px; text-decoration: underline;">اضغط هنا لبدء اللعب الآن 🏃‍♂️</p>
+        <h2 style="text-align:center; color:var(--gold); margin-bottom:20px; font-weight:800;">مغامرة صالح</h2>
+        
+        <style>
+            .game-link-card {
+                background: var(--card-bg);
+                border-radius: 20px;
+                border: 1px solid var(--border-color);
+                text-decoration: none;
+                display: block;
+                transition: 0.3s;
+                padding: 30px;
+                text-align: center;
+                position: relative;
+            }
+            .game-link-card:hover {
+                transform: translateY(-5px);
+                border-color: var(--gold);
+                box-shadow: 0 0 30px var(--gold-glow);
+            }
+            .play-now-text {
+                display: inline-block;
+                color: var(--gold);
+                font-weight: 900;
+                font-size: 18px;
+                text-decoration: underline;
+                margin-top: 15px;
+            }
+        </style>
+
+        <a href="Games.html" class="game-link-card">
+            <div class="game-info-wrapper">
+                <p style="color:#ccc; font-size:16px; line-height:1.6; margin: 0;">
+                    يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول ؟
+                </p>
+                <div class="play-now-text">اضغط هنا لبدء اللعب الآن 🏃‍♂️</div>
             </div>
         </a>
     </section>
