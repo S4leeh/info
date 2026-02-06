@@ -170,7 +170,7 @@ function loop() {
 function gameOver() {
     state = "OVER";
     document.getElementById("msg").style.display = "flex";
-    document.getElementById("msg-text").innerText = "💀 سقط صالح! \n نقاطك: " + score;
+    document.getElementById("msg-text").innerText = "💀 انتهت المغامرة! \n نقاطك: " + score;
     document.getElementById("start-btn").innerText = "إعادة المحاولة";
     
     highScores.push(score);
