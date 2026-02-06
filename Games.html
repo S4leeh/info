@@ -190,14 +190,15 @@ function spawn() {
     const rand = Math.random();
     let o = { x: canvas.width + 120, passed: false };
 
-    if(rand < 0.35) { // موبز (35%)
+    // توزيع عشوائي للفئات
+    if(rand < 0.35) { // موبز
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
         Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105 });
-    } else if(rand < 0.70) { // بلوكات (35%)
+    } else if(rand < 0.70) { // بلوكات
         const blocks = ["Dirt", "Lava", "Stone", "Cobblestone"];
         const b = blocks[Math.floor(Math.random() * blocks.length)];
         Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60 });
-    } else { // شباب (30%)
+    } else { // شباب
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
@@ -206,8 +207,16 @@ function spawn() {
     }
     
     obstacles.push(o);
-    // جعل وقت الرسبون عشوائي جداً وغير متوقع
-    nextSpawnFrame = frame + Math.floor(Math.random() * 80) + 70;
+
+    // --- منطق العشوائية الفوضوية الجديد ---
+    const isBunch = Math.random() < 0.3; // احتمالية 30% لظهور عوائق متقاربة جداً
+    if(isBunch) {
+        // إذا كانت "موجة"، نجعل العائق القادم يظهر بسرعة (بين 35 و 60 إطار)
+        nextSpawnFrame = frame + Math.floor(Math.random() * 25) + 35;
+    } else {
+        // إذا كان نظام عادي، نعطي مساحة (بين 80 و 150 إطار)
+        nextSpawnFrame = frame + Math.floor(Math.random() * 70) + 80;
+    }
 }
 
 function loop() {
