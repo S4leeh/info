@@ -72,36 +72,37 @@
 <div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-6">
     <div class="custom-bg"><div class="bg-overlay"></div></div>
 
-    <div class="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-4">
+    <div class="relative z-20 w-full flex justify-end items-start px-4 pt-4">
         
-        <div class="glass-card rounded-2xl p-4 w-full md:w-64 order-2 md:order-1">
-            <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
-                <span class="material-icons text-primary text-sm">emoji_events</span>
-                <span class="text-xs font-bold text-gray-200">أفضل المحاولات</span>
-            </div>
-            <div id="top3-menu" class="space-y-2 text-sm font-bold" style="direction: ltr;"></div>
-        </div>
-
-        <div class="flex flex-col items-center order-1 md:order-2 w-full md:w-auto mt-4 md:mt-0">
+        <div class="absolute left-1/2 top-6 -translate-x-1/2 flex flex-col items-center z-10">
             <div class="relative w-28 h-28 mb-2">
                 <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
                 <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-105 transition duration-300">
             </div>
             <div class="bg-black/80 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
-                <span class="text-primary font-black tracking-widest text-lg">S4LEEH</span>
+                <span class="text-primary font-black tracking-widest text-lg font-display">مغامرة صالح</span>
             </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-4 w-full md:w-72 h-40 md:h-56 flex flex-col order-3">
-            <div class="flex items-center justify-between mb-2 border-b border-white/10 pb-2">
-                <div class="flex items-center gap-2">
-                    <span class="material-icons text-primary text-sm">assignment</span>
-                    <span class="text-xs font-bold text-gray-200">مهام اليوم</span>
+        <div class="flex flex-col gap-4 w-full md:w-72 relative z-20 mt-36 md:mt-0">
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
+                    <span class="material-icons text-primary text-sm">emoji_events</span>
+                    <span class="text-xs font-bold text-gray-200">أفضل المحاولات</span>
                 </div>
-                <span id="date-display" class="text-[10px] text-gray-400 font-mono"></span>
+                <div id="top3-menu" class="space-y-2 text-sm font-bold" style="direction: ltr;"></div>
             </div>
-            <div id="daily-quests-container" class="overflow-y-auto pr-1 space-y-2 flex-1">
+
+            <div class="glass-card rounded-2xl p-4 h-56 flex flex-col">
+                <div class="flex items-center justify-between mb-2 border-b border-white/10 pb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="material-icons text-primary text-sm">assignment</span>
+                        <span class="text-xs font-bold text-gray-200">مهام اليوم</span>
+                    </div>
+                    <span id="date-display" class="text-[10px] text-gray-400 font-mono"></span>
                 </div>
+                <div id="daily-quests-container" class="overflow-y-auto pr-1 space-y-2 flex-1"></div>
+            </div>
         </div>
     </div>
 
@@ -150,18 +151,12 @@
 <script>
 /* ================== نظام التخزين والإحصائيات ================== */
 const highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0, 0, 0];
-// استرجاع أو تهيئة الإحصائيات اليومية
 let dailyStats = JSON.parse(localStorage.getItem("s4leehDailyStats")) || {
     date: new Date().toDateString(),
-    jumps: 0,
-    gamesPlayed: 0,
-    maxScore: 0,
-    creepersAvoided: 0,
-    zombiesAvoided: 0,
-    skinsAvoided: 0
+    jumps: 0, gamesPlayed: 0, maxScore: 0,
+    creepersAvoided: 0, zombiesAvoided: 0, skinsAvoided: 0
 };
 
-// التحقق من اليوم الجديد
 if (dailyStats.date !== new Date().toDateString()) {
     dailyStats = {
         date: new Date().toDateString(),
@@ -171,7 +166,6 @@ if (dailyStats.date !== new Date().toDateString()) {
     localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
 }
 
-// قاعدة بيانات المهام (المنطقية)
 const QUEST_DB = [
     { id: 0, text: "اقفز 30 مرة", target: 30, key: "jumps", type: "cumulative" },
     { id: 1, text: "وصل سكور 500", target: 500, key: "maxScore", type: "single" },
@@ -205,7 +199,6 @@ function generateAndRenderQuests() {
     document.getElementById('date-display').innerText = date.toLocaleDateString('en-GB');
     const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
     
-    // اختيار 4 مهام عشوائية لليوم
     let dailyIndices = [];
     let tempSeed = seed;
     while(dailyIndices.length < 4) {
@@ -277,7 +270,7 @@ function exitGame() {
     gameState = "MENU";
     document.getElementById('game-interface').style.display = 'none';
     document.getElementById('main-menu').style.display = 'flex';
-    generateAndRenderQuests(); // تحديث عرض المهام عند الخروج
+    generateAndRenderQuests();
     updateMenuHighScores();
 }
 
@@ -288,18 +281,14 @@ function resetGame() {
     document.getElementById('msg-overlay').classList.add('hidden');
     document.getElementById('msg-overlay').classList.remove('flex');
     gameState = "PLAY";
-    
-    // تحديث إحصائية عدد مرات اللعب
     dailyStats.gamesPlayed++;
     localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
-    
     requestAnimationFrame(loop);
 }
 
 function doJump() {
     if(!player.jump && gameState === "PLAY") {
         player.vy = -18.5; player.jump = true;
-        // تحديث إحصائية القفز
         dailyStats.jumps++;
         localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
     }
@@ -361,16 +350,11 @@ function loop() {
         o.x -= speed;
         if(o.img) ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
 
-        // تجاوز العائق بنجاح
         if(!o.passed && o.x + o.w < player.x) { 
             score += 14; o.passed = true; speed += 0.05;
-            
-            // تحديث إحصائيات التجاوز
             if(o.name === "Creeper") dailyStats.creepersAvoided++;
             if(o.name === "Zombie") dailyStats.zombiesAvoided++;
             if(o.type === "skin") dailyStats.skinsAvoided++;
-            
-            // تحديث السكور
             if(score > dailyStats.maxScore) dailyStats.maxScore = score;
             localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
         }
@@ -395,8 +379,6 @@ function gameOver(killerName) {
     document.getElementById("death-reason").innerText = "سبب السقوط: " + killerName;
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
-    
-    // حفظ أقصى سكور عند الخسارة أيضاً
     if(score > dailyStats.maxScore) {
         dailyStats.maxScore = score;
         localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
