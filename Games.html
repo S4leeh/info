@@ -1,135 +1,189 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html class="dark" lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S4leeh | مغامرة صالح </title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>S4leeh | مغامرة صالح</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&family=Cairo:wght@700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <style>
+    /* --- Game Styles (Night Mode) --- */
     :root { --gold: #d4af37; --bg-dark: #0a0a0a; --night-sky: #1a1a2e; }
-    html, body { 
-        margin: 0; padding: 0; background: var(--bg-dark); 
-        font-family: 'Cairo', sans-serif; touch-action: none; 
-        overflow: hidden; color: white; height: 100%; width: 100%;
+    
+    /* Voxel Background Animation */
+    .voxel-bg {
+        background-image: 
+            linear-gradient(rgba(32, 29, 18, 0.85), rgba(10, 10, 10, 0.95)),
+            linear-gradient(90deg, rgba(212, 175, 53, 0.05) 1px, transparent 1px),
+            linear-gradient(rgba(212, 175, 53, 0.05) 1px, transparent 1px);
+        background-size: 100% 100%, 40px 40px, 40px 40px;
+        background-position: center bottom;
+        transform: perspective(500px) rotateX(20deg) scale(1.5);
+        height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;
     }
-    .brand-header {
-        text-align: center;
-        padding: 10px 0;
-        background: rgba(10, 10, 20, 0.9);
-        border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+
+    /* Game Canvas Container */
+    #game-container {
+        display: none; /* Hidden by default */
+        position: fixed; inset: 0; z-index: 50;
+        background: #0a0a0a;
+        flex-direction: column; align-items: center; justify-content: center;
     }
-    .logo { width: 60px; height: auto; margin-bottom: 5px; }
-    .game-title { font-size: 22px; font-weight: 900; color: var(--gold); margin: 0; }
-    #game-wrap { 
-        position: relative; 
-        width: 100%; 
-        max-width: 1000px;
-        margin: 10px auto;
-        display: flex;
-        justify-content: center;
-    }
+
     canvas { 
-        display: block; 
-        background: var(--night-sky); 
-        border: 4px solid var(--gold); 
-        border-radius: 15px; 
-        width: 95vw; 
-        height: auto; 
-        max-height: 65vh;
-        box-shadow: 0 0 40px rgba(0,0,0,0.9); 
-        image-rendering: pixelated;
+        display: block; background: var(--night-sky); 
+        border: 4px solid var(--gold); border-radius: 15px; 
+        width: 95vw; height: auto; max-height: 65vh; 
+        box-shadow: 0 0 40px rgba(0,0,0,0.9); image-rendering: pixelated; 
     }
-    .ui { 
-        position: absolute; 
-        color: #fff; 
-        background: rgba(0,0,0,0.85); 
-        padding: 5px 12px; 
-        border-radius: 8px; 
-        border: 1px solid var(--gold); 
-        font-weight: bold; 
-        z-index: 10; 
-        font-size: 14px;
-        backdrop-filter: blur(4px);
+
+    /* UI Overlay for Game */
+    .game-ui { position: absolute; top: 15px; width: 95vw; max-width: 850px; display: flex; justify-content: space-between; z-index: 60; pointer-events: none; }
+    .score-badge { background: rgba(0,0,0,0.8); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 8px; color: white; font-family: 'Cairo'; font-weight: bold; }
+
+    /* Game Over / Pause Screen */
+    #msg-overlay { 
+        position: absolute; inset: 0; display: none; 
+        align-items: center; justify-content: center; 
+        background: rgba(0,0,0,0.9); z-index: 100; 
+        flex-direction: column; text-align: center;
     }
-    #score { top: 10px; right: 10px; }
-    #top3 { top: 10px; left: 10px; direction: ltr; font-size: 11px; }
-    #msg { 
-        position: absolute; 
-        inset: 0; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        background: rgba(0,0,0,0.9); 
-        z-index: 100; 
-        color: var(--gold); 
-        text-align: center; 
-        border-radius: 15px; 
-        flex-direction: column; 
-        padding: 20px;
-        width: 90%;
-        margin: auto;
+    
+    /* 3D Button Effect */
+    .btn-3d {
+        transition: all 0.1s;
+        box-shadow: 0px 6px 0px 0px #8f7216, 0px 10px 20px rgba(0,0,0,0.4); 
+        transform: translateY(0);
     }
-    #msg-text { font-size: 22px; margin-bottom: 5px; font-weight: 900; }
-    #death-reason { font-size: 16px; color: #ff4d4d; margin-bottom: 15px; font-weight: 700; background: rgba(255,0,0,0.1); padding: 5px 15px; border-radius: 20px; }
-    button { 
-        padding: 12px 35px; 
-        font-size: 18px; 
-        background: var(--gold); 
-        border: none; 
-        border-radius: 8px; 
-        cursor: pointer; 
-        font-weight: 900; 
-        color: #000; 
-        transition: 0.3s;
-        z-index: 101;
-    }
-    button:active { transform: scale(0.95); }
-    .nav-back {
-        display: block;
-        text-align: center;
-        margin-top: 5px;
-        color: #888;
-        text-decoration: none;
-        font-size: 13px;
-    }
-    @media (max-width: 600px) {
-        .game-title { font-size: 18px; }
-        #msg-text { font-size: 18px; }
-    }
+    .btn-3d:active { transform: translateY(6px); box-shadow: 0px 0px 0px 0px #8f7216; }
+
+    /* Animations */
+    .tilt-card { transition: transform 0.3s ease; }
+    .tilt-card:hover { transform: scale(1.05); }
+    
+    body { font-family: 'Cairo', sans-serif; overflow: hidden; user-select: none; -webkit-user-select: none; }
 </style>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: { "primary": "#d4af35", "background-dark": "#0a0a0a" },
+                fontFamily: { "display": ["Cairo", "sans-serif"] }
+            }
+        }
+    }
+</script>
 </head>
-<body>
+<body class="bg-background-dark text-white h-screen w-screen relative">
 
-<header class="brand-header">
-    <img src="logo.png" alt="S4leeh Logo" class="logo">
-    <h1 class="game-title">مغامرة صالح</h1>
-</header>
+<div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-4 overflow-hidden">
+    <div class="voxel-bg"></div>
 
-<div id="game-wrap">
-    <div id="score" class="ui">النقاط: 0</div>
-    <div id="top3" class="ui">#1: 0 | #2: 0 | #3: 0</div>
-    <canvas id="game" width="850" height="420"></canvas>
-    <div id="msg">
-        <h2 id="msg-text">جاري تجهيز عالم صالح...</h2>
-        <p id="death-reason"></p>
-        <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة 🌙</button>
+    <div class="flex justify-between items-start w-full max-w-6xl mx-auto relative z-20">
+        <div class="tilt-card bg-black/40 backdrop-blur-md border border-primary/30 rounded-xl p-3 shadow-lg flex items-center gap-3">
+            <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-lg text-primary">
+                <span class="material-icons">monetization_on</span>
+            </div>
+            <div>
+                <p class="text-[10px] text-gray-400 uppercase font-bold">الرصيد</p>
+                <h2 class="text-xl font-bold text-primary">14,250</h2>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 bg-black/60 border border-primary/30 rounded-full pl-1 pr-4 py-1 backdrop-blur-sm">
+            <img src="https://minotar.net/avatar/Saleh/100.png" class="w-8 h-8 rounded-full border border-primary">
+            <span class="font-bold text-sm">Saleh</span>
+        </div>
+
+        <div class="tilt-card bg-black/40 backdrop-blur-md border border-primary/30 rounded-xl p-3 shadow-lg flex items-center gap-3 dir-ltr">
+            <div class="text-right">
+                <p class="text-[10px] text-gray-400 uppercase font-bold">أفضل رقم</p>
+                <h2 id="menu-highscore" class="text-xl font-bold text-white">0</h2>
+            </div>
+            <div class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-lg text-primary border border-primary/20">
+                <span class="material-icons">emoji_events</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <div class="relative group">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-10 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
+            <img src="https://crafatar.com/renders/body/Saleh?scale=8&overlay" class="h-[50vh] object-contain drop-shadow-2xl hover:scale-105 transition duration-500">
+        </div>
+    </div>
+
+    <div class="hidden md:block absolute right-10 top-1/2 -translate-y-1/2 w-72 bg-black/80 backdrop-blur-xl border-r-4 border-primary rounded-l-xl p-5 shadow-2xl z-20">
+        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span class="material-icons text-primary">assignment</span> مهام اليوم
+        </h3>
+        <div class="space-y-4">
+            <div>
+                <div class="flex justify-between text-xs mb-1 text-gray-300">
+                    <span>اجمع 500 نقطة</span>
+                    <span class="text-primary">300/500</span>
+                </div>
+                <div class="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary w-[60%]"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between text-xs mb-1 text-green-400">
+                    <span>تجاوز سعيد</span>
+                    <span class="flex items-center gap-1"><span class="material-icons text-[10px]">check_circle</span> تم</span>
+                </div>
+                <div class="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-green-500 w-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full flex justify-center pb-12 z-30 relative">
+        <button onclick="switchToGame()" class="btn-3d relative w-72 h-20 bg-primary hover:bg-[#eac448] text-black font-black text-3xl rounded-xl border-2 border-[#fceda8] flex flex-col items-center justify-center overflow-hidden group">
+            <span class="relative z-10 drop-shadow-sm">ابدأ المغامرة</span>
+            <span class="relative z-10 text-[12px] font-bold opacity-70 tracking-widest mt-[-2px]">اضغط للانطلاق</span>
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/30 to-transparent opacity-50"></div>
+        </button>
+        
+        <a href="index.html" class="absolute bottom-2 text-gray-500 text-xs hover:text-primary transition">العودة للرئيسية</a>
     </div>
 </div>
 
-<a href="index.html" class="nav-back">العودة للرئيسية</a>
+<div id="game-container">
+    <div class="game-ui">
+        <div class="score-badge" id="top3">#1: 0 | #2: 0</div>
+        <div class="score-badge" id="score">النقاط: 0</div>
+    </div>
+
+    <canvas id="game" width="850" height="420"></canvas>
+
+    <div id="msg-overlay">
+        <h2 id="msg-text" class="text-3xl text-primary font-bold mb-2"></h2>
+        <p id="death-reason" class="text-red-400 bg-red-900/30 px-4 py-1 rounded-full mb-6 font-bold"></p>
+        <button class="btn-3d bg-primary text-black font-bold px-8 py-3 rounded-lg text-xl" onclick="resetGame()">إعادة المحاولة</button>
+        <button class="text-gray-400 mt-4 text-sm hover:text-white" onclick="backToMenu()">القائمة الرئيسية</button>
+    </div>
+</div>
 
 <script>
+/* ================= GAME LOGIC ================= */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d", { alpha: false });
 ctx.imageSmoothingEnabled = false;
 
 const GROUND = 340;
-let state = "LOADING", score = 0, baseSpeed = 5.5, speed = baseSpeed, frame = 0, nextSpawnFrame = 100;
+let state = "MENU"; // States: MENU, PLAY, OVER
+let score = 0, baseSpeed = 5.5, speed = baseSpeed, frame = 0, nextSpawnFrame = 100;
 let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
+
+// Update menu highscore display
+document.getElementById('menu-highscore').innerText = highScores[0];
 
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
-const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_","Raheeb_","KMA77","Z4_clown_king","Nina__a","iDexter89","Quack__27"];
+const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_"];
 
 const assets = {};
 const toLoad = [
@@ -147,28 +201,35 @@ toLoad.forEach(item => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = item.u;
-    img.onload = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
-    img.onerror = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
+    img.onload = () => loaded++;
     assets[item.n] = img;
 });
 
-function showStartButton() {
-    document.getElementById("msg-text").innerText = "جاهز للمغامرة الليلية؟";
-    document.getElementById("death-reason").innerText = "";
-    document.getElementById("start-btn").style.display = "block";
+// UI Switching Functions
+function switchToGame() {
+    if(loaded < toLoad.length) return alert("جاري تحميل الموارد، انتظر لحظة...");
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('game-container').style.display = 'flex';
+    resetGame();
 }
 
-function startGame(e) {
-    if (e) e.stopPropagation();
+function backToMenu() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'flex';
+    state = "MENU";
+    document.getElementById('menu-highscore').innerText = highScores[0];
+}
+
+function resetGame() {
     score = 0; speed = baseSpeed; frame = 0; obstacles = [];
     player.y = GROUND - player.h; player.vy = 0; player.jump = false;
-    nextSpawnFrame = 80; 
-    document.getElementById("msg").style.display = "none";
-    document.getElementById("death-reason").innerText = "";
+    nextSpawnFrame = 80;
+    document.getElementById("msg-overlay").style.display = "none";
     state = "PLAY";
     requestAnimationFrame(loop);
 }
 
+// Game Mechanics
 function doJump() {
     if(!player.jump && state === "PLAY") {
         player.vy = -18.5;
@@ -176,14 +237,8 @@ function doJump() {
     }
 }
 
-// التحكم: تم التعديل لمنع إعادة التشغيل بزر السبيس
 document.addEventListener("keydown", e => { 
-    if(e.code === "Space") {
-        if(state === "PLAY") {
-            doJump();
-        }
-        // تم حذف إمكانية بدء اللعبة أو إعادتها بزر السبيس هنا لضمان عدم الضغط بالخطأ
-    }
+    if(e.code === "Space" && state === "PLAY") doJump();
 });
 
 window.addEventListener("touchstart", e => { 
@@ -222,40 +277,39 @@ function loop() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // --- رسم الليل ---
-    ctx.fillStyle = "#0f0f1b"; 
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Night Environment
+    ctx.fillStyle = "#0f0f1b"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     
+    // Stars
     ctx.fillStyle = "white";
     if (frame % 2 === 0) { 
         ctx.fillRect(100, 50, 2, 2); ctx.fillRect(300, 80, 2, 2);
         ctx.fillRect(500, 40, 2, 2); ctx.fillRect(700, 90, 2, 2);
     }
-    
-    ctx.fillStyle = "#f5f5f5";
-    ctx.beginPath();
-    ctx.arc(750, 60, 25, 0, Math.PI * 2);
-    ctx.fill();
+    // Moon
+    ctx.fillStyle = "#f5f5f5"; ctx.beginPath(); ctx.arc(750, 60, 25, 0, Math.PI * 2); ctx.fill();
 
+    // Ground
     ctx.fillStyle = "#2d1d0f"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
     ctx.fillStyle = "#2a4d1a"; ctx.fillRect(0, GROUND, canvas.width, 12);
 
+    // Player Physics
     player.vy += 0.85; 
     player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
+    // Player Draw with Glow
     ctx.shadowBlur = 10; ctx.shadowColor = "rgba(212, 175, 55, 0.3)";
     if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
     ctx.shadowBlur = 0;
 
     if(frame >= nextSpawnFrame) spawn();
 
+    // Obstacles Logic
     for(let i = obstacles.length - 1; i >= 0; i--) {
         let o = obstacles[i];
         o.x -= speed;
-        if(o.img && (o.img.complete || o.img.naturalWidth > 0)) {
-            ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
-        }
+        if(o.img && (o.img.complete || o.img.naturalWidth > 0)) ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
 
         if(!o.passed && o.x + o.w < player.x) { 
             score += 14; o.passed = true; speed += 0.05; 
@@ -270,21 +324,19 @@ function loop() {
     }
 
     document.getElementById("score").innerText = "النقاط: " + score;
-    document.getElementById("top3").innerText = `#1: ${highScores[0]} | #2: ${highScores[1]} | #3: ${highScores[2]}`;
+    document.getElementById("top3").innerText = `#1: ${highScores[0]} | #2: ${highScores[1]}`;
     requestAnimationFrame(loop);
 }
 
 function gameOver(killerName) {
     state = "OVER";
-    document.getElementById("msg").style.display = "flex";
-    document.getElementById("msg-text").innerHTML = "💀 إنتهت المغامرة!<br>نقاطك: " + score;
+    document.getElementById("msg-overlay").style.display = "flex";
+    document.getElementById("msg-text").innerText = "💀 سقط صالح!";
     document.getElementById("death-reason").innerText = "السبب: " + killerName;
-    document.getElementById("start-btn").innerText = "إعادة المحاولة";
+    
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
 }
-
-window.onload = () => { if(loaded >= toLoad.length) showStartButton(); };
 </script>
 </body>
 </html>
