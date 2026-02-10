@@ -25,30 +25,35 @@
 <style>
     body { background-color: #050505; color: white; overflow: hidden; touch-action: none; user-select: none; }
     
-    /* خلفية برمجية (مضمونة الظهور) */
-    .digital-bg {
-        position: absolute; inset: 0; z-index: 0;
-        background: radial-gradient(circle at 50% 30%, #1a1a2e 0%, #000000 90%);
+    /* --- خلفية الشبكة ثلاثية الأبعاد (Voxel/Grid Floor) --- */
+    .retro-grid-container {
+        position: fixed; inset: 0; z-index: 0;
+        background: linear-gradient(to bottom, #0a0a0a 0%, #111 100%);
+        overflow: hidden;
     }
-    .grid-lines {
-        position: absolute; inset: 0; opacity: 0.15;
-        background-image: linear-gradient(rgba(212, 175, 53, 0.3) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(212, 175, 53, 0.3) 1px, transparent 1px);
+    .retro-grid {
+        position: absolute; width: 200vw; height: 200vh;
+        left: -50%; top: -25%;
+        background-image: 
+            linear-gradient(rgba(212, 175, 53, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(212, 175, 53, 0.15) 1px, transparent 1px);
         background-size: 50px 50px;
-        transform: perspective(1000px) rotateX(60deg) translateY(-100px) scale(3);
+        transform: perspective(500px) rotateX(60deg);
         transform-origin: center top;
-        pointer-events: none;
+        animation: gridMove 20s linear infinite;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
     }
+    @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 50px; } }
 
     /* تأثيرات البطاقات */
     .glass-card {
-        background: rgba(20, 20, 20, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(212, 175, 53, 0.3);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-        transition: transform 0.3s ease, border-color 0.3s;
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(212, 175, 53, 0.2);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease;
     }
-    .glass-card:hover { transform: translateY(-5px); border-color: #d4af35; }
+    .glass-card:hover { border-color: #d4af35; transform: translateY(-2px); }
 
     /* زر ثلاثي الأبعاد */
     .btn-3d {
@@ -59,9 +64,9 @@
     .btn-3d:active { transform: translateY(8px); box-shadow: 0px 0px 0px 0px #8f7216; }
 
     /* شريط التمرير للمهام */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: #d4af35; border-radius: 10px; }
-    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-track { background: transparent; }
 
     canvas { 
         image-rendering: pixelated; 
@@ -71,37 +76,37 @@
     }
 </style>
 </head>
-<body class="font-display">
+<body class="font-display h-screen w-screen relative">
 
-<div id="main-menu" class="relative z-10 w-full h-full flex flex-col items-center justify-between p-6">
-    <div class="digital-bg"><div class="grid-lines"></div></div>
+<div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-6">
+    <div class="retro-grid-container"><div class="retro-grid"></div></div>
 
-    <div class="relative z-20 w-full max-w-7xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-4">
         
-        <div class="glass-card rounded-2xl p-4 w-full md:w-64">
+        <div class="glass-card rounded-2xl p-4 w-full md:w-64 order-2 md:order-1">
             <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
-                <span class="material-icons text-primary">emoji_events</span>
-                <span class="text-sm font-bold text-gray-200">أفضل المحاولات</span>
+                <span class="material-icons text-primary text-sm">emoji_events</span>
+                <span class="text-xs font-bold text-gray-200">أفضل المحاولات</span>
             </div>
             <div id="top3-menu" class="space-y-2 text-sm font-bold" style="direction: ltr;">
                 </div>
         </div>
 
-        <div class="absolute left-1/2 top-0 -translate-x-1/2 hidden md:flex flex-col items-center pt-4">
-            <div class="relative w-24 h-24 mb-2">
+        <div class="flex flex-col items-center order-1 md:order-2 w-full md:w-auto mt-4 md:mt-0">
+            <div class="relative w-28 h-28 mb-2">
                 <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
-                <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-110 transition duration-300">
+                <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-105 transition duration-300">
             </div>
             <div class="bg-black/60 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
                 <span class="text-primary font-black tracking-widest text-lg">S4LEEH</span>
             </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-4 w-full md:w-72 h-48 md:h-64 flex flex-col">
-            <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+        <div class="glass-card rounded-2xl p-4 w-full md:w-72 h-40 md:h-56 flex flex-col order-3">
+            <div class="flex items-center justify-between mb-2 border-b border-white/10 pb-2">
                 <div class="flex items-center gap-2">
-                    <span class="material-icons text-primary">assignment</span>
-                    <span class="text-sm font-bold text-gray-200">مهام اليوم</span>
+                    <span class="material-icons text-primary text-sm">assignment</span>
+                    <span class="text-xs font-bold text-gray-200">مهام اليوم</span>
                 </div>
                 <span id="date-display" class="text-[10px] text-gray-500 font-mono"></span>
             </div>
@@ -110,45 +115,38 @@
         </div>
     </div>
 
-    <div class="md:hidden relative z-10 flex flex-col items-center mt-4">
-        <img src="logo.png" class="w-32 h-32 object-contain drop-shadow-neon animate-pulse">
-    </div>
+    <div class="flex-grow"></div>
 
-    <div class="relative z-20 w-full flex flex-col items-center pb-8">
-        <button onclick="switchToGame()" class="btn-3d group relative w-full max-w-md h-24 bg-primary hover:bg-[#eac448] rounded-2xl border-2 border-[#fceda8] flex flex-col items-center justify-center overflow-hidden transition-all">
-            <span class="text-black font-black text-4xl drop-shadow-sm z-10">ابدأ المغامرة</span>
-            <span class="text-black/70 text-xs font-bold tracking-widest mt-1 z-10">اضغط للانطلاق 🚀</span>
-            
+    <div class="relative z-20 w-full flex flex-col items-center pb-8 md:pb-12">
+        <button onclick="switchToGame()" class="btn-3d group relative w-full max-w-sm md:max-w-md h-20 md:h-24 bg-primary hover:bg-[#eac448] rounded-2xl border-2 border-[#fceda8] flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer">
+            <span class="text-black font-black text-3xl md:text-4xl drop-shadow-sm z-10">ابدأ المغامرة</span>
+            <span class="text-black/70 text-[10px] md:text-xs font-bold tracking-widest mt-1 z-10">اضغط للانطلاق 🚀</span>
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite]"></div>
         </button>
-        <a href="index.html" class="mt-6 text-gray-500 hover:text-primary transition font-bold text-sm">العودة للصفحة الرئيسية</a>
+        <a href="index.html" class="mt-6 text-gray-500 hover:text-primary transition font-bold text-xs">العودة للصفحة الرئيسية</a>
     </div>
 </div>
 
 <div id="game-interface" class="hidden fixed inset-0 z-50 bg-[#0a0a0a] flex-col items-center justify-center">
     <div class="absolute top-0 w-full max-w-5xl p-4 flex justify-between items-center z-50">
         <div class="bg-black/70 border border-primary/50 px-5 py-2 rounded-xl backdrop-blur-md">
-            <span class="text-gray-400 text-xs font-bold block">النقاط الحالية</span>
+            <span class="text-gray-400 text-xs font-bold block">النقاط</span>
             <span id="game-score" class="text-2xl font-black text-primary font-mono">0</span>
         </div>
-        
-        <button onclick="exitGame()" class="bg-red-500/10 hover:bg-red-600 border border-red-500/50 text-red-500 hover:text-white w-12 h-12 rounded-xl flex items-center justify-center transition duration-200">
-            <span class="material-icons text-2xl">close</span>
+        <button onclick="exitGame()" class="bg-red-500/10 hover:bg-red-600 border border-red-500/50 text-red-500 hover:text-white w-10 h-10 rounded-lg flex items-center justify-center transition duration-200">
+            <span class="material-icons text-xl">close</span>
         </button>
     </div>
 
-    <canvas id="gameCanvas" width="850" height="420" class="max-w-[95vw] max-h-[65vh]"></canvas>
+    <canvas id="gameCanvas" width="850" height="420" class="max-w-[95vw] max-h-[60vh]"></canvas>
 
-    <div id="msg-overlay" class="hidden absolute inset-0 bg-black/90 z-[60] flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
-        <h2 class="text-5xl font-black text-primary mb-2 drop-shadow-neon">انتهت اللعبة!</h2>
-        <div class="text-2xl text-white font-bold mb-6">نقاطك: <span id="final-score" class="text-primary font-mono">0</span></div>
-        
-        <div id="death-reason" class="bg-red-900/40 border border-red-500/30 text-red-300 px-6 py-2 rounded-full mb-10 font-bold text-lg">
-            </div>
-        
-        <div class="flex flex-col md:flex-row gap-4 w-full max-w-md">
-            <button onclick="resetGame()" class="btn-3d flex-1 bg-primary text-black font-black py-4 rounded-xl text-xl hover:brightness-110">محاولة مرة أخرى</button>
-            <button onclick="exitGame()" class="flex-1 bg-gray-800 border-2 border-gray-600 text-gray-300 font-bold py-4 rounded-xl hover:bg-gray-700 transition">خروج للقائمة</button>
+    <div id="msg-overlay" class="hidden absolute inset-0 bg-black/95 z-[60] flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
+        <h2 class="text-4xl md:text-5xl font-black text-primary mb-2 drop-shadow-neon">انتهت اللعبة!</h2>
+        <div class="text-xl text-white font-bold mb-6">نقاطك: <span id="final-score" class="text-primary font-mono">0</span></div>
+        <div id="death-reason" class="bg-red-900/40 border border-red-500/30 text-red-300 px-6 py-2 rounded-full mb-10 font-bold text-sm md:text-lg"></div>
+        <div class="flex flex-col md:flex-row gap-4 w-full max-w-sm">
+            <button onclick="resetGame()" class="btn-3d flex-1 bg-primary text-black font-black py-3 rounded-xl text-lg hover:brightness-110">مرة أخرى</button>
+            <button onclick="exitGame()" class="flex-1 bg-gray-800 border-2 border-gray-600 text-gray-300 font-bold py-3 rounded-xl hover:bg-gray-700 transition">خروج</button>
         </div>
     </div>
 </div>
@@ -163,7 +161,6 @@
 /* ================== النظام والمهام ================== */
 const highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0, 0, 0];
 
-// تحديث الأرقام القياسية
 function updateMenuHighScores() {
     const container = document.getElementById('top3-menu');
     container.innerHTML = `
@@ -181,7 +178,6 @@ function updateMenuHighScores() {
 }
 updateMenuHighScores();
 
-// توليد مهام يومية عشوائية ومتجددة
 function generateDailyQuests() {
     const allQuests = [
         "اقفز 50 مرة", "اجمع 1000 نقطة", "تجنب الكريبر 3 مرات", 
@@ -189,13 +185,9 @@ function generateDailyQuests() {
         "تجاوز سكين سعيد", "اهزم الزومبي", "العب في الليل", 
         "حقق رقم قياسي جديد", "اقفز فوق 10 حواجز", "ابقى حياً لمدة دقيقتين"
     ];
-    
-    // استخدام التاريخ كـ Seed عشوائي
     const date = new Date();
     document.getElementById('date-display').innerText = date.toLocaleDateString('en-GB');
     const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
-    
-    // خوارزمية اختيار 5 مهام لليوم
     let dailyIndices = [];
     let tempSeed = seed;
     while(dailyIndices.length < 5) {
@@ -203,12 +195,11 @@ function generateDailyQuests() {
         if(!dailyIndices.includes(val)) dailyIndices.push(val);
         tempSeed++;
     }
-
     const container = document.getElementById('daily-quests-container');
     container.innerHTML = dailyIndices.map(i => `
         <div class="flex justify-between items-center p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition group">
-            <span class="text-xs text-gray-300 group-hover:text-primary transition">${allQuests[i]}</span>
-            <div class="w-3 h-3 rounded-full border border-gray-600"></div>
+            <span class="text-[10px] md:text-xs text-gray-300 group-hover:text-primary transition">${allQuests[i]}</span>
+            <div class="w-2 h-2 rounded-full border border-gray-600"></div>
         </div>
     `).join('');
 }
@@ -225,7 +216,6 @@ let score = 0, speed = 5.5, frame = 0, nextSpawnFrame = 100;
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
 
-// الأصول
 const assets = {};
 const toLoad = [
     { n: "Saleh", u: "https://minotar.net/armor/body/Saleh/100.png" },
@@ -247,7 +237,6 @@ toLoad.forEach(item => {
     assets[item.n] = img;
 });
 
-// دوال التحكم
 function switchToGame() {
     if(loadedCount < toLoad.length) return alert("جاري تحميل الموارد، يرجى الانتظار...");
     document.getElementById('main-menu').style.display = 'none';
@@ -272,7 +261,6 @@ function resetGame() {
     requestAnimationFrame(loop);
 }
 
-// القفز
 function doJump() {
     if(!player.jump && gameState === "PLAY") {
         player.vy = -18.5; player.jump = true;
@@ -284,7 +272,6 @@ window.addEventListener("touchstart", e => {
     if (gameState === "PLAY" && e.target.tagName !== 'BUTTON') { e.preventDefault(); doJump(); }
 }, {passive: false});
 
-// إنشاء العوائق
 function spawn() {
     const rand = Math.random();
     let o = { x: canvas.width + 120, passed: false, name: "" };
@@ -303,44 +290,34 @@ function spawn() {
         skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
         Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105, name: s });
     }
-    
     obstacles.push(o);
-    // نظام المسافة الآمنة
     const minSafeGap = 55; 
     const randomExtraGap = Math.floor(Math.random() * 85); 
     nextSpawnFrame = frame + minSafeGap + randomExtraGap;
 }
 
-// حلقة اللعبة
 function loop() {
     if(gameState !== "PLAY") return;
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // ليل
     ctx.fillStyle = "#1a1a2e"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // نجوم
     ctx.fillStyle = "white";
     if (frame % 2 === 0) { ctx.fillRect(100, 50, 2, 2); ctx.fillRect(500, 40, 2, 2); }
-    // قمر
     ctx.fillStyle = "#f5f5f5"; ctx.beginPath(); ctx.arc(750, 60, 25, 0, Math.PI * 2); ctx.fill();
 
-    // أرضية
     ctx.fillStyle = "#2d1d0f"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
     ctx.fillStyle = "#2a4d1a"; ctx.fillRect(0, GROUND, canvas.width, 12);
 
-    // اللاعب
     player.vy += 0.85; player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
-    // توهج
     ctx.shadowBlur = 15; ctx.shadowColor = "rgba(212, 175, 55, 0.4)";
     if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
     ctx.shadowBlur = 0;
 
     if(frame >= nextSpawnFrame) spawn();
 
-    // العوائق
     for(let i = obstacles.length - 1; i >= 0; i--) {
         let o = obstacles[i];
         o.x -= speed;
@@ -350,7 +327,6 @@ function loop() {
             score += 14; o.passed = true; speed += 0.05; 
         }
         
-        // تصادم
         if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
            player.y+15 < o.y+o.h-10 && player.y+player.h-10 > o.y+15) {
             gameOver(o.name);
@@ -358,7 +334,6 @@ function loop() {
         }
         if(o.x < -150) obstacles.splice(i, 1);
     }
-
     document.getElementById("game-score").innerText = score;
     requestAnimationFrame(loop);
 }
@@ -368,10 +343,8 @@ function gameOver(killerName) {
     const overlay = document.getElementById("msg-overlay");
     overlay.classList.remove('hidden');
     overlay.classList.add('flex');
-    
     document.getElementById("final-score").innerText = score;
     document.getElementById("death-reason").innerText = "سبب السقوط: " + killerName;
-    
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
 }
