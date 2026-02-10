@@ -14,165 +14,201 @@
             extend: {
                 colors: { "primary": "#d4af35", "bg-dark": "#0a0a0a", "night": "#1a1a2e" },
                 fontFamily: { "display": ["Cairo", "sans-serif"] },
-                boxShadow: { "neon": "0 0 15px rgba(212, 175, 53, 0.5)" }
+                boxShadow: { 
+                    "neon": "0 0 20px rgba(212, 175, 53, 0.4)",
+                    "card": "0 8px 30px rgba(0,0,0,0.5)"
+                }
             }
         }
     }
 </script>
 <style>
-    /* --- تنسيقات خاصة --- */
-    body { background-color: #0a0a0a; color: white; overflow: hidden; touch-action: none; }
+    body { background-color: #050505; color: white; overflow: hidden; touch-action: none; user-select: none; }
     
-    /* خلفية ليلية احترافية مضمونة (بدون صور خارجية) */
-    .voxel-bg {
+    /* خلفية برمجية (مضمونة الظهور) */
+    .digital-bg {
         position: absolute; inset: 0; z-index: 0;
-        background: radial-gradient(circle at 50% 20%, #1e1e2f 0%, #0a0a0a 80%);
-        background-size: 100% 100%;
+        background: radial-gradient(circle at 50% 30%, #1a1a2e 0%, #000000 90%);
     }
-    .grid-overlay {
-        position: absolute; inset: 0;
-        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        background-size: 40px 40px;
-        transform: perspective(500px) rotateX(20deg) scale(1.5);
-        opacity: 0.5; pointer-events: none;
+    .grid-lines {
+        position: absolute; inset: 0; opacity: 0.15;
+        background-image: linear-gradient(rgba(212, 175, 53, 0.3) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(212, 175, 53, 0.3) 1px, transparent 1px);
+        background-size: 50px 50px;
+        transform: perspective(1000px) rotateX(60deg) translateY(-100px) scale(3);
+        transform-origin: center top;
+        pointer-events: none;
     }
 
-    /* تأثيرات ثلاثية الأبعاد */
+    /* تأثيرات البطاقات */
+    .glass-card {
+        background: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 175, 53, 0.3);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        transition: transform 0.3s ease, border-color 0.3s;
+    }
+    .glass-card:hover { transform: translateY(-5px); border-color: #d4af35; }
+
+    /* زر ثلاثي الأبعاد */
     .btn-3d {
         transition: all 0.1s;
-        box-shadow: 0px 6px 0px 0px #8f7216, 0px 10px 20px rgba(0,0,0,0.4);
+        box-shadow: 0px 8px 0px 0px #8f7216, 0px 20px 20px rgba(0,0,0,0.4);
         transform: translateY(0);
     }
-    .btn-3d:active { transform: translateY(6px); box-shadow: 0px 0px 0px 0px #8f7216; }
-    
-    .tilt-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .tilt-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px rgba(212, 175, 53, 0.3); }
+    .btn-3d:active { transform: translateY(8px); box-shadow: 0px 0px 0px 0px #8f7216; }
 
-    /* حاوية اللعبة */
-    #game-interface { display: none; position: fixed; inset: 0; z-index: 50; background: #0a0a0a; flex-direction: column; align-items: center; justify-content: center; }
-    
+    /* شريط التمرير للمهام */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: #d4af35; border-radius: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+
     canvas { 
-        background: #1a1a2e; border: 3px solid #d4af35; border-radius: 12px; 
-        width: 95vw; height: auto; max-height: 60vh; 
-        image-rendering: pixelated; box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        image-rendering: pixelated; 
+        border: 2px solid #d4af35; 
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        border-radius: 12px;
     }
-
-    /* نص المهام */
-    .quest-item { @apply flex justify-between items-center text-xs p-2 bg-white/5 rounded-lg border border-white/10 mb-2; }
 </style>
 </head>
 <body class="font-display">
 
-<div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-4">
-    <div class="voxel-bg"><div class="grid-overlay"></div></div>
+<div id="main-menu" class="relative z-10 w-full h-full flex flex-col items-center justify-between p-6">
+    <div class="digital-bg"><div class="grid-lines"></div></div>
 
-    <div class="relative z-20 flex justify-between items-start max-w-6xl mx-auto w-full">
-        <div class="tilt-card bg-black/50 backdrop-blur-md border border-primary/30 rounded-xl p-3 min-w-[140px]">
-            <div class="flex items-center gap-2 mb-2 border-b border-white/10 pb-1">
-                <span class="material-icons text-primary text-sm">emoji_events</span>
-                <span class="text-xs font-bold text-gray-300">لوحة الأساطير</span>
+    <div class="relative z-20 w-full max-w-7xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        
+        <div class="glass-card rounded-2xl p-4 w-full md:w-64">
+            <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
+                <span class="material-icons text-primary">emoji_events</span>
+                <span class="text-sm font-bold text-gray-200">أفضل المحاولات</span>
             </div>
-            <div id="top3-menu" class="text-xs space-y-1 font-mono text-left" style="direction: ltr;">
-                Loading...
+            <div id="top3-menu" class="space-y-2 text-sm font-bold" style="direction: ltr;">
+                </div>
+        </div>
+
+        <div class="absolute left-1/2 top-0 -translate-x-1/2 hidden md:flex flex-col items-center pt-4">
+            <div class="relative w-24 h-24 mb-2">
+                <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
+                <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-110 transition duration-300">
+            </div>
+            <div class="bg-black/60 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
+                <span class="text-primary font-black tracking-widest text-lg">S4LEEH</span>
             </div>
         </div>
 
-        <div class="flex flex-col items-center">
-            <img src="logo.png" class="w-16 h-16 object-contain drop-shadow-neon mb-1 animate-pulse">
-            <div class="bg-primary/10 border border-primary/30 px-4 py-1 rounded-full backdrop-blur-sm">
-                <span class="font-bold text-primary tracking-wider">S4LEEH</span>
+        <div class="glass-card rounded-2xl p-4 w-full md:w-72 h-48 md:h-64 flex flex-col">
+            <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-primary">assignment</span>
+                    <span class="text-sm font-bold text-gray-200">مهام اليوم</span>
+                </div>
+                <span id="date-display" class="text-[10px] text-gray-500 font-mono"></span>
             </div>
-        </div>
-
-        <div class="tilt-card bg-black/50 backdrop-blur-md border border-primary/30 rounded-xl p-4 w-64 hidden md:block">
-            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                <span class="material-icons text-primary text-sm">assignment</span> مهام اليوم
-            </h3>
-            <div id="daily-quests-container">
+            <div id="daily-quests-container" class="overflow-y-auto pr-1 space-y-2 flex-1">
                 </div>
         </div>
     </div>
 
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <img src="https://crafatar.com/renders/body/Saleh?scale=8&overlay" class="h-[45vh] object-contain drop-shadow-2xl opacity-90">
+    <div class="md:hidden relative z-10 flex flex-col items-center mt-4">
+        <img src="logo.png" class="w-32 h-32 object-contain drop-shadow-neon animate-pulse">
     </div>
 
-    <div class="relative z-20 w-full flex justify-center pb-10">
-        <button onclick="switchToGame()" class="btn-3d relative w-72 h-20 bg-primary hover:bg-[#eac448] text-black font-black text-2xl rounded-xl border-t-2 border-[#fceda8] flex flex-col items-center justify-center group">
-            <span class="relative z-10 drop-shadow-sm">ابدأ المغامرة</span>
-            <span class="relative z-10 text-[10px] font-bold opacity-70 tracking-widest mt-[-2px]">اضغط هنا للانطلاق</span>
+    <div class="relative z-20 w-full flex flex-col items-center pb-8">
+        <button onclick="switchToGame()" class="btn-3d group relative w-full max-w-md h-24 bg-primary hover:bg-[#eac448] rounded-2xl border-2 border-[#fceda8] flex flex-col items-center justify-center overflow-hidden transition-all">
+            <span class="text-black font-black text-4xl drop-shadow-sm z-10">ابدأ المغامرة</span>
+            <span class="text-black/70 text-xs font-bold tracking-widest mt-1 z-10">اضغط للانطلاق 🚀</span>
+            
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite]"></div>
         </button>
-        <a href="index.html" class="absolute bottom-3 text-gray-500 text-xs hover:text-primary transition">العودة للرئيسية</a>
+        <a href="index.html" class="mt-6 text-gray-500 hover:text-primary transition font-bold text-sm">العودة للصفحة الرئيسية</a>
     </div>
 </div>
 
-<div id="game-interface">
-    <div class="absolute top-4 w-[95vw] max-w-[850px] flex justify-between items-center z-50">
-        <div class="bg-black/80 border border-primary/50 text-primary px-4 py-2 rounded-lg font-bold text-sm backdrop-blur">
-            النقاط: <span id="game-score" class="text-white">0</span>
+<div id="game-interface" class="hidden fixed inset-0 z-50 bg-[#0a0a0a] flex-col items-center justify-center">
+    <div class="absolute top-0 w-full max-w-5xl p-4 flex justify-between items-center z-50">
+        <div class="bg-black/70 border border-primary/50 px-5 py-2 rounded-xl backdrop-blur-md">
+            <span class="text-gray-400 text-xs font-bold block">النقاط الحالية</span>
+            <span id="game-score" class="text-2xl font-black text-primary font-mono">0</span>
         </div>
         
-        <button onclick="exitGame()" class="bg-red-500/20 hover:bg-red-500 border border-red-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition">
-            <span class="material-icons">close</span>
+        <button onclick="exitGame()" class="bg-red-500/10 hover:bg-red-600 border border-red-500/50 text-red-500 hover:text-white w-12 h-12 rounded-xl flex items-center justify-center transition duration-200">
+            <span class="material-icons text-2xl">close</span>
         </button>
     </div>
 
-    <canvas id="gameCanvas" width="850" height="420"></canvas>
+    <canvas id="gameCanvas" width="850" height="420" class="max-w-[95vw] max-h-[65vh]"></canvas>
 
-    <div id="msg-overlay" class="absolute inset-0 bg-black/95 z-[60] hidden flex-col items-center justify-center text-center p-6">
-        <h2 class="text-4xl font-bold text-primary mb-2">💀 انتهت المغامرة</h2>
-        <p id="final-score" class="text-white text-xl mb-4"></p>
-        <div id="death-reason" class="bg-red-900/30 text-red-400 px-4 py-2 rounded-full mb-8 font-bold border border-red-900/50"></div>
+    <div id="msg-overlay" class="hidden absolute inset-0 bg-black/90 z-[60] flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
+        <h2 class="text-5xl font-black text-primary mb-2 drop-shadow-neon">انتهت اللعبة!</h2>
+        <div class="text-2xl text-white font-bold mb-6">نقاطك: <span id="final-score" class="text-primary font-mono">0</span></div>
         
-        <div class="flex gap-4">
-            <button onclick="resetGame()" class="btn-3d bg-primary text-black font-bold px-8 py-3 rounded-lg text-lg">إعادة المحاولة</button>
-            <button onclick="exitGame()" class="border border-gray-600 text-gray-400 hover:text-white px-6 py-3 rounded-lg font-bold transition">خروج</button>
+        <div id="death-reason" class="bg-red-900/40 border border-red-500/30 text-red-300 px-6 py-2 rounded-full mb-10 font-bold text-lg">
+            </div>
+        
+        <div class="flex flex-col md:flex-row gap-4 w-full max-w-md">
+            <button onclick="resetGame()" class="btn-3d flex-1 bg-primary text-black font-black py-4 rounded-xl text-xl hover:brightness-110">محاولة مرة أخرى</button>
+            <button onclick="exitGame()" class="flex-1 bg-gray-800 border-2 border-gray-600 text-gray-300 font-bold py-4 rounded-xl hover:bg-gray-700 transition">خروج للقائمة</button>
         </div>
     </div>
 </div>
 
 <script>
-/* ================== منطق القائمة والمهام ================== */
+    tailwind.config.theme.extend.keyframes = {
+        shine: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } }
+    }
+</script>
+
+<script>
+/* ================== النظام والمهام ================== */
 const highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0, 0, 0];
 
-// تحديث لوحة الأوائل في القائمة
+// تحديث الأرقام القياسية
 function updateMenuHighScores() {
     const container = document.getElementById('top3-menu');
     container.innerHTML = `
-        <div class="flex justify-between"><span class="text-yellow-400">#1</span> <span>${highScores[0]}</span></div>
-        <div class="flex justify-between"><span class="text-gray-400">#2</span> <span>${highScores[1]}</span></div>
-        <div class="flex justify-between"><span class="text-orange-700">#3</span> <span>${highScores[2]}</span></div>
+        <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/5">
+            <div class="flex items-center gap-2"><span class="material-icons text-yellow-400 text-xs">emoji_events</span> <span class="text-yellow-400 font-black">#1</span></div>
+            <span class="font-mono text-white text-lg">${highScores[0]}</span>
+        </div>
+        <div class="flex justify-between items-center px-2 py-1">
+            <span class="text-gray-400 font-bold text-xs">#2</span> <span class="font-mono text-gray-300">${highScores[1]}</span>
+        </div>
+        <div class="flex justify-between items-center px-2 py-1">
+            <span class="text-orange-700 font-bold text-xs">#3</span> <span class="font-mono text-gray-400">${highScores[2]}</span>
+        </div>
     `;
 }
 updateMenuHighScores();
 
-// نظام المهام اليومية (يعتمد على التاريخ)
+// توليد مهام يومية عشوائية ومتجددة
 function generateDailyQuests() {
-    const quests = [
-        "اقفز 50 مرة", "اجمع 1000 نقطة", "تجنب كريبر مرتين", 
-        "العب 3 مرات", "وصل سكور 500", "لا تموت من اللافا",
-        "تجاوز سعيد", "اهزم الزومبي", "العب في الليل"
+    const allQuests = [
+        "اقفز 50 مرة", "اجمع 1000 نقطة", "تجنب الكريبر 3 مرات", 
+        "العب 5 محاولات", "وصل سكور 500 بدون ضرر", "لا تموت من اللافا",
+        "تجاوز سكين سعيد", "اهزم الزومبي", "العب في الليل", 
+        "حقق رقم قياسي جديد", "اقفز فوق 10 حواجز", "ابقى حياً لمدة دقيقتين"
     ];
     
-    // استخدام التاريخ كـ Seed (نفس المهام لكل المستخدمين في نفس اليوم)
+    // استخدام التاريخ كـ Seed عشوائي
     const date = new Date();
+    document.getElementById('date-display').innerText = date.toLocaleDateString('en-GB');
     const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
     
-    // خوارزمية اختيار عشوائي ثابت لليوم
+    // خوارزمية اختيار 5 مهام لليوم
     let dailyIndices = [];
     let tempSeed = seed;
-    while(dailyIndices.length < 3) {
-        let val = Math.floor((tempSeed * 9301 + 49297) % 233280) % quests.length;
+    while(dailyIndices.length < 5) {
+        let val = Math.floor((tempSeed * 9301 + 49297) % 233280) % allQuests.length;
         if(!dailyIndices.includes(val)) dailyIndices.push(val);
         tempSeed++;
     }
 
     const container = document.getElementById('daily-quests-container');
     container.innerHTML = dailyIndices.map(i => `
-        <div class="quest-item">
-            <span class="text-gray-300">${quests[i]}</span>
-            <span class="text-primary text-[10px]">جاري..</span>
+        <div class="flex justify-between items-center p-2 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition group">
+            <span class="text-xs text-gray-300 group-hover:text-primary transition">${allQuests[i]}</span>
+            <div class="w-3 h-3 rounded-full border border-gray-600"></div>
         </div>
     `).join('');
 }
@@ -184,12 +220,12 @@ const ctx = canvas.getContext("2d", { alpha: false });
 ctx.imageSmoothingEnabled = false;
 
 const GROUND = 340;
-let gameState = "MENU"; // MENU, PLAY, OVER
+let gameState = "MENU"; 
 let score = 0, speed = 5.5, frame = 0, nextSpawnFrame = 100;
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
 
-// تحميل الصور
+// الأصول
 const assets = {};
 const toLoad = [
     { n: "Saleh", u: "https://minotar.net/armor/body/Saleh/100.png" },
@@ -211,9 +247,9 @@ toLoad.forEach(item => {
     assets[item.n] = img;
 });
 
-// دوال التحكم في الشاشات
+// دوال التحكم
 function switchToGame() {
-    if(loadedCount < toLoad.length) return alert("انتظر تحميل الموارد...");
+    if(loadedCount < toLoad.length) return alert("جاري تحميل الموارد، يرجى الانتظار...");
     document.getElementById('main-menu').style.display = 'none';
     document.getElementById('game-interface').style.display = 'flex';
     resetGame();
@@ -230,14 +266,13 @@ function resetGame() {
     score = 0; speed = 5.5; frame = 0; obstacles = [];
     player.y = GROUND - player.h; player.vy = 0; player.jump = false;
     nextSpawnFrame = 80;
-    document.getElementById('msg-overlay').style.display = 'none'; // إخفاء شاشة الخسارة
-    document.getElementById('msg-overlay').classList.remove('flex');
     document.getElementById('msg-overlay').classList.add('hidden');
+    document.getElementById('msg-overlay').classList.remove('flex');
     gameState = "PLAY";
     requestAnimationFrame(loop);
 }
 
-// التحكم
+// القفز
 function doJump() {
     if(!player.jump && gameState === "PLAY") {
         player.vy = -18.5; player.jump = true;
@@ -254,14 +289,14 @@ function spawn() {
     const rand = Math.random();
     let o = { x: canvas.width + 120, passed: false, name: "" };
 
-    if(rand < 0.35) { // موبز
+    if(rand < 0.35) { 
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
         Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105, name: m });
-    } else if(rand < 0.70) { // بلوكات
+    } else if(rand < 0.70) { 
         const blocks = ["Dirt", "Lava", "Stone", "Cobblestone"];
         const b = blocks[Math.floor(Math.random() * blocks.length)];
         Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60, name: b });
-    } else { // شباب
+    } else { 
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
@@ -270,8 +305,10 @@ function spawn() {
     }
     
     obstacles.push(o);
-    // مسافة آمنة
-    nextSpawnFrame = frame + 55 + Math.floor(Math.random() * 85);
+    // نظام المسافة الآمنة
+    const minSafeGap = 55; 
+    const randomExtraGap = Math.floor(Math.random() * 85); 
+    nextSpawnFrame = frame + minSafeGap + randomExtraGap;
 }
 
 // حلقة اللعبة
@@ -280,7 +317,7 @@ function loop() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // رسم الخلفية (ليل)
+    // ليل
     ctx.fillStyle = "#1a1a2e"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     // نجوم
     ctx.fillStyle = "white";
@@ -296,7 +333,8 @@ function loop() {
     player.vy += 0.85; player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
-    ctx.shadowBlur = 10; ctx.shadowColor = "rgba(212, 175, 55, 0.3)";
+    // توهج
+    ctx.shadowBlur = 15; ctx.shadowColor = "rgba(212, 175, 55, 0.4)";
     if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
     ctx.shadowBlur = 0;
 
@@ -328,10 +366,10 @@ function loop() {
 function gameOver(killerName) {
     gameState = "OVER";
     const overlay = document.getElementById("msg-overlay");
-    overlay.style.display = 'flex'; // استخدام فليكس للتوسيط
     overlay.classList.remove('hidden');
+    overlay.classList.add('flex');
     
-    document.getElementById("final-score").innerText = "النقاط: " + score;
+    document.getElementById("final-score").innerText = score;
     document.getElementById("death-reason").innerText = "سبب السقوط: " + killerName;
     
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
