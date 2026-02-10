@@ -25,32 +25,28 @@
 <style>
     body { background-color: #050505; color: white; overflow: hidden; touch-action: none; user-select: none; }
     
-    /* --- خلفية الشبكة ثلاثية الأبعاد (Voxel/Grid Floor) --- */
-    .retro-grid-container {
+    /* --- الخلفية الجديدة بالصورة المرفقة --- */
+    .custom-bg {
         position: fixed; inset: 0; z-index: 0;
-        background: linear-gradient(to bottom, #0a0a0a 0%, #111 100%);
-        overflow: hidden;
+        background-image: url('wmremove-transformed.png'); /* الصورة المرفقة */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
-    .retro-grid {
-        position: absolute; width: 200vw; height: 200vh;
-        left: -50%; top: -25%;
-        background-image: 
-            linear-gradient(rgba(212, 175, 53, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(212, 175, 53, 0.15) 1px, transparent 1px);
-        background-size: 50px 50px;
-        transform: perspective(500px) rotateX(60deg);
-        transform-origin: center top;
-        animation: gridMove 20s linear infinite;
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
+    
+    /* طبقة تعتيم خفيفة لضمان وضوح النصوص فوق الصورة */
+    .bg-overlay {
+        position: absolute; inset: 0;
+        background: rgba(0, 0, 0, 0.6); /* درجة التعتيم */
+        z-index: 1;
     }
-    @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 50px; } }
 
     /* تأثيرات البطاقات */
     .glass-card {
-        background: rgba(10, 10, 10, 0.8);
+        background: rgba(10, 10, 10, 0.85); /* زيادة التعتيم قليلاً لتناسب الخلفية الملونة */
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(212, 175, 53, 0.2);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        border: 1px solid rgba(212, 175, 53, 0.3);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         transition: transform 0.3s ease;
     }
     .glass-card:hover { border-color: #d4af35; transform: translateY(-2px); }
@@ -58,7 +54,7 @@
     /* زر ثلاثي الأبعاد */
     .btn-3d {
         transition: all 0.1s;
-        box-shadow: 0px 8px 0px 0px #8f7216, 0px 20px 20px rgba(0,0,0,0.4);
+        box-shadow: 0px 8px 0px 0px #8f7216, 0px 20px 20px rgba(0,0,0,0.5);
         transform: translateY(0);
     }
     .btn-3d:active { transform: translateY(8px); box-shadow: 0px 0px 0px 0px #8f7216; }
@@ -66,12 +62,12 @@
     /* شريط التمرير للمهام */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: #d4af35; border-radius: 10px; }
-    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
 
     canvas { 
         image-rendering: pixelated; 
         border: 2px solid #d4af35; 
-        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        box-shadow: 0 0 50px rgba(0,0,0,0.9);
         border-radius: 12px;
     }
 </style>
@@ -79,7 +75,7 @@
 <body class="font-display h-screen w-screen relative">
 
 <div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-6">
-    <div class="retro-grid-container"><div class="retro-grid"></div></div>
+    <div class="custom-bg"><div class="bg-overlay"></div></div>
 
     <div class="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-4">
         
@@ -97,7 +93,7 @@
                 <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
                 <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-105 transition duration-300">
             </div>
-            <div class="bg-black/60 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
+            <div class="bg-black/80 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
                 <span class="text-primary font-black tracking-widest text-lg">S4LEEH</span>
             </div>
         </div>
@@ -108,7 +104,7 @@
                     <span class="material-icons text-primary text-sm">assignment</span>
                     <span class="text-xs font-bold text-gray-200">مهام اليوم</span>
                 </div>
-                <span id="date-display" class="text-[10px] text-gray-500 font-mono"></span>
+                <span id="date-display" class="text-[10px] text-gray-400 font-mono"></span>
             </div>
             <div id="daily-quests-container" class="overflow-y-auto pr-1 space-y-2 flex-1">
                 </div>
@@ -123,7 +119,7 @@
             <span class="text-black/70 text-[10px] md:text-xs font-bold tracking-widest mt-1 z-10">اضغط للانطلاق 🚀</span>
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite]"></div>
         </button>
-        <a href="index.html" class="mt-6 text-gray-500 hover:text-primary transition font-bold text-xs">العودة للصفحة الرئيسية</a>
+        <a href="index.html" class="mt-6 text-gray-400 hover:text-white transition font-bold text-xs bg-black/50 px-4 py-1 rounded-full">العودة للصفحة الرئيسية</a>
     </div>
 </div>
 
