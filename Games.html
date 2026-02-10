@@ -1,135 +1,242 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html class="dark" lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S4leeh | مغامرة صالح </title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>S4leeh | مغامرة صالح</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: { "primary": "#d4af35", "bg-dark": "#0a0a0a", "night": "#1a1a2e" },
+                fontFamily: { "display": ["Cairo", "sans-serif"] },
+                boxShadow: { 
+                    "neon": "0 0 20px rgba(212, 175, 53, 0.4)",
+                    "card": "0 8px 30px rgba(0,0,0,0.5)"
+                }
+            }
+        }
+    }
+</script>
 <style>
-    :root { --gold: #d4af37; --bg-dark: #0a0a0a; --night-sky: #1a1a2e; }
-    html, body { 
-        margin: 0; padding: 0; background: var(--bg-dark); 
-        font-family: 'Cairo', sans-serif; touch-action: none; 
-        overflow: hidden; color: white; height: 100%; width: 100%;
+    body { background-color: #050505; color: white; overflow: hidden; touch-action: none; user-select: none; }
+    
+    .custom-bg {
+        position: fixed; inset: 0; z-index: 0;
+        background-image: url('wmremove-transformed.png'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
-    .brand-header {
-        text-align: center;
-        padding: 10px 0;
-        background: rgba(10, 10, 20, 0.9);
-        border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+    
+    .bg-overlay {
+        position: absolute; inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1;
     }
-    .logo { width: 60px; height: auto; margin-bottom: 5px; }
-    .game-title { font-size: 22px; font-weight: 900; color: var(--gold); margin: 0; }
-    #game-wrap { 
-        position: relative; 
-        width: 100%; 
-        max-width: 1000px;
-        margin: 10px auto;
-        display: flex;
-        justify-content: center;
+
+    .glass-card {
+        background: rgba(10, 10, 10, 0.85);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(212, 175, 53, 0.3);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        transition: transform 0.3s ease;
     }
+    .glass-card:hover { border-color: #d4af35; transform: translateY(-2px); }
+
+    .btn-3d {
+        transition: all 0.1s;
+        box-shadow: 0px 8px 0px 0px #8f7216, 0px 20px 20px rgba(0,0,0,0.5);
+        transform: translateY(0);
+    }
+    .btn-3d:active { transform: translateY(8px); box-shadow: 0px 0px 0px 0px #8f7216; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #d4af35; border-radius: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+
     canvas { 
-        display: block; 
-        background: var(--night-sky); 
-        border: 4px solid var(--gold); 
-        border-radius: 15px; 
-        width: 95vw; 
-        height: auto; 
-        max-height: 65vh;
-        box-shadow: 0 0 40px rgba(0,0,0,0.9); 
-        image-rendering: pixelated;
-    }
-    .ui { 
-        position: absolute; 
-        color: #fff; 
-        background: rgba(0,0,0,0.85); 
-        padding: 5px 12px; 
-        border-radius: 8px; 
-        border: 1px solid var(--gold); 
-        font-weight: bold; 
-        z-index: 10; 
-        font-size: 14px;
-        backdrop-filter: blur(4px);
-    }
-    #score { top: 10px; right: 10px; }
-    #top3 { top: 10px; left: 10px; direction: ltr; font-size: 11px; }
-    #msg { 
-        position: absolute; 
-        inset: 0; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        background: rgba(0,0,0,0.9); 
-        z-index: 100; 
-        color: var(--gold); 
-        text-align: center; 
-        border-radius: 15px; 
-        flex-direction: column; 
-        padding: 20px;
-        width: 90%;
-        margin: auto;
-    }
-    #msg-text { font-size: 22px; margin-bottom: 5px; font-weight: 900; }
-    #death-reason { font-size: 16px; color: #ff4d4d; margin-bottom: 15px; font-weight: 700; background: rgba(255,0,0,0.1); padding: 5px 15px; border-radius: 20px; }
-    button { 
-        padding: 12px 35px; 
-        font-size: 18px; 
-        background: var(--gold); 
-        border: none; 
-        border-radius: 8px; 
-        cursor: pointer; 
-        font-weight: 900; 
-        color: #000; 
-        transition: 0.3s;
-        z-index: 101;
-    }
-    button:active { transform: scale(0.95); }
-    .nav-back {
-        display: block;
-        text-align: center;
-        margin-top: 5px;
-        color: #888;
-        text-decoration: none;
-        font-size: 13px;
-    }
-    @media (max-width: 600px) {
-        .game-title { font-size: 18px; }
-        #msg-text { font-size: 18px; }
+        image-rendering: pixelated; 
+        border: 2px solid #d4af35; 
+        box-shadow: 0 0 50px rgba(0,0,0,0.9);
+        border-radius: 12px;
     }
 </style>
 </head>
-<body>
+<body class="font-display h-screen w-screen relative">
 
-<header class="brand-header">
-    <img src="logo.png" alt="S4leeh Logo" class="logo">
-    <h1 class="game-title">مغامرة صالح</h1>
-</header>
+<div id="main-menu" class="relative z-10 w-full h-full flex flex-col justify-between p-6">
+    <div class="custom-bg"><div class="bg-overlay"></div></div>
 
-<div id="game-wrap">
-    <div id="score" class="ui">النقاط: 0</div>
-    <div id="top3" class="ui">#1: 0 | #2: 0 | #3: 0</div>
-    <canvas id="game" width="850" height="420"></canvas>
-    <div id="msg">
-        <h2 id="msg-text">جاري تجهيز عالم صالح...</h2>
-        <p id="death-reason"></p>
-        <button id="start-btn" style="display:none;" onclick="startGame(event)">ابدأ المغامرة 🌙</button>
+    <div class="relative z-20 w-full flex justify-end items-start px-4 pt-4">
+        
+        <div class="absolute left-1/2 top-6 -translate-x-1/2 flex flex-col items-center z-10">
+            <div class="relative w-28 h-28 mb-2">
+                <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
+                <img src="logo.png" class="relative w-full h-full object-contain drop-shadow-lg transform hover:scale-105 transition duration-300">
+            </div>
+            <div class="bg-black/80 border border-primary/40 px-6 py-1 rounded-full backdrop-blur-md">
+                <span class="text-primary font-black tracking-widest text-lg font-display">مغامرة صالح</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4 w-full md:w-72 relative z-20 mt-36 md:mt-0">
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
+                    <span class="material-icons text-primary text-sm">emoji_events</span>
+                    <span class="text-xs font-bold text-gray-200">أفضل المحاولات</span>
+                </div>
+                <div id="top3-menu" class="space-y-2 text-sm font-bold" style="direction: ltr;"></div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 h-56 flex flex-col">
+                <div class="flex items-center justify-between mb-2 border-b border-white/10 pb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="material-icons text-primary text-sm">assignment</span>
+                        <span class="text-xs font-bold text-gray-200">مهام اليوم</span>
+                    </div>
+                    <span id="date-display" class="text-[10px] text-gray-400 font-mono"></span>
+                </div>
+                <div id="daily-quests-container" class="overflow-y-auto pr-1 space-y-2 flex-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-grow"></div>
+
+    <div class="relative z-20 w-full flex flex-col items-center pb-8 md:pb-12">
+        <button onclick="switchToGame()" class="btn-3d group relative w-full max-w-sm md:max-w-md h-20 md:h-24 bg-primary hover:bg-[#eac448] rounded-2xl border-2 border-[#fceda8] flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer">
+            <span class="text-black font-black text-3xl md:text-4xl drop-shadow-sm z-10">ابدأ المغامرة</span>
+            <span class="text-black/70 text-[10px] md:text-xs font-bold tracking-widest mt-1 z-10">اضغط للانطلاق 🚀</span>
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite]"></div>
+        </button>
+        <a href="index.html" class="mt-6 text-gray-400 hover:text-white transition font-bold text-xs bg-black/50 px-4 py-1 rounded-full">العودة للصفحة الرئيسية</a>
     </div>
 </div>
 
-<a href="index.html" class="nav-back">العودة للرئيسية</a>
+<div id="game-interface" class="hidden fixed inset-0 z-50 bg-[#0a0a0a] flex-col items-center justify-center">
+    <div class="absolute top-0 w-full max-w-5xl p-4 flex justify-between items-center z-50">
+        <div class="bg-black/70 border border-primary/50 px-5 py-2 rounded-xl backdrop-blur-md">
+            <span class="text-gray-400 text-xs font-bold block">النقاط</span>
+            <span id="game-score" class="text-2xl font-black text-primary font-mono">0</span>
+        </div>
+        <button onclick="exitGame()" class="bg-red-500/10 hover:bg-red-600 border border-red-500/50 text-red-500 hover:text-white w-10 h-10 rounded-lg flex items-center justify-center transition duration-200">
+            <span class="material-icons text-xl">close</span>
+        </button>
+    </div>
+
+    <canvas id="gameCanvas" width="850" height="420" class="max-w-[95vw] max-h-[60vh]"></canvas>
+
+    <div id="msg-overlay" class="hidden absolute inset-0 bg-black/95 z-[60] flex-col items-center justify-center text-center p-6 backdrop-blur-sm">
+        <h2 class="text-4xl md:text-5xl font-black text-primary mb-2 drop-shadow-neon">انتهت اللعبة!</h2>
+        <div class="text-xl text-white font-bold mb-6">نقاطك: <span id="final-score" class="text-primary font-mono">0</span></div>
+        <div id="death-reason" class="bg-red-900/40 border border-red-500/30 text-red-300 px-6 py-2 rounded-full mb-10 font-bold text-sm md:text-lg"></div>
+        <div class="flex flex-col md:flex-row gap-4 w-full max-w-sm">
+            <button onclick="resetGame()" class="btn-3d flex-1 bg-primary text-black font-black py-3 rounded-xl text-lg hover:brightness-110">مرة أخرى</button>
+            <button onclick="exitGame()" class="flex-1 bg-gray-800 border-2 border-gray-600 text-gray-300 font-bold py-3 rounded-xl hover:bg-gray-700 transition">خروج</button>
+        </div>
+    </div>
+</div>
 
 <script>
-const canvas = document.getElementById("game");
+    tailwind.config.theme.extend.keyframes = {
+        shine: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } }
+    }
+</script>
+
+<script>
+/* ================== نظام التخزين والإحصائيات ================== */
+const highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0, 0, 0];
+let dailyStats = JSON.parse(localStorage.getItem("s4leehDailyStats")) || {
+    date: new Date().toDateString(),
+    jumps: 0, gamesPlayed: 0, maxScore: 0,
+    creepersAvoided: 0, zombiesAvoided: 0, skinsAvoided: 0
+};
+
+if (dailyStats.date !== new Date().toDateString()) {
+    dailyStats = {
+        date: new Date().toDateString(),
+        jumps: 0, gamesPlayed: 0, maxScore: 0,
+        creepersAvoided: 0, zombiesAvoided: 0, skinsAvoided: 0
+    };
+    localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
+}
+
+const QUEST_DB = [
+    { id: 0, text: "اقفز 30 مرة", target: 30, key: "jumps", type: "cumulative" },
+    { id: 1, text: "وصل سكور 500", target: 500, key: "maxScore", type: "single" },
+    { id: 2, text: "تجاوز 3 كريبـر", target: 3, key: "creepersAvoided", type: "cumulative" },
+    { id: 3, text: "العب 5 محاولات", target: 5, key: "gamesPlayed", type: "cumulative" },
+    { id: 4, text: "تجاوز 3 زومبي", target: 3, key: "zombiesAvoided", type: "cumulative" },
+    { id: 5, text: "تجاوز 3 من الشباب", target: 3, key: "skinsAvoided", type: "cumulative" },
+    { id: 6, text: "اقفز 100 مرة", target: 100, key: "jumps", type: "cumulative" },
+    { id: 7, text: "وصل سكور 1000", target: 1000, key: "maxScore", type: "single" }
+];
+
+function updateMenuHighScores() {
+    const container = document.getElementById('top3-menu');
+    container.innerHTML = `
+        <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/5">
+            <div class="flex items-center gap-2"><span class="material-icons text-yellow-400 text-xs">emoji_events</span> <span class="text-yellow-400 font-black">#1</span></div>
+            <span class="font-mono text-white text-lg">${highScores[0]}</span>
+        </div>
+        <div class="flex justify-between items-center px-2 py-1">
+            <span class="text-gray-400 font-bold text-xs">#2</span> <span class="font-mono text-gray-300">${highScores[1]}</span>
+        </div>
+        <div class="flex justify-between items-center px-2 py-1">
+            <span class="text-orange-700 font-bold text-xs">#3</span> <span class="font-mono text-gray-400">${highScores[2]}</span>
+        </div>
+    `;
+}
+updateMenuHighScores();
+
+function generateAndRenderQuests() {
+    const date = new Date();
+    document.getElementById('date-display').innerText = date.toLocaleDateString('en-GB');
+    const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+    
+    let dailyIndices = [];
+    let tempSeed = seed;
+    while(dailyIndices.length < 4) {
+        let val = Math.floor((tempSeed * 9301 + 49297) % 233280) % QUEST_DB.length;
+        if(!dailyIndices.includes(val)) dailyIndices.push(val);
+        tempSeed++;
+    }
+
+    const container = document.getElementById('daily-quests-container');
+    container.innerHTML = dailyIndices.map(i => {
+        const quest = QUEST_DB[i];
+        const currentVal = dailyStats[quest.key] || 0;
+        const isDone = currentVal >= quest.target;
+        
+        return `
+        <div class="flex justify-between items-center p-2 rounded-lg border transition group ${isDone ? 'bg-green-900/20 border-green-500/30' : 'bg-white/5 border-white/5'}">
+            <div class="flex flex-col">
+                <span class="text-[10px] md:text-xs ${isDone ? 'text-green-400 font-bold' : 'text-gray-300'}">${quest.text}</span>
+                <span class="text-[9px] text-gray-500">${Math.min(currentVal, quest.target)} / ${quest.target}</span>
+            </div>
+            ${isDone 
+                ? '<span class="material-icons text-green-500 text-sm">check_circle</span>' 
+                : '<div class="w-2 h-2 rounded-full border border-gray-600"></div>'}
+        </div>
+    `}).join('');
+}
+generateAndRenderQuests();
+
+/* ================== منطق اللعبة ================== */
+const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d", { alpha: false });
 ctx.imageSmoothingEnabled = false;
 
 const GROUND = 340;
-let state = "LOADING", score = 0, baseSpeed = 5.5, speed = baseSpeed, frame = 0, nextSpawnFrame = 100;
-let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
-
+let gameState = "MENU"; 
+let score = 0, speed = 5.5, frame = 0, nextSpawnFrame = 100;
 const player = { x:80, y:GROUND-100, w:75, h:100, vy:0, jump:false };
 let obstacles = [];
-const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_","Raheeb_","KMA77","Z4_clown_king","Nina__a","iDexter89","Quack__27"];
 
 const assets = {};
 const toLoad = [
@@ -141,76 +248,75 @@ const toLoad = [
     { n: "Stone", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1d/Stone.png" },
     { n: "Cobblestone", u: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Cobblestone.png" }
 ];
+const skins = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_"];
 
-let loaded = 0;
+let loadedCount = 0;
 toLoad.forEach(item => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = item.u;
-    img.onload = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
-    img.onerror = () => { loaded++; if(loaded >= toLoad.length) showStartButton(); };
+    img.onload = () => loadedCount++;
     assets[item.n] = img;
 });
 
-function showStartButton() {
-    document.getElementById("msg-text").innerText = "جاهز للمغامرة الليلية؟";
-    document.getElementById("death-reason").innerText = "";
-    document.getElementById("start-btn").style.display = "block";
+function switchToGame() {
+    if(loadedCount < toLoad.length) return alert("جاري تحميل الموارد، يرجى الانتظار...");
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('game-interface').style.display = 'flex';
+    resetGame();
 }
 
-function startGame(e) {
-    if (e) e.stopPropagation();
-    score = 0; speed = baseSpeed; frame = 0; obstacles = [];
+function exitGame() {
+    gameState = "MENU";
+    document.getElementById('game-interface').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'flex';
+    generateAndRenderQuests();
+    updateMenuHighScores();
+}
+
+function resetGame() {
+    score = 0; speed = 5.5; frame = 0; obstacles = [];
     player.y = GROUND - player.h; player.vy = 0; player.jump = false;
-    nextSpawnFrame = 80; 
-    document.getElementById("msg").style.display = "none";
-    document.getElementById("death-reason").innerText = "";
-    state = "PLAY";
+    nextSpawnFrame = 80;
+    document.getElementById('msg-overlay').classList.add('hidden');
+    document.getElementById('msg-overlay').classList.remove('flex');
+    gameState = "PLAY";
+    dailyStats.gamesPlayed++;
+    localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
     requestAnimationFrame(loop);
 }
 
 function doJump() {
-    if(!player.jump && state === "PLAY") {
-        player.vy = -18.5;
-        player.jump = true;
+    if(!player.jump && gameState === "PLAY") {
+        player.vy = -18.5; player.jump = true;
+        dailyStats.jumps++;
+        localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
     }
 }
 
-// التحكم: تم التعديل لمنع إعادة التشغيل بزر السبيس
-document.addEventListener("keydown", e => { 
-    if(e.code === "Space") {
-        if(state === "PLAY") {
-            doJump();
-        }
-        // تم حذف إمكانية بدء اللعبة أو إعادتها بزر السبيس هنا لضمان عدم الضغط بالخطأ
-    }
-});
-
+document.addEventListener("keydown", e => { if(e.code === "Space" && gameState === "PLAY") doJump(); });
 window.addEventListener("touchstart", e => { 
-    if (state === "PLAY" && e.target.tagName !== 'BUTTON') {
-        e.preventDefault(); doJump();
-    }
+    if (gameState === "PLAY" && e.target.tagName !== 'BUTTON') { e.preventDefault(); doJump(); }
 }, {passive: false});
 
 function spawn() {
     const rand = Math.random();
-    let o = { x: canvas.width + 120, passed: false, name: "" };
+    let o = { x: canvas.width + 120, passed: false, name: "", type: "" };
 
     if(rand < 0.35) { 
         const m = Math.random() > 0.5 ? "Creeper" : "Zombie";
-        Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105, name: m });
+        Object.assign(o, { img: assets[m], w: 75, h: 105, y: GROUND-105, name: m, type: "mob" });
     } else if(rand < 0.70) { 
         const blocks = ["Dirt", "Lava", "Stone", "Cobblestone"];
         const b = blocks[Math.floor(Math.random() * blocks.length)];
-        Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60, name: b });
+        Object.assign(o, { img: assets[b], w: 60, h: 60, y: GROUND-60, name: b, type: "block" });
     } else { 
         const s = skins[Math.floor(Math.random()*skins.length)];
         const skinImg = new Image();
         skinImg.crossOrigin = "anonymous";
         skinImg.src = `https://minotar.net/armor/body/${s}/100.png`;
-        Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105, name: s });
+        Object.assign(o, { img: skinImg, w: 75, h: 105, y: GROUND-105, name: s, type: "skin" });
     }
-    
     obstacles.push(o);
     const minSafeGap = 55; 
     const randomExtraGap = Math.floor(Math.random() * 85); 
@@ -218,33 +324,22 @@ function spawn() {
 }
 
 function loop() {
-    if(state !== "PLAY") return;
+    if(gameState !== "PLAY") return;
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // --- رسم الليل ---
-    ctx.fillStyle = "#0f0f1b"; 
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+    ctx.fillStyle = "#1a1a2e"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
-    if (frame % 2 === 0) { 
-        ctx.fillRect(100, 50, 2, 2); ctx.fillRect(300, 80, 2, 2);
-        ctx.fillRect(500, 40, 2, 2); ctx.fillRect(700, 90, 2, 2);
-    }
-    
-    ctx.fillStyle = "#f5f5f5";
-    ctx.beginPath();
-    ctx.arc(750, 60, 25, 0, Math.PI * 2);
-    ctx.fill();
+    if (frame % 2 === 0) { ctx.fillRect(100, 50, 2, 2); ctx.fillRect(500, 40, 2, 2); }
+    ctx.fillStyle = "#f5f5f5"; ctx.beginPath(); ctx.arc(750, 60, 25, 0, Math.PI * 2); ctx.fill();
 
     ctx.fillStyle = "#2d1d0f"; ctx.fillRect(0, GROUND, canvas.width, canvas.height-GROUND);
     ctx.fillStyle = "#2a4d1a"; ctx.fillRect(0, GROUND, canvas.width, 12);
 
-    player.vy += 0.85; 
-    player.y += player.vy;
+    player.vy += 0.85; player.y += player.vy;
     if(player.y >= GROUND-player.h) { player.y = GROUND-player.h; player.vy = 0; player.jump = false; }
     
-    ctx.shadowBlur = 10; ctx.shadowColor = "rgba(212, 175, 55, 0.3)";
+    ctx.shadowBlur = 15; ctx.shadowColor = "rgba(212, 175, 55, 0.4)";
     if(assets["Saleh"]) ctx.drawImage(assets["Saleh"], player.x, player.y, player.w, player.h);
     ctx.shadowBlur = 0;
 
@@ -253,12 +348,15 @@ function loop() {
     for(let i = obstacles.length - 1; i >= 0; i--) {
         let o = obstacles[i];
         o.x -= speed;
-        if(o.img && (o.img.complete || o.img.naturalWidth > 0)) {
-            ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
-        }
+        if(o.img) ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
 
         if(!o.passed && o.x + o.w < player.x) { 
-            score += 14; o.passed = true; speed += 0.05; 
+            score += 14; o.passed = true; speed += 0.05;
+            if(o.name === "Creeper") dailyStats.creepersAvoided++;
+            if(o.name === "Zombie") dailyStats.zombiesAvoided++;
+            if(o.type === "skin") dailyStats.skinsAvoided++;
+            if(score > dailyStats.maxScore) dailyStats.maxScore = score;
+            localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
         }
         
         if(player.x+25 < o.x+o.w-25 && player.x+player.w-25 > o.x+25 && 
@@ -268,23 +366,24 @@ function loop() {
         }
         if(o.x < -150) obstacles.splice(i, 1);
     }
-
-    document.getElementById("score").innerText = "النقاط: " + score;
-    document.getElementById("top3").innerText = `#1: ${highScores[0]} | #2: ${highScores[1]} | #3: ${highScores[2]}`;
+    document.getElementById("game-score").innerText = score;
     requestAnimationFrame(loop);
 }
 
 function gameOver(killerName) {
-    state = "OVER";
-    document.getElementById("msg").style.display = "flex";
-    document.getElementById("msg-text").innerHTML = "💀 إنتهت المغامرة!<br>نقاطك: " + score;
-    document.getElementById("death-reason").innerText = "السبب: " + killerName;
-    document.getElementById("start-btn").innerText = "إعادة المحاولة";
+    gameState = "OVER";
+    const overlay = document.getElementById("msg-overlay");
+    overlay.classList.remove('hidden');
+    overlay.classList.add('flex');
+    document.getElementById("final-score").innerText = score;
+    document.getElementById("death-reason").innerText = "سبب السقوط: " + killerName;
     highScores.push(score); highScores.sort((a,b)=>b-a); highScores = highScores.slice(0,3);
     localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
+    if(score > dailyStats.maxScore) {
+        dailyStats.maxScore = score;
+        localStorage.setItem("s4leehDailyStats", JSON.stringify(dailyStats));
+    }
 }
-
-window.onload = () => { if(loaded >= toLoad.length) showStartButton(); };
 </script>
 </body>
 </html>
