@@ -317,12 +317,9 @@
             <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">صالح: ⭐⭐⭐⭐⭐</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
             <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div><div class="game-note">الشات: ⭐⭐⭐✫✫</div></div></div>
             <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
-            <div id="hidden-games-area" class="hidden-games-container">
-                <div class="games-grid">
-                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫ </div></div></div>
-                    <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐✫✫ </div></div></div>
-                </div>
-            </div>
+            
+            <div class="game-card hidden-game" style="display: none;"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫ </div></div></div>
+            <div class="game-card hidden-game" style="display: none;"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐✫✫ </div></div></div>
         </div>
         <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد من الألعاب</button>
     </div>
@@ -496,11 +493,25 @@
             document.getElementById(epId).classList.add('active'); node.classList.add('active');
             refreshCursorEvents();
         }
+        
+        // تم تعديل دالة تبديل الألعاب لتخفي وتظهر البطاقات مباشرة في الشبكة
         function toggleGames() {
-            const area = document.getElementById('hidden-games-area');
+            const hiddenGames = document.querySelectorAll('.hidden-game');
             const btn = document.getElementById('show-more-btn');
-            if (area.style.display === "block") { area.style.display = "none"; btn.innerText = "عرض المزيد من الألعاب"; }
-            else { area.style.display = "block"; btn.innerText = "إخفاء الألعاب"; }
+            
+            // التحقق من حالة أول عنصر مخفي
+            const isHidden = hiddenGames[0].style.display === "none";
+
+            hiddenGames.forEach(game => {
+                // نعيد العرض إلى flex لأن البطاقات مصممة كـ flex في الـ CSS
+                game.style.display = isHidden ? "flex" : "none";
+            });
+
+            if (isHidden) { 
+                btn.innerText = "إخفاء الألعاب"; 
+            } else { 
+                btn.innerText = "عرض المزيد من الألعاب"; 
+            }
             refreshCursorEvents();
         }
 
