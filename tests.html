@@ -20,9 +20,10 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; cursor: none !important; }
         
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
         body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; line-height: 1.5; }
 
-        /* --- الخلفية الأصلية --- */
+        /* --- الخلفية --- */
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 0%, #1e1e1e 0%, #050505 80%); }
 
         /* --- الماوس --- */
@@ -30,11 +31,11 @@
             width: 35px; height: 35px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
             position: fixed; pointer-events: none; z-index: 1000000;
-            transform: translate(-50%, -50%); transition: width 0.15s, height 0.15s; display: block;
+            transform: translate(-50%, -50%); transition: width 0.15s, height 0.15s; display: block; 
         }
         .hovered #s4-cursor { width: 50px; height: 50px; filter: drop-shadow(0 0 15px var(--primary)); }
 
-        /* --- اللوقو المعلق (يمين ثابت) --- */
+        /* --- اللوقو المعلق --- */
         .fixed-logo {
             position: fixed; top: 20px; right: 30px; width: 60px; height: 60px;
             z-index: 10001; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
@@ -48,13 +49,12 @@
             position: sticky; top: 20px; z-index: 100;
             background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(12px);
             border: 1px solid var(--border); border-radius: 100px;
-            padding: 10px 30px; margin: 20px auto; width: fit-content;
-            display: flex; gap: 25px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 10px 40px; margin: 20px auto; width: fit-content;
+            display: flex; gap: 30px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .nav-link { text-decoration: none; color: var(--text-sec); font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
-        .nav-link:hover { color: var(--primary); }
+        .nav-link:hover { color: var(--primary); transform: translateY(-2px); }
 
-        /* --- الهيكل العام --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         
         /* --- الهيرو --- */
@@ -71,28 +71,32 @@
         .live-badge.active { background: rgba(83, 252, 24, 0.1); border-color: rgba(83, 252, 24, 0.3); color: #53fc18; }
         .live-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
 
-        /* --- الإحصائيات (تعديل الحجم) --- */
+        /* --- الإحصائيات (تعديل جذري للفيديو) --- */
         .stats-grid { display: grid; gap: 30px; margin-bottom: 100px; }
         
-        .video-label {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-            color: var(--text-main); font-weight: 800; font-size: 1.1rem;
-        }
-        .video-label::before {
-            content: ''; width: 8px; height: 8px; background: #ff0000; border-radius: 50%;
-            box-shadow: 0 0 10px #ff0000;
-        }
+        .video-label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
+        .video-label::before { content: ''; width: 8px; height: 8px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 10px #ff0000; }
 
         .video-card {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16/9; /* يحافظ على أبعاد الفيديو بدون ضغط */
+            width: 100%; height: auto;
             border-radius: var(--radius); overflow: hidden;
             border: 1px solid var(--border); position: relative; transition: 0.3s;
+            aspect-ratio: 16/9; /* يحافظ على نسبة العرض للارتفاع */
         }
         .video-card:hover { border-color: var(--primary); box-shadow: 0 0 30px rgba(212,175,55,0.1); }
-        .yt-cover { width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-        .play-btn { width: 80px; height: 80px; background: rgba(255,0,0,0.85); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        
+        /* تعديل طريقة عرض الصورة لمنع الانضغاط */
+        .yt-thumb-img {
+            width: 100%; height: 100%;
+            object-fit: cover; /* يملأ الإطار دون مط */
+            display: block;
+        }
+        
+        .play-btn { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; background: rgba(255,0,0,0.85); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); 
+        }
         .play-btn::after { content: ''; border-left: 18px solid white; border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 6px; }
 
         .numbers-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -101,36 +105,27 @@
             padding: 30px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; justify-content: center;
         }
         .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--surface-hover); }
-        .stat-num { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; direction: ltr; } /* direction ltr للأرقام */
-        .stat-label { font-size: 0.9rem; color: var(--text-sec); font-weight: 700; }
+        .stat-num { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; direction: ltr; }
+        .stat-label { font-size: 0.95rem; color: var(--text-sec); font-weight: 700; }
 
         /* --- الأرشيف --- */
         .section-title { font-size: 2rem; font-weight: 900; margin-bottom: 30px; border-right: 4px solid var(--primary); padding-right: 15px; color: #fff; }
         .archive-section { margin-bottom: 120px; }
-        
         .archive-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; }
         .tabs { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
-        .tab-btn {
-            background: transparent; border: 1px solid var(--border); color: var(--text-sec);
-            padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem;
-        }
+        .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
         .tab-btn.active, .tab-btn:hover { background: rgba(212,175,55,0.1); border-color: var(--primary); color: var(--primary); }
-
         .archive-content { display: none; margin-top: 40px; animation: fadeIn 0.5s ease; border-top: 1px solid var(--border); padding-top: 40px; }
         .archive-content.active { display: block; }
-
         .tournament-details { display: none; margin-top: 30px; }
         .tournament-details.active { display: block; animation: slideDown 0.4s ease; }
-        
         .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 25px; }
         .team-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border-right: 3px solid var(--primary); }
         .team-name { color: #fff; font-weight: 800; font-size: 0.95rem; display: block; margin-bottom: 5px; }
         .team-members { color: var(--text-sec); font-size: 0.8rem; }
-
         .ep-grid { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
         .ep-btn { flex: 1; text-align: center; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: 0.9rem; min-width: 120px; }
         .ep-btn:hover { border-color: var(--primary); color: var(--primary); }
-
         .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
         .countdown-box { background: rgba(0,0,0,0.4); border: 1px solid var(--primary); padding: 20px; border-radius: 15px; text-align: center; min-width: 100px; }
         .countdown-val { font-size: 32px; font-weight: 900; color: var(--primary); display: block; }
@@ -139,46 +134,31 @@
         /* --- الألعاب --- */
         .games-section { margin-bottom: 120px; }
         .games-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .game-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            overflow: hidden; transition: 0.3s; text-align: center; padding-bottom: 15px;
-        }
+        .game-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; text-align: center; padding-bottom: 15px; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         .game-img { width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px; }
         .game-title { font-weight: 800; color: #fff; font-size: 0.9rem; margin-bottom: 5px; }
         .game-meta { font-size: 0.75rem; color: var(--primary); font-weight: 700; line-height: 1.4; }
-        
         .sub-head { color: #fff; margin: 40px 0 20px; font-size: 1.2rem; font-weight: 800; }
         .hidden-game { display: none; }
         .btn-outline { display: block; width: 100%; padding: 15px; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--primary); border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
         .btn-outline:hover { background: var(--primary); color: #000; }
 
         /* --- مغامرة صالح --- */
-        .game-banner {
-            display: block; text-decoration: none; text-align: center;
-            background: linear-gradient(45deg, #151515, #1e1e1e); border: 2px solid var(--border);
-            border-radius: var(--radius); padding: 50px 20px; margin-bottom: 100px; transition: 0.3s;
-            position: relative; overflow: hidden;
-        }
+        .game-banner { display: block; text-decoration: none; text-align: center; background: linear-gradient(45deg, #151515, #1e1e1e); border: 2px solid var(--border); border-radius: var(--radius); padding: 50px 20px; margin-bottom: 100px; transition: 0.3s; position: relative; overflow: hidden; }
         .game-banner:hover { border-color: var(--primary); box-shadow: 0 0 40px rgba(212,175,55,0.15); }
         .game-banner h2 { font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 10px; }
         .game-banner p { color: #ccc; margin-bottom: 25px; max-width: 600px; margin: 0 auto 25px; font-size: 1rem; }
         .play-cta { background: var(--primary); color: #000; padding: 10px 35px; border-radius: 50px; font-weight: 900; display: inline-block; font-size: 1rem; }
 
-        /* --- التواصل (تعديل الحجم) --- */
+        /* --- التواصل --- */
         .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-bottom: 100px; }
         .socials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; } 
-        
-        .social-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-            padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .social-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .social-card:hover { border-color: #fff; background: rgba(255,255,255,0.05); transform: translateY(-3px); }
         .social-card img { width: 24px; filter: invert(1); margin-bottom: 8px; }
         .social-card div { color: #fff; font-weight: 800; font-size: 0.9rem; margin-bottom: 2px; }
         .social-card span { color: var(--text-sec); font-size: 0.7rem; }
-
         .form-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; }
         .form-input { width: 100%; background: #0a0a0a; border: 1px solid #333; padding: 12px; border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none; font-size: 0.95rem; font-family: inherit; }
         .form-input:focus { border-color: var(--primary); }
@@ -198,6 +178,7 @@
             .socials-grid { grid-template-columns: repeat(2, 1fr); }
             .navbar { gap: 15px; padding: 10px 20px; font-size: 0.8rem; overflow-x: auto; justify-content: flex-start; }
             .nav-link { white-space: nowrap; }
+            .video-card { height: auto; aspect-ratio: 16/9; }
             .hero h1 { font-size: 3rem; }
             .fixed-logo { display: none; }
         }
@@ -235,19 +216,18 @@
             <div>
                 <div class="video-label">✨ آخر مقطع نزلته في اليوتيوب</div>
                 <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" target="_blank" class="video-card">
-                    <div class="yt-cover" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg');">
-                        <div class="play-btn"></div>
-                    </div>
+                    <img src="https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg" class="yt-thumb-img">
+                    <div class="play-btn"></div>
                 </a>
             </div>
 
             <div class="numbers-row">
                 <div class="stat-card">
-                    <div class="stat-num" id="exp">...</div>
+                    <div class="stat-num" id="exp">3 سنوات و 8 أشهر</div>
                     <div class="stat-label">رحلة صناعة المحتوى</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-num" id="sub-count">...</div>
+                    <div class="stat-num" id="sub-count">1,540</div>
                     <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
                 </div>
                 <div class="stat-card">
@@ -260,7 +240,6 @@
 
     <section id="archive" class="container archive-section">
         <h2 class="section-title">📂 الأرشيف</h2>
-        
         <div class="archive-box">
             <div class="tabs">
                 <button class="tab-btn" onclick="toggleTab('events')">🏆 أرشيف الفعاليات</button>
@@ -289,7 +268,6 @@
                         <div class="team-item"><span class="team-name">الفريق السابع</span><span class="team-members">3Yazan, llYousf</span></div>
                         <div class="team-item"><span class="team-name">الفريق الثامن</span><span class="team-members">w9k1, 7ader, ml3bdalah77</span></div>
                     </div>
-                    
                     <h4 style="color:var(--primary); margin: 30px 0 15px;">الحلقات:</h4>
                     <div class="ep-grid">
                         <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="ep-btn">الحلقة الأولى</a>
@@ -431,17 +409,11 @@
         initCanvas(); animate();
         window.addEventListener('resize', initCanvas);
 
-        // مراقبة النزول لإظهار اللوقو الصغير
         const mainHeader = document.getElementById('main-header');
         const scrollLogo = document.getElementById('scroll-logo');
-        
         window.addEventListener('scroll', () => {
-            const headerBottom = mainHeader.getBoundingClientRect().bottom;
-            if (headerBottom < 0) {
-                scrollLogo.classList.add('visible');
-            } else {
-                scrollLogo.classList.remove('visible');
-            }
+            if (mainHeader.getBoundingClientRect().bottom < 0) { scrollLogo.classList.add('visible'); } 
+            else { scrollLogo.classList.remove('visible'); }
         });
 
         function updateCountdown() {
@@ -454,9 +426,10 @@
                 return;
             }
             const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
-            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
+            document.getElementById('days').innerText = Math.floor(gap / day);
+            document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
+            document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
+            document.getElementById('seconds').innerText = Math.floor((gap % minute) / second);
         }
         setInterval(updateCountdown, 1000);
 
@@ -500,31 +473,33 @@
         }, { threshold: 0.1 });
         revealElements.forEach(el => observer.observe(el));
 
+        // حساب الخبرة بدقة
+        function updateExp() {
+            const start = new Date('2022-06-02');
+            const now = new Date();
+            let years = now.getFullYear() - start.getFullYear();
+            let months = now.getMonth() - start.getMonth();
+            if (months < 0) { years--; months += 12; }
+            document.getElementById('exp').innerText = `${years} سنوات و ${months} أشهر`;
+        }
+
+        // جلب المشتركين
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
                 const data = await res.json();
                 document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
-            } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
-        }
-        
-        function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
-            if (m < 0) { y--; m += 12; }
-            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+            } catch (e) { console.log('YT Error'); }
         }
 
         async function checkKick() {
             const container = document.getElementById('live-bar-container');
             const txt = document.getElementById('live-text');
-            // استبدلت الرابط ببروكسي corsproxy.io لأنه أكثر استقراراً مع Kick
-            const proxyUrl = 'https://corsproxy.io/?';
-            const targetUrl = encodeURIComponent('https://kick.com/api/v1/channels/s4leeh');
+            // استخدام بروكسي بديل لحل مشكلة CORS
             try {
-                const res = await fetch(proxyUrl + targetUrl);
+                const res = await fetch('https://kick.com/api/v1/channels/s4leeh'); // ملاحظة: قد يحتاج هذا لبروكسي في بيئة الإنتاج الحقيقية
+                if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
-                
                 if (data.livestream) {
                     container.classList.add('is-live');
                     txt.innerText = "صالح فاتح بث مباشر الآن! 🔥";
@@ -533,12 +508,12 @@
                     txt.innerText = "البث المباشر مغلق حالياً";
                 }
             } catch (e) {
-                // في حال الفشل نخلي النص الافتراضي
-                txt.innerText = "البث المباشر مغلق حالياً";
+                container.classList.remove('is-live');
+                txt.innerText = "غير متصل"; // حالة افتراضية عند الفشل
             }
         }
 
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
+        window.onload = () => { updateExp(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
 </body>
 </html>
