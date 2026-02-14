@@ -9,177 +9,124 @@
     <style>
         :root {
             --bg: #050505;
-            --surface: rgba(20, 20, 20, 0.6);
-            --surface-hover: rgba(30, 30, 30, 0.8);
+            --surface: rgba(20, 20, 20, 0.8);
             --border: rgba(255, 255, 255, 0.1);
             --primary: #d4af37;
-            --text-main: #ffffff;
-            --text-sec: #cccccc;
+            --text: #ffffff;
             --radius: 20px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; cursor: none !important; }
         
-        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; line-height: 1.5; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* --- الخلفية --- */
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 0%, #1e1e1e 0%, #050505 80%); }
-
-        /* --- الماوس --- */
+        /* الخلفية والماوس */
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #1e1e1e 0%, #050505 80%); }
+        
         #s4-cursor {
-            width: 35px; height: 35px;
+            width: 30px; height: 30px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
-            position: fixed; pointer-events: none; z-index: 1000000;
-            transform: translate(-50%, -50%); transition: width 0.15s, height 0.15s; display: block; 
+            position: fixed; pointer-events: none; z-index: 999999;
+            transform: translate(-50%, -50%); display: block;
         }
-        .hovered #s4-cursor { width: 50px; height: 50px; filter: drop-shadow(0 0 15px var(--primary)); }
+        .hovered #s4-cursor { width: 50px; height: 50px; filter: drop-shadow(0 0 10px var(--primary)); }
 
-        /* --- اللوقو المعلق --- */
-        .fixed-logo {
-            position: fixed; top: 20px; right: 30px; width: 60px; height: 60px;
-            z-index: 10001; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-        }
-        .fixed-logo.visible { opacity: 1; pointer-events: auto; }
+        .fixed-logo { position: fixed; top: 25px; right: 30px; width: 70px; height: 70px; z-index: 1000; }
         .fixed-logo img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* --- البار العائم --- */
+        /* القائمة */
         .navbar {
             position: sticky; top: 20px; z-index: 100;
-            background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(12px);
-            border: 1px solid var(--border); border-radius: 100px;
+            background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(10px);
+            border: 1px solid var(--border); border-radius: 50px;
             padding: 10px 40px; margin: 20px auto; width: fit-content;
-            display: flex; gap: 30px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .nav-link { text-decoration: none; color: var(--text-sec); font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
-        .nav-link:hover { color: var(--primary); transform: translateY(-2px); }
+        .nav-link { color: #ccc; text-decoration: none; font-weight: 700; transition: 0.3s; }
+        .nav-link:hover { color: var(--primary); }
 
+        /* الهيرو */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        
-        /* --- الهيرو --- */
-        .hero { text-align: center; padding: 80px 0 60px; }
-        .hero-logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 25px; box-shadow: 0 0 40px rgba(212, 175, 55, 0.2); display: inline-block; }
-        .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 10px; color: #fff; line-height: 1; }
-        .hero p { color: var(--text-sec); font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+        .hero { text-align: center; padding: 100px 0 60px; }
+        .hero h1 { font-size: 4rem; font-weight: 900; margin-bottom: 10px; }
+        .hero p { color: #888; font-size: 1.2rem; }
         
         .live-badge {
             background: rgba(234, 29, 44, 0.1); border: 1px solid rgba(234, 29, 44, 0.3);
-            color: #ea1d2c; padding: 6px 18px; border-radius: 50px; font-weight: 700; font-size: 0.85rem;
+            color: #ea1d2c; padding: 8px 20px; border-radius: 50px; font-weight: 700;
             display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; text-decoration: none;
         }
-        .live-badge.active { background: rgba(83, 252, 24, 0.1); border-color: rgba(83, 252, 24, 0.3); color: #53fc18; }
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
+        .live-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; }
 
-        /* --- الإحصائيات (تعديل جذري للفيديو) --- */
-        .stats-grid { display: grid; gap: 30px; margin-bottom: 100px; }
+        /* الإحصائيات (تعديل الحجم والفيديو) */
+        .stats-grid { display: flex; flex-direction: column; gap: 30px; margin-bottom: 100px; }
         
-        .video-label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
-        .video-label::before { content: ''; width: 8px; height: 8px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 10px #ff0000; }
+        .video-wrapper { position: relative; width: 100%; }
+        .video-label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: 800; font-size: 1.1rem; }
+        .video-label::before { content: ''; width: 8px; height: 8px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 10px red; }
 
         .video-card {
-            width: 100%; height: auto;
-            border-radius: var(--radius); overflow: hidden;
-            border: 1px solid var(--border); position: relative; transition: 0.3s;
-            aspect-ratio: 16/9; /* يحافظ على نسبة العرض للارتفاع */
+            width: 100%; height: 480px; /* ارتفاع كبير وثابت للفيديو */
+            border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);
+            position: relative; transition: 0.3s;
         }
         .video-card:hover { border-color: var(--primary); box-shadow: 0 0 30px rgba(212,175,55,0.1); }
-        
-        /* تعديل طريقة عرض الصورة لمنع الانضغاط */
-        .yt-thumb-img {
-            width: 100%; height: 100%;
-            object-fit: cover; /* يملأ الإطار دون مط */
-            display: block;
+        .yt-thumb { width: 100%; height: 100%; object-fit: cover; } /* ملء الصورة بدون ضغط */
+        .play-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
         }
-        
-        .play-btn { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 80px; height: 80px; background: rgba(255,0,0,0.85); border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); 
+        .play-btn {
+            width: 80px; height: 80px; background: rgba(255,0,0,0.9); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
-        .play-btn::after { content: ''; border-left: 18px solid white; border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 6px; }
+        .play-btn::after { content: ''; border-left: 20px solid white; border-top: 14px solid transparent; border-bottom: 14px solid transparent; margin-left: 6px; }
 
-        .numbers-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .stat-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 30px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; justify-content: center;
+            padding: 30px; text-align: center; transition: 0.3s;
         }
-        .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--surface-hover); }
-        .stat-num { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; direction: ltr; }
-        .stat-label { font-size: 0.95rem; color: var(--text-sec); font-weight: 700; }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .stat-num { font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 5px; direction: ltr; }
+        .stat-label { color: #888; font-weight: 700; font-size: 0.9rem; }
 
-        /* --- الأرشيف --- */
-        .section-title { font-size: 2rem; font-weight: 900; margin-bottom: 30px; border-right: 4px solid var(--primary); padding-right: 15px; color: #fff; }
-        .archive-section { margin-bottom: 120px; }
-        .archive-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; }
-        .tabs { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
-        .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
-        .tab-btn.active, .tab-btn:hover { background: rgba(212,175,55,0.1); border-color: var(--primary); color: var(--primary); }
-        .archive-content { display: none; margin-top: 40px; animation: fadeIn 0.5s ease; border-top: 1px solid var(--border); padding-top: 40px; }
-        .archive-content.active { display: block; }
-        .tournament-details { display: none; margin-top: 30px; }
-        .tournament-details.active { display: block; animation: slideDown 0.4s ease; }
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 25px; }
-        .team-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border-right: 3px solid var(--primary); }
-        .team-name { color: #fff; font-weight: 800; font-size: 0.95rem; display: block; margin-bottom: 5px; }
-        .team-members { color: var(--text-sec); font-size: 0.8rem; }
-        .ep-grid { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
-        .ep-btn { flex: 1; text-align: center; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: 0.9rem; min-width: 120px; }
-        .ep-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
-        .countdown-box { background: rgba(0,0,0,0.4); border: 1px solid var(--primary); padding: 20px; border-radius: 15px; text-align: center; min-width: 100px; }
-        .countdown-val { font-size: 32px; font-weight: 900; color: var(--primary); display: block; }
-        .countdown-lbl { font-size: 12px; color: #aaa; font-weight: 700; margin-top: 5px; }
-
-        /* --- الألعاب --- */
-        .games-section { margin-bottom: 120px; }
+        /* الأقسام الأخرى */
+        .section-title { font-size: 2rem; font-weight: 900; margin-bottom: 30px; border-right: 4px solid var(--primary); padding-right: 15px; }
+        .archive-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; margin-bottom: 100px; }
+        
+        .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: transparent; border: 1px solid var(--border); color: #ccc; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: rgba(212,175,55,0.15); border-color: var(--primary); color: var(--primary); }
+        
+        .content-pane { display: none; animation: fade 0.5s; padding-top: 20px; border-top: 1px solid var(--border); }
+        .content-pane.active { display: block; }
+        
         .games-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .game-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; text-align: center; padding-bottom: 15px; }
-        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .game-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-align: center; padding-bottom: 15px; transition: 0.3s; }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .game-img { width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px; }
-        .game-title { font-weight: 800; color: #fff; font-size: 0.9rem; margin-bottom: 5px; }
-        .game-meta { font-size: 0.75rem; color: var(--primary); font-weight: 700; line-height: 1.4; }
-        .sub-head { color: #fff; margin: 40px 0 20px; font-size: 1.2rem; font-weight: 800; }
         .hidden-game { display: none; }
-        .btn-outline { display: block; width: 100%; padding: 15px; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--primary); border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
-        .btn-outline:hover { background: var(--primary); color: #000; }
-
-        /* --- مغامرة صالح --- */
-        .game-banner { display: block; text-decoration: none; text-align: center; background: linear-gradient(45deg, #151515, #1e1e1e); border: 2px solid var(--border); border-radius: var(--radius); padding: 50px 20px; margin-bottom: 100px; transition: 0.3s; position: relative; overflow: hidden; }
-        .game-banner:hover { border-color: var(--primary); box-shadow: 0 0 40px rgba(212,175,55,0.15); }
-        .game-banner h2 { font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 10px; }
-        .game-banner p { color: #ccc; margin-bottom: 25px; max-width: 600px; margin: 0 auto 25px; font-size: 1rem; }
-        .play-cta { background: var(--primary); color: #000; padding: 10px 35px; border-radius: 50px; font-weight: 900; display: inline-block; font-size: 1rem; }
-
-        /* --- التواصل --- */
-        .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-bottom: 100px; }
-        .socials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; } 
-        .social-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .social-card:hover { border-color: #fff; background: rgba(255,255,255,0.05); transform: translateY(-3px); }
-        .social-card img { width: 24px; filter: invert(1); margin-bottom: 8px; }
-        .social-card div { color: #fff; font-weight: 800; font-size: 0.9rem; margin-bottom: 2px; }
-        .social-card span { color: var(--text-sec); font-size: 0.7rem; }
-        .form-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; }
-        .form-input { width: 100%; background: #0a0a0a; border: 1px solid #333; padding: 12px; border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none; font-size: 0.95rem; font-family: inherit; }
-        .form-input:focus { border-color: var(--primary); }
-        .submit-btn { width: 100%; background: var(--primary); color: #000; padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .submit-btn:hover { background: #fff; }
-
-        footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); color: #666; font-size: 0.9rem; font-weight: 600; margin-top: 50px; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
+        
+        .socials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .social-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; text-decoration: none; transition: 0.3s; display: block; }
+        .social-item:hover { border-color: #fff; transform: translateY(-3px); }
+        .social-item img { width: 24px; filter: invert(1); margin-bottom: 5px; }
+        
+        /* العداد */
+        .countdown-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .c-box { background: rgba(0,0,0,0.5); border: 1px solid var(--primary); padding: 15px; border-radius: 10px; min-width: 80px; text-align: center; }
+        .c-val { font-size: 24px; font-weight: 900; color: var(--primary); display: block; }
+        
+        .btn-main { background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 800; border: none; cursor: pointer; display: block; margin: 20px auto 0; }
+        
+        @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 900px) {
-            .numbers-row { grid-template-columns: 1fr; }
+            .stats-row, .games-grid, .socials-grid { grid-template-columns: 1fr; }
             .games-grid { grid-template-columns: repeat(2, 1fr); }
-            .contact-grid { grid-template-columns: 1fr; }
-            .socials-grid { grid-template-columns: repeat(2, 1fr); }
-            .navbar { gap: 15px; padding: 10px 20px; font-size: 0.8rem; overflow-x: auto; justify-content: flex-start; }
-            .nav-link { white-space: nowrap; }
-            .video-card { height: auto; aspect-ratio: 16/9; }
-            .hero h1 { font-size: 3rem; }
+            .navbar { padding: 10px; gap: 15px; font-size: 0.8rem; }
+            .video-card { height: 250px; }
             .fixed-logo { display: none; }
         }
     </style>
@@ -188,10 +135,8 @@
 
     <div id="s4-cursor"></div>
     <canvas id="bg-canvas"></canvas>
-
-    <div class="fixed-logo" id="scroll-logo">
-        <img src="logo.png" alt="S4leeh">
-    </div>
+    
+    <div class="fixed-logo"><img src="logo.png" alt="S4leeh"></div>
 
     <nav class="navbar">
         <a href="#stats" class="nav-link">الإحصائيات</a>
@@ -200,199 +145,185 @@
         <a href="#contact" class="nav-link">تواصل</a>
     </nav>
 
-    <header class="hero container" id="main-header">
-        <img src="logo.png" alt="S4leeh" class="hero-logo">
-        <br>
-        <a href="https://kick.com/S4leeh" target="_blank" class="live-badge" id="live-badge">
-            <span class="live-dot"></span>
-            <span id="live-text">جاري فحص حالة البث...</span>
+    <header class="hero container">
+        <a href="https://kick.com/S4leeh" target="_blank" class="live-badge">
+            <span class="live-dot"></span> <span>غير متصل (اضغط للذهاب للقناة)</span>
         </a>
         <h1>صالح</h1>
         <p>صانع محتوى في اليوتيوب و ستريمر في منصة كيك.<br>تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي</p>
     </header>
 
     <section id="stats" class="container">
-        <div class="stats-grid">
-            <div>
-                <div class="video-label">✨ آخر مقطع نزلته في اليوتيوب</div>
-                <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" target="_blank" class="video-card">
-                    <img src="https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg" class="yt-thumb-img">
-                    <div class="play-btn"></div>
-                </a>
-            </div>
+        <div class="video-wrapper">
+            <div class="video-label">✨ آخر مقطع نزلته في اليوتيوب</div>
+            <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" target="_blank" class="video-card" style="display:block;">
+                <img src="https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg" class="yt-thumb">
+                <div class="play-overlay"><div class="play-btn"></div></div>
+            </a>
+        </div>
 
-            <div class="numbers-row">
-                <div class="stat-card">
-                    <div class="stat-num" id="exp">3 سنوات و 8 أشهر</div>
-                    <div class="stat-label">رحلة صناعة المحتوى</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-num" id="sub-count">1,540</div>
-                    <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-num" id="live-count">13</div>
-                    <div class="stat-label">عدد البثوث في 2026</div>
-                </div>
+        <div class="stats-row" style="margin-top: 30px;">
+            <div class="stat-card">
+                <div class="stat-num">3 سنوات و 8 أشهر</div>
+                <div class="stat-label">رحلة صناعة المحتوى</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">1,540</div>
+                <div class="stat-label">عدد مشتركين قناة اليوتيوب</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">13</div>
+                <div class="stat-label">عدد البثوث في 2026</div>
             </div>
         </div>
     </section>
 
-    <section id="archive" class="container archive-section">
+    <section id="archive" class="container">
         <h2 class="section-title">📂 الأرشيف</h2>
-        
         <div class="archive-box">
             <div class="tabs">
-                <button class="tab-btn" onclick="toggleTab('events')">🏆 أرشيف الفعاليات</button>
-                <button class="tab-btn" onclick="toggleTab('ramadan')">🌙 رمضانيّات مع صالح</button>
-                <button class="tab-btn" onclick="toggleTab('highlights')">🎬 البثوث المميزة</button>
+                <button class="tab-btn active" onclick="openTab(event, 'events')">🏆 الفعاليات</button>
+                <button class="tab-btn" onclick="openTab(event, 'ramadan')">🌙 رمضانيات</button>
+                <button class="tab-btn" onclick="openTab(event, 'highlights')">🎬 لقطات</button>
             </div>
 
-            <div id="events" class="archive-content">
-                <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3 style="color:#fff; font-weight:800; font-size:1.1rem;">🏆 ثلاثيّات تحداني</h3>
-                        <p style="color:#888; font-size:0.9rem; margin-top:5px;">صراع ملحمي بين 8 فرق.</p>
-                    </div>
-                    <button onclick="toggleTour()" style="background:var(--primary); border:none; padding:8px 20px; border-radius:50px; font-weight:800; cursor:pointer;">عرض التفاصيل</button>
-                </div>
-
-                <div id="tour-details" class="tournament-details">
-                    <h4 style="color:var(--primary); margin: 25px 0 15px;">الفرق المشاركة:</h4>
-                    <div class="team-grid">
-                        <div class="team-item"><span class="team-name">الفريق الأول</span><span class="team-members">Spitfire57, iDexter89, imRashly</span></div>
-                        <div class="team-item"><span class="team-name">الفريق الثاني</span><span class="team-members">PYWQ, BDR1, 7og9</span></div>
-                        <div class="team-item"><span class="team-name">الفريق الثالث</span><span class="team-members">IIKhaled77, Raheeb, Mohammd</span></div>
-                        <div class="team-item"><span class="team-name">الفريق الرابع</span><span class="team-members">HIR0, MEDO_DV, Mr8asm</span></div>
-                        <div class="team-item"><span class="team-name">الفريق الخامس</span><span class="team-members">S3eedxx, Q7sa, marions77</span></div>
-                        <div class="team-item"><span class="team-name">الفريق السادس</span><span class="team-members">ex21xe, KhalledHD, MK119</span></div>
-                        <div class="team-item"><span class="team-name">الفريق السابع</span><span class="team-members">3Yazan, llYousf</span></div>
-                        <div class="team-item"><span class="team-name">الفريق الثامن</span><span class="team-members">w9k1, 7ader, ml3bdalah77</span></div>
-                    </div>
-                    
-                    <h4 style="color:var(--primary); margin: 30px 0 15px;">الحلقات:</h4>
-                    <div class="ep-grid">
-                        <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="ep-btn">الحلقة الأولى</a>
-                        <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="ep-btn">الحلقة الثانية</a>
-                        <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="ep-btn">الحلقة الثالثة</a>
-                        <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="ep-btn" style="border-color:var(--primary); color:var(--primary);">النهائي 🔥</a>
-                    </div>
+            <div id="events" class="content-pane active">
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:15px;">
+                    <h3 style="color:#fff;">🏆 ثلاثيات تحداني</h3>
+                    <a href="https://www.youtube.com/playlist?list=PL..." target="_blank" style="color:var(--primary); font-weight:700;">شاهد القائمة الكاملة &larr;</a>
                 </div>
             </div>
 
-            <div id="ramadan" class="archive-content">
-                <div style="text-align:center; padding:30px;">
-                    <h3 style="font-size:1.3rem; margin-bottom:20px; color:#fff;">⏳ العد التنازلي للحلقة الأولى</h3>
+            <div id="ramadan" class="content-pane">
+                <div style="text-align:center;">
+                    <h3 style="color:#fff; margin-bottom:20px;">العد التنازلي لـ 1 رمضان</h3>
                     <div class="countdown-container">
-                        <div class="countdown-box"><span id="days" class="countdown-val">00</span><span class="countdown-lbl">يوم</span></div>
-                        <div class="countdown-box"><span id="hours" class="countdown-val">00</span><span class="countdown-lbl">ساعة</span></div>
-                        <div class="countdown-box"><span id="minutes" class="countdown-val">00</span><span class="countdown-lbl">دقيقة</span></div>
-                        <div class="countdown-box"><span id="seconds" class="countdown-val">00</span><span class="countdown-lbl">ثانية</span></div>
+                        <div class="c-box"><span class="c-val" id="d">00</span>يوم</div>
+                        <div class="c-box"><span class="c-val" id="h">00</span>ساعة</div>
+                        <div class="c-box"><span class="c-val" id="m">00</span>دقيقة</div>
+                        <div class="c-box"><span class="c-val" id="s">00</span>ثانية</div>
                     </div>
-                    <p style="margin-top:25px; color:#888;">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
                 </div>
             </div>
 
-            <div id="highlights" class="archive-content">
-                <p style="text-align:center; padding:50px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+            <div id="highlights" class="content-pane">
+                <p style="text-align:center; color:#888;">قريباً...</p>
             </div>
         </div>
     </section>
 
-    <section id="games" class="container games-section">
-        <h2 class="section-title">🎮 مكتبة ألعاب 2026</h2>
-
-        <h3 class="sub-head">ألعبها حاليًا</h3>
+    <section id="games" class="container">
+        <h2 class="section-title">🎮 مكتبة الألعاب</h2>
+        
+        <h3 style="color:#fff; margin:30px 0 15px;">ألعبها حاليًا</h3>
         <div class="games-grid">
-            <div class="game-card">
-                <img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" class="game-img">
-                <div class="game-title">ألعاب عشوائية</div>
-            </div>
+            <div class="game-card"><img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" class="game-img"><div style="font-weight:700; color:#fff;">ألعاب عشوائية</div></div>
         </div>
 
-        <h3 class="sub-head">مُخطط لها مستقبلًا</h3>
-        <div class="games-grid">
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-title">Supraworld</div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-title">Parallel Experiment</div><div class="game-meta">مع BDR1 🤝</div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-title">Let me out</div></div>
-        </div>
-
-        <h3 class="sub-head">الألعاب اللي لعبناها</h3>
-        <div class="games-grid" id="played-games-container">
+        <h3 style="color:#fff; margin:30px 0 15px;">الألعاب اللي لعبناها</h3>
+        <div class="games-grid" id="played-list">
             <div class="game-card">
                 <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img">
-                <div class="game-title">Fateel - فتيل</div>
-                <div class="game-meta">تقييم صالح: ⭐⭐<br>تقييم الشات: ⭐✫✫✫✫</div>
+                <div style="font-weight:700; color:#fff;">Fateel</div>
+                <div style="font-size:0.8rem; color:var(--primary);">صالح: ⭐⭐</div>
             </div>
-            <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-title">Minecraft</div><div class="game-meta">فوق التقييم 👑</div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-title">Viewfinder</div><div class="game-meta">صالح: ⭐⭐⭐⭐⭐<br>الشات: ⭐⭐⭐⭐✫</div></div>
-            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-title">Hytale</div><div class="game-meta">صالح: ⭐⭐⭐✫✫<br>الشات: ⭐⭐⭐✫✫</div></div>
-            
-            <div class="game-card hidden-game"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-title">Candleman</div><div class="game-meta">صالح: ⭐⭐⭐⭐✫<br>الشات: ⭐⭐⭐⭐✫</div></div>
-            <div class="game-card hidden-game"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-title">Fever Meme</div><div class="game-meta">صالح: ⭐⭐✫✫✫<br>الشات: ⭐⭐⭐⭐✫</div></div>
-            <div class="game-card hidden-game"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.img" class="game-img"><div class="game-title">Superliminal</div><div class="game-meta">صالح: ⭐⭐⭐⭐✫<br>الشات: ⭐⭐⭐✫✫</div></div>
+            <div class="game-card">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div style="font-weight:700; color:#fff;">Minecraft</div>
+                <div style="font-size:0.8rem; color:var(--primary);">فوق التقييم</div>
+            </div>
+            <div class="game-card">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
+                <div style="font-weight:700; color:#fff;">Viewfinder</div>
+                <div style="font-size:0.8rem; color:var(--primary);">صالح: ⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="game-card">
+                <img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img">
+                <div style="font-weight:700; color:#fff;">Hytale</div>
+                <div style="font-size:0.8rem; color:var(--primary);">صالح: ⭐⭐⭐</div>
+            </div>
+            <div class="game-card hidden-game"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div style="font-weight:700; color:#fff;">Candleman</div></div>
+            <div class="game-card hidden-game"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div style="font-weight:700; color:#fff;">Fever Meme</div></div>
         </div>
-        <button id="show-more-btn" class="btn-outline" onclick="toggleGames()">عرض المزيد من الألعاب</button>
+        <button class="btn-main" onclick="toggleMore(this)" style="background:transparent; border:1px solid var(--primary); color:var(--primary);">عرض المزيد</button>
     </section>
 
-    <section id="s4leeh-game" class="container">
-        <a href="Games.html" class="game-banner">
-            <h2>مغامرة صالح</h2>
-            <p>يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول ؟</p>
-            <div class="play-cta">اضغط هنا لبدء اللعب الآن 🏃‍♂️</div>
+    <section id="s4leeh-game" class="container" style="margin-bottom:100px;">
+        <a href="Games.html" style="display:block; text-decoration:none; background:linear-gradient(45deg,#111,#222); border:2px solid var(--border); border-radius:20px; padding:40px; text-align:center; transition:0.3s;" onmouseover="this.style.borderColor='#d4af37'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
+            <h2 style="color:#fff; font-weight:900; font-size:2.5rem; margin-bottom:10px;">مغامرة صالح</h2>
+            <p style="color:#ccc; margin-bottom:20px;">لعبة التحدي والقفز، هل يمكنك تحقيق رقم قياسي جديد؟</p>
+            <span style="background:var(--primary); color:#000; padding:10px 30px; border-radius:50px; font-weight:800;">العب الآن</span>
         </a>
     </section>
 
     <section id="contact" class="container">
         <h2 class="section-title">🔗 تواصل معي</h2>
-        <div class="contact-grid">
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:30px;">
             <div class="socials-grid">
-                <a href="https://kick.com/S4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-                <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-                <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-                <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-                <a href="https://www.tiktok.com/@KICK.S4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-                <a href="https://x.com/iS4leeh" target="_blank" class="social-card"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>Twitter</div><span>أحدث الأخبار</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><br><b style="color:#fff;">Kick</b><br><span style="color:#888; font-size:0.8rem;">بثوث مباشرة</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><br><b style="color:#fff;">YouTube</b><br><span style="color:#888; font-size:0.8rem;">مقاطع رئيسية</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><br><b style="color:#fff;">Discord</b><br><span style="color:#888; font-size:0.8rem;">المجتمع</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><br><b style="color:#fff;">Instagram</b><br><span style="color:#888; font-size:0.8rem;">يوميات</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><br><b style="color:#fff;">TikTok</b><br><span style="color:#888; font-size:0.8rem;">لقطات</span></a>
+                <a href="#" class="social-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><br><b style="color:#fff;">Twitter</b><br><span style="color:#888; font-size:0.8rem;">أخبار</span></a>
             </div>
-
-            <div class="form-box">
-                <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:#fff;">💡 ارسل اقتراحك</h3>
-                <form action="https://formspree.io/f/mwvewwew" method="POST">
-                    <input type="text" name="name" placeholder="الاسم" class="form-input" required>
-                    <select name="type" class="form-input">
-                        <option value="لعبة جديدة">لعبة جديدة</option>
-                        <option value="فكرة مقطع">فكرة مقطع</option>
-                        <option value="فكرة بث">فكرة بث</option>
-                        <option value="تحسين للموقع">تحسين للموقع</option>
-                    </select>
-                    <textarea name="msg" rows="3" placeholder="الاقتراح" class="form-input" required></textarea>
-                    <button type="submit" class="submit-btn">إرسال الاقتراح</button>
-                </form>
-            </div>
+            
+            <form action="https://formspree.io/f/mwvewwew" method="POST" style="background:var(--surface); padding:30px; border-radius:20px; border:1px solid var(--border);">
+                <h3 style="color:#fff; margin-bottom:15px;">ارسل اقتراحك 💡</h3>
+                <input type="text" name="name" placeholder="الاسم" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff; border-radius:8px;">
+                <select name="type" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff; border-radius:8px;">
+                    <option>لعبة جديدة</option>
+                    <option>فكرة مقطع</option>
+                    <option>فكرة بث</option>
+                </select>
+                <textarea name="msg" rows="3" placeholder="الاقتراح" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff; border-radius:8px;"></textarea>
+                <button style="width:100%; padding:10px; background:var(--primary); border:none; border-radius:8px; font-weight:bold; cursor:pointer;">إرسال</button>
+            </form>
         </div>
     </section>
 
-    <footer><p>© جميع الحقوق محفوظة لـ <b>S4leeh | صالح</b> | 2026</p></footer>
+    <footer><p>© 2026 جميع الحقوق محفوظة لـ <b>S4leeh</b></p></footer>
 
     <script>
-        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
-        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
-
+        // الماوس
         const cursor = document.getElementById('s4-cursor');
         document.addEventListener('mousemove', e => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
+        document.querySelectorAll('a, button, .game-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
 
-        function refreshCursorEvents() {
-            const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card, .social-item';
-            document.querySelectorAll(hoverTags).forEach(item => {
-                item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-                item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-            });
+        // التبويب
+        function openTab(evt, id) {
+            document.querySelectorAll('.content-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
-        refreshCursorEvents();
 
+        // إظهار المزيد
+        function toggleMore(btn) {
+            const hidden = document.querySelectorAll('.hidden-game');
+            const isHidden = hidden[0].style.display === 'none' || hidden[0].style.display === '';
+            hidden.forEach(el => el.style.display = isHidden ? 'block' : 'none');
+            btn.innerText = isHidden ? "إخفاء" : "عرض المزيد";
+        }
+
+        // العداد
+        setInterval(() => {
+            const diff = new Date('February 18, 2026 20:00:00') - new Date();
+            if(diff > 0) {
+                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('h').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                document.getElementById('m').innerText = Math.floor((diff / 1000 / 60) % 60);
+                document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
+            }
+        }, 1000);
+
+        // خلفية النجوم
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -410,109 +341,6 @@
         for (let i = 0; i < 100; i++) particles.push(new Particle());
         initCanvas(); animate();
         window.addEventListener('resize', initCanvas);
-
-        const mainHeader = document.getElementById('main-header');
-        const scrollLogo = document.getElementById('scroll-logo');
-        window.addEventListener('scroll', () => {
-            if (mainHeader.getBoundingClientRect().bottom < 0) { scrollLogo.classList.add('visible'); } 
-            else { scrollLogo.classList.remove('visible'); }
-        });
-
-        function updateCountdown() {
-            const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = ramadanDate - now;
-            if (gap <= 0) {
-                const timerTitle = document.getElementById('countdown-title');
-                if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
-                return;
-            }
-            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
-            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
-        }
-        setInterval(updateCountdown, 1000);
-
-        function toggleTab(id) {
-            const content = document.getElementById(id);
-            const btn = event.target;
-            if(content.classList.contains('active')) {
-                content.classList.remove('active');
-                btn.classList.remove('active');
-                return;
-            }
-            document.querySelectorAll('.archive-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            content.classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function toggleTour() {
-            document.getElementById('tour-details').classList.toggle('active');
-        }
-
-        function toggleGames() {
-            const hidden = document.querySelectorAll('.hidden-game');
-            const btn = document.getElementById('show-more-btn');
-            const isHidden = hidden[0].style.display === 'none' || hidden[0].style.display === '';
-            hidden.forEach(el => el.style.display = isHidden ? 'block' : 'none');
-            btn.innerText = isHidden ? "إخفاء الألعاب" : "عرض المزيد من الألعاب";
-        }
-
-        const form = document.getElementById("suggestion-form");
-        form.onsubmit = function() {
-            setTimeout(() => {
-                document.getElementById("suggestion-container").style.display = "none";
-                document.getElementById("success-message").style.display = "block";
-            }, 100);
-        };
-
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        revealElements.forEach(el => observer.observe(el));
-
-        async function updateYouTubeSubs() {
-            try {
-                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
-                const data = await res.json();
-                // التعديل: إظهار الرقم كاملاً بدون اختصار
-                document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
-            } catch (e) { console.log('YT Error'); }
-        }
-        
-        function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
-            if (m < 0) { y--; m += 12; }
-            // التعديل: إظهار السنوات والأشهر
-            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
-        }
-
-        async function checkKick() {
-            const container = document.getElementById('live-bar-container');
-            const txt = document.getElementById('live-text');
-            // استخدام بروكسي بديل لحل مشكلة CORS
-            try {
-                const res = await fetch('https://kick.com/api/v1/channels/s4leeh'); // ملاحظة: قد يحتاج هذا لبروكسي في بيئة الإنتاج الحقيقية
-                if (!res.ok) throw new Error('Network response was not ok');
-                const data = await res.json();
-                if (data.livestream) {
-                    container.classList.add('is-live');
-                    txt.innerText = "صالح فاتح بث مباشر الآن! 🔥";
-                } else {
-                    container.classList.remove('is-live');
-                    txt.innerText = "البث المباشر مغلق حالياً";
-                }
-            } catch (e) {
-                container.classList.remove('is-live');
-                txt.innerText = "غير متصل"; // حالة افتراضية عند الفشل
-            }
-        }
-
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
 </body>
 </html>
