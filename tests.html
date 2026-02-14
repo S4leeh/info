@@ -240,6 +240,7 @@
 
     <section id="archive" class="container archive-section">
         <h2 class="section-title">📂 الأرشيف</h2>
+        
         <div class="archive-box">
             <div class="tabs">
                 <button class="tab-btn" onclick="toggleTab('events')">🏆 أرشيف الفعاليات</button>
@@ -268,6 +269,7 @@
                         <div class="team-item"><span class="team-name">الفريق السابع</span><span class="team-members">3Yazan, llYousf</span></div>
                         <div class="team-item"><span class="team-name">الفريق الثامن</span><span class="team-members">w9k1, 7ader, ml3bdalah77</span></div>
                     </div>
+                    
                     <h4 style="color:var(--primary); margin: 30px 0 15px;">الحلقات:</h4>
                     <div class="ep-grid">
                         <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="ep-btn">الحلقة الأولى</a>
@@ -426,10 +428,9 @@
                 return;
             }
             const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            document.getElementById('days').innerText = Math.floor(gap / day);
-            document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
-            document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
-            document.getElementById('seconds').innerText = Math.floor((gap % minute) / second);
+            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
+            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
+            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
         }
         setInterval(updateCountdown, 1000);
 
@@ -473,23 +474,21 @@
         }, { threshold: 0.1 });
         revealElements.forEach(el => observer.observe(el));
 
-        // حساب الخبرة بدقة
-        function updateExp() {
-            const start = new Date('2022-06-02');
-            const now = new Date();
-            let years = now.getFullYear() - start.getFullYear();
-            let months = now.getMonth() - start.getMonth();
-            if (months < 0) { years--; months += 12; }
-            document.getElementById('exp').innerText = `${years} سنوات و ${months} أشهر`;
-        }
-
-        // جلب المشتركين
         async function updateYouTubeSubs() {
             try {
                 const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
                 const data = await res.json();
+                // التعديل: إظهار الرقم كاملاً بدون اختصار
                 document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
             } catch (e) { console.log('YT Error'); }
+        }
+        
+        function updateStats() {
+            const startExp = new Date('2022-06-02'); const now = new Date();
+            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
+            if (m < 0) { y--; m += 12; }
+            // التعديل: إظهار السنوات والأشهر
+            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
         }
 
         async function checkKick() {
@@ -513,7 +512,7 @@
             }
         }
 
-        window.onload = () => { updateExp(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
     </script>
 </body>
 </html>
