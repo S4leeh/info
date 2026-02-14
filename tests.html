@@ -5,576 +5,431 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S4leeh | صالح</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #121212;
-            --card-bg: #1a1a1a;
-            --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.4);
-            --border-color: rgba(212, 175, 55, 0.2);
-            --kick-green: #53fc18;
-            --live-red: #ea1d2c;
+            --bg: #050505;
+            --surface: #111111;
+            --surface-hover: #1a1a1a;
+            --border: #222;
+            --primary: #d4af37;
+            --text-main: #ffffff;
+            --text-sec: #888888;
+            --radius: 24px;
+            --pad: 30px;
         }
 
-        /* --- نظام الماوس (اللوقو) --- */
-        html, body, a, button, select, textarea, input, .ep-node, .game-card, .social-item {
-            cursor: none !important;
-        }
-
-        #s4-cursor {
-            width: 30px;
-            height: 30px;
-            background-image: url('logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000000;
-            transform: translate(-50%, -50%);
-            transition: width 0.15s ease-out, height 0.15s ease-out;
-            display: block;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; cursor: none !important; }
         
-        .cursor-hover {
-            width: 50px !important;
-            height: 50px !important;
-            filter: drop-shadow(0 0 12px var(--gold)) !important;
-        }
-
-        @media (pointer: coarse) {
-            #s4-cursor { display: none !important; }
-            html, body, a, button, input, textarea, select, .social-item { cursor: auto !important; }
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        html { scroll-behavior: smooth; }
-        section, div[id] { scroll-margin-top: 130px; }
-        body { background-color: var(--bg-dark); color: #fff; padding-bottom: 0; overflow-x: hidden; position: relative; }
-
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, #1e1e1e 0%, var(--bg-dark) 60%); }
+        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; line-height: 1.5; }
         
-        /* --- إضافة حركة الظهور الناعمة فقط --- */
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(50px); 
-            transition: all 1s ease-out; 
+        /* --- المؤشر المخصص --- */
+        #custom-cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: difference;
         }
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0); 
+        .hovered #custom-cursor { width: 50px; height: 50px; background: rgba(212, 175, 55, 0.2); border-color: transparent; }
+
+        /* --- الشبكة الخلفية --- */
+        .grid-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 80%);
         }
 
-        .live-status-bar { width: 100%; background: rgba(5, 5, 5, 0.98); border-bottom: 2px solid var(--border-color); padding: 12px; position: sticky; top: 0; z-index: 10001; display: flex; justify-content: center; text-decoration: none; }
-        .status-content { display: flex; align-items: center; gap: 12px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--live-red); }
-        .is-live .status-dot { background-color: var(--kick-green); box-shadow: 0 0 15px var(--kick-green); animation: pulse 1.2s infinite; }
-        .status-text { color: #fff; font-weight: 900; font-size: 14px; }
+        /* --- التنسيق العام (Quartr Style) --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .section-header { margin-bottom: 40px; }
+        .section-title { font-size: 2.5rem; font-weight: 900; color: var(--text-main); margin-bottom: 10px; }
+        .section-desc { font-size: 1.1rem; color: var(--text-sec); max-width: 500px; }
+
+        /* --- البار العلوي العائم --- */
+        .navbar {
+            position: sticky; top: 20px; z-index: 100;
+            background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(12px);
+            border: 1px solid var(--border); border-radius: 100px;
+            padding: 10px 30px; margin: 20px auto; width: fit-content;
+            display: flex; gap: 25px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-link { text-decoration: none; color: var(--text-sec); font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+
+        /* --- الهيرو (الواجهة) --- */
+        .hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 60px; }
+        .hero-logo { width: 150px; height: 150px; border-radius: 50%; border: 2px solid var(--primary); margin-bottom: 30px; object-fit: cover; box-shadow: 0 0 50px rgba(212,175,55,0.15); }
+        .hero h1 { font-size: 5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; margin-bottom: 20px; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.2rem; color: var(--text-sec); max-width: 600px; margin: 0 auto 40px; }
+        
+        .live-badge {
+            background: rgba(234, 29, 44, 0.1); border: 1px solid rgba(234, 29, 44, 0.3);
+            color: #ea1d2c; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 0.9rem;
+            display: inline-flex; align-items: center; gap: 10px; margin-bottom: 30px; text-decoration: none; transition: 0.3s;
+        }
+        .live-badge.active { background: rgba(83, 252, 24, 0.1); border-color: rgba(83, 252, 24, 0.3); color: #53fc18; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
+
+        /* --- شبكة البينتو (Bento Grid) --- */
+        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 100px; }
+        .bento-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: var(--pad); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative;
+        }
+        .bento-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .bento-card.large { grid-column: span 2; }
+        .bento-card.full { grid-column: span 3; }
+        
+        .stat-num { font-size: 3rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .stat-label { font-size: 1rem; color: var(--text-sec); margin-top: 5px; font-weight: 700; }
+
+        /* --- كرت اليوتيوب --- */
+        .yt-cover { width: 100%; height: 400px; background-size: cover; background-position: center; border-radius: 16px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .play-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .play-icon::after { content: ''; border-left: 20px solid white; border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 5px; }
+        .bento-card:hover .play-icon { background: var(--primary); transform: scale(1.1); }
+        .bento-card:hover .play-icon::after { border-left-color: #000; }
+
+        /* --- الأرشيف --- */
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 12px 24px; border-radius: 50px; font-weight: 700; transition: 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: var(--text-main); color: var(--bg); border-color: var(--text-main); }
+        
+        .archive-content { display: none; animation: fadeIn 0.5s ease; }
+        .archive-content.active { display: block; }
+
+        .team-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid var(--border); }
+        .team-row:last-child { border-bottom: none; }
+        .team-name { font-weight: 800; color: var(--text-main); }
+        .team-list { font-size: 0.9rem; color: var(--text-sec); }
+
+        /* --- الألعاب --- */
+        .games-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .game-item {
+            background: var(--surface-hover); border-radius: 16px; padding: 15px; border: 1px solid var(--border);
+            text-align: center; transition: 0.3s;
+        }
+        .game-item:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .game-img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .game-title { font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 5px; }
+        .rating { font-size: 0.8rem; color: var(--primary); background: rgba(212,175,55,0.1); padding: 4px 10px; border-radius: 8px; display: inline-block; margin-top: 5px; }
+        
+        .hidden-game { display: none; }
+        .btn-outline { display: block; width: 100%; padding: 15px; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--text-main); border-radius: 12px; font-weight: 700; transition: 0.3s; }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* --- تواصل معنا --- */
+        .socials-flex { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .social-chip {
+            display: flex; align-items: center; gap: 10px; padding: 15px 25px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 50px;
+            text-decoration: none; color: var(--text-main); font-weight: 700; transition: 0.3s;
+        }
+        .social-chip:hover { background: var(--text-main); color: var(--bg); transform: translateY(-3px); }
+        .social-chip img { width: 20px; height: 20px; filter: invert(1); transition: 0.3s; }
+        .social-chip:hover img { filter: invert(0); }
+
+        /* --- نموذج الاقتراحات (تصميم نظيف) --- */
+        .form-clean input, .form-clean select, .form-clean textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
+            padding: 15px 0; color: #fff; font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .form-clean input:focus, .form-clean textarea:focus { border-bottom-color: var(--primary); }
+        .form-label { font-size: 0.85rem; color: var(--text-sec); margin-top: 20px; display: block; }
+        .btn-primary { 
+            background: var(--text-main); color: var(--bg); padding: 15px 40px; border: none; 
+            border-radius: 50px; font-weight: 900; font-size: 1rem; margin-top: 30px; 
+            cursor: pointer; transition: 0.3s; display: inline-block;
+        }
+        .btn-primary:hover { background: var(--primary); transform: scale(1.05); }
+
+        /* --- مغامرة صالح --- */
+        .game-banner {
+            background: linear-gradient(45deg, #111, #1a1a1a); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 60px; text-align: center; position: relative; overflow: hidden;
+            text-decoration: none; display: block; transition: 0.4s;
+        }
+        .game-banner:hover { border-color: var(--primary); }
+        .game-banner h3 { font-size: 2.5rem; color: var(--text-main); font-weight: 900; margin-bottom: 10px; }
+        .game-banner span { color: var(--primary); text-decoration: underline; font-weight: 700; }
+
+        footer { text-align: center; padding: 50px 0; border-top: 1px solid var(--border); margin-top: 80px; color: var(--text-sec); font-size: 0.9rem; }
+
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
-        .nav-bar { width: fit-content; background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); padding: 8px 25px; position: sticky; top: 65px; z-index: 10000; margin: 0 auto; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .nav-link { color: #eee; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; position: relative; padding: 5px 2px; }
-        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--gold); transition: 0.3s; }
-        .nav-link:hover::after { width: 100%; }
-        .nav-link:hover { color: var(--gold); }
-
-        header { text-align: center; padding: 60px 20px 40px; }
-        .logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--gold); box-shadow: 0 0 20px var(--gold-glow); margin-bottom: 20px; animation: float 4s ease-in-out infinite; object-fit: cover; overflow: hidden; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .owner-name { font-size: 45px; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
-        .bio { color: #b0b0b0; font-size: 16px; max-width: 600px; margin: 0 auto; line-height: 1.6; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
-        .stat-card { background: rgba(26, 26, 26, 0.6); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; text-align: center; transition: 0.3s; backdrop-filter: blur(5px); }
-        .stat-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
-        .stat-value { font-size: 25px; font-weight: 900; color: var(--gold); }
-        .stat-label { font-size: 14px; color: #888; font-weight: 700; }
-
-        .content-section { max-width: 850px; margin: 0 auto 60px; padding: 0 20px; }
-        .yt-card { background: var(--card-bg); border-radius: 25px; overflow: hidden; border: 1px solid var(--border-color); text-decoration: none; display: block; transition: 0.3s; position: relative; }
-        .yt-card:hover { transform: scale(1.02); border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
-        .yt-thumbnail { width: 100%; height: 350px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-        .play-btn { width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
-        .play-btn::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent white; margin-left: 5px; }
-        .yt-details { padding: 25px; text-align: center; }
-        .yt-details h2 { color: #fff; font-size: 20px; font-weight: 800; }
-
-        .archive-container { max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; }
-        .archive-wrapper { background: rgba(26, 26, 26, 0.7); border-radius: 30px; border: 1px solid var(--border-color); padding: 40px; backdrop-filter: blur(10px); }
-        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-        .tab-btn { background: #111; border: 1px solid #333; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.4s; }
-        .tab-btn:hover, .tab-btn.active { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); color: var(--gold); }
-        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid #333; padding-top: 30px; }
-        .tournament-details { display: none; }
-        .tournament-details.active { display: block; animation: fadeIn 0.5s ease-in; }
-        .archive-body { display: none; }
-        .archive-body.active { display: block; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
-        .countdown-box { background: rgba(0,0,0,0.4); border: 1px solid var(--gold); padding: 20px; border-radius: 15px; min-width: 100px; text-align: center; }
-        .countdown-value { font-size: 32px; font-weight: 900; color: var(--gold); display: block; }
-        .countdown-label { font-size: 12px; color: #aaa; font-weight: 700; }
-
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
-        .team-card { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border-right: 4px solid var(--gold); }
-        .team-title { font-weight: 900; font-size: 14px; color: var(--gold); margin-bottom: 5px; }
-        .team-members { font-size: 13px; color: #ccc; }
-
-        .episodes-selector { display: flex; justify-content: center; gap: 15px; margin: 30px 0; border-top: 1px solid #333; padding-top: 30px; flex-wrap: wrap; }
-        .ep-node { width: 130px; height: 50px; background: #0a0a0a; border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 900; transition: 0.4s; color: #888; }
-        .ep-node:hover, .ep-node.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); transform: scale(1.05); }
-
-        .large-ep-card { width: 100%; max-width: 900px; margin: 0 auto; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; text-decoration: none; display: block; }
-        .large-ep-thumbnail { width: 100%; height: 450px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
-        .large-ep-details { padding: 25px; text-align: center; background: var(--card-bg); }
-        .large-ep-details h2 { color: #fff; font-size: 18px; font-weight: 800; }
-
-        .library-container { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
-        .sub-title { border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0 20px; color: var(--gold); font-weight: 800; }
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; width: 100%; }
-        .game-card { background: rgba(26, 26, 26, 0.8); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; height: 185px; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
-        .game-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-        .game-img { width: 100%; height: 105px; object-fit: cover; flex-shrink: 0; }
-        .game-info { padding: 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
-        .game-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 1px; }
-        .game-note { font-size: 10px; color: var(--gold); font-weight: 800; line-height: 1.2; }
-
-        .hidden-games-container { display: none; width: 100%; margin-top: 15px; }
-        .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
-
-        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
-        .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
-        .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
-        .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
-        .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
-
-        .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
-        .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 14px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0b0b0b; border: 1px solid #333; border-radius: 10px; color: #fff; outline: none; }
-        .submit-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .submit-btn:hover { background: #fff; color: #000; }
-
-        #success-message { display: none; text-align: center; padding: 30px; background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--gold); border-radius: 15px; color: var(--gold); font-weight: 900; }
-        .honey { display: none; }
-
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.4); margin-top: 20px; }
-        footer p { color: #888; font-size: 14px; font-weight: 700; }
-        footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
-
         @media (max-width: 900px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .socials-grid { grid-template-columns: repeat(3, 1fr); }
-            .nav-bar { gap: 10px; padding: 8px 15px; width: 95%; }
-            .nav-link { font-size: 11px; }
-            .large-ep-thumbnail { height: 250px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card.large, .bento-card.full { grid-column: span 1; }
+            .hero h1 { font-size: 3rem; }
+            .navbar { width: 90%; justify-content: center; padding: 10px; }
+            .nav-link { font-size: 0.8rem; }
         }
     </style>
 </head>
-<body id="top-page">
+<body>
 
-    <div id="s4-cursor"></div>
-    <canvas id="bg-canvas"></canvas>
+    <div id="custom-cursor"></div>
+    <div class="grid-bg"></div>
 
-    <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
-        <div class="status-content">
-            <span class="status-dot"></span>
-            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
-        </div>
-    </a>
-
-    <nav class="nav-bar reveal">
-        <a href="#top-page" class="nav-link">أعلى الصفحة</a>
-        <a href="#last-video" class="nav-link">آخر مقطع</a>
-        <a href="#archive-section" class="nav-link">الأرشيف</a>
-        <a href="#games-library" class="nav-link">الألعاب</a>
-        <a href="#my-socials" class="nav-link">حساباتي</a>
-        <a href="#suggestions" class="nav-link">الاقتراحات</a>
+    <nav class="navbar">
+        <a href="#home" class="nav-link">الرئيسية</a>
+        <a href="#stats" class="nav-link">الإحصائيات</a>
+        <a href="#games" class="nav-link">الألعاب</a>
+        <a href="#archive" class="nav-link">الأرشيف</a>
+        <a href="#contact" class="nav-link">تواصل</a>
     </nav>
 
-    <header class="reveal">
-        <img src="logo.png" class="logo" alt="S4leeh">
-        <h1 class="owner-name">صالح</h1>
-        <p class="bio">
-            صانع محتوى في اليوتيوب و ستريمر في منصة كيك
-            <br>
-            تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي
-        </p>
-    </header>
-
-    <section class="stats-grid reveal">
-        <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
-        <div class="stat-card"><div class="stat-value" id="sub-count">...</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
-        <div class="stat-card"><div class="stat-value" id="live-count">13</div><div class="stat-label">عدد البثوث في 2026</div></div>
-    </section>
-
-    <section id="last-video" class="content-section reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
-        <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" class="yt-card" target="_blank">
-            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
-            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
+    <section id="home" class="hero container">
+        <img src="logo.png" alt="S4leeh" class="hero-logo">
+        <a href="https://kick.com/S4leeh" target="_blank" class="live-badge" id="live-badge">
+            <span class="live-dot"></span>
+            <span id="live-text">جاري التحقق من البث...</span>
         </a>
+        <h1>صالح S4LEEH</h1>
+        <p>صانع محتوى في اليوتيوب و ستريمر في منصة كيك. نقدم لكم تجربة ترفيهية مختلفة، من بطولات وتحديات إلى بثوث يومية ممتعة.</p>
     </section>
 
-    <section id="archive-section" class="archive-container reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📂 الأرشيف</h2>
-        <div class="archive-wrapper">
-            <div class="archive-tabs">
-                <button id="events-tab" class="tab-btn" onclick="toggleMainArchive('events')">🏆 أرشيف الفعاليات</button>
-                <button id="ramadan-tab" class="tab-btn" onclick="toggleMainArchive('ramadan')">🌙 رمضانيّات مع صالح</button>
-                <button id="highlights-tab" class="tab-btn" onclick="toggleMainArchive('highlights')">🎬 البثوث المميزة</button>
+    <section id="stats" class="container">
+        <div class="bento-grid">
+            <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" target="_blank" class="bento-card large" style="padding:0; border:none;">
+                <div class="yt-cover" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg');">
+                    <div class="play-icon"></div>
+                </div>
+            </a>
+
+            <div class="bento-card">
+                <div>
+                    <div class="stat-num" id="sub-count">...</div>
+                    <div class="stat-label">مشترك يوتيوب</div>
+                </div>
+                <div style="font-size:3rem; opacity:0.1; align-self: flex-end;">📺</div>
             </div>
 
-            <div id="archive-content-area" class="archive-main-content">
-                <div id="events-body" class="archive-body">
-                    <div style="display:flex; justify-content:center; margin-bottom:30px;">
-                        <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
-                    </div>
-                    <div id="tahadani-details" class="tournament-details">
-                        <div style="background:rgba(212, 175, 55, 0.05); padding:20px; border-radius:15px; border-right:5px solid var(--gold); margin-bottom:40px;">
-                            <p style="color:var(--gold); font-weight:900;">⚡ عن البطولة:</p>
-                            <p style="font-size:14px; margin-top:10px; line-height:1.6;">صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها 150$ و15 لعبة مجانية.</p>
-                        </div>
-                        <p style="color:var(--gold); font-weight:900; margin-bottom:15px;">👥 نخبة المشاركين (24 مشارك):</p>
-                        <div class="team-grid">
-                            <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
-                            <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
-                            <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">3Yazan, llYousf</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
-                        </div>
-                        <div class="episodes-selector">
-                            <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
-                            <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
-                            <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
-                            <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
-                        </div>
-                        <div id="ep-display">
-                            <div id="ep-1" class="archive-body active">
-                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
-                                </a>
-                            </div>
-                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2></div></a></div>
-                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h2></div></a></div>
-                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div></a></div>
-                        </div>
-                    </div>
+            <div class="bento-card">
+                <div>
+                    <div class="stat-num" id="live-count">13</div>
+                    <div class="stat-label">بث مباشر في 2026</div>
                 </div>
+            </div>
 
-                <div id="ramadan-body" class="archive-body">
-                    <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🌙 رمضانيّات مع صالح</h3>
-                    <p style="text-align:center; color:#ccc; line-height:1.6;">انتظرونا في شهر رمضان المبارك مع حلقات خاصة وحصرية في الشهر الفضيل</p>
-                    <div style="margin-top:40px; text-align:center;">
-                        <h4 id="countdown-title" style="color:var(--gold); margin-bottom:20px;">⏳ العد التنازلي للحلقة الأولى</h4>
-                        <div class="countdown-container">
-                            <div class="countdown-box"><span id="days" class="countdown-value">00</span><span class="countdown-label">يوم</span></div>
-                            <div class="countdown-box"><span id="hours" class="countdown-value">00</span><span class="countdown-label">ساعة</span></div>
-                            <div class="countdown-box"><span id="minutes" class="countdown-value">00</span><span class="countdown-label">دقيقة</span></div>
-                            <div class="countdown-box"><span id="seconds" class="countdown-value">00</span><span class="countdown-label">ثانية</span></div>
-                        </div>
-                        <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
-                    </div>
+            <div class="bento-card">
+                <div>
+                    <div class="stat-num" id="exp">...</div>
+                    <div class="stat-label">خبرة في صناعة المحتوى</div>
                 </div>
+            </div>
 
-                <div id="highlights-body" class="archive-body">
-                    <p style="text-align:center; padding:40px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+            <a href="Games.html" class="bento-card full" style="background: linear-gradient(45deg, #1a1a1a, #0a0a0a); align-items:center; justify-content:center; text-decoration:none; text-align:center;">
+                <h2 style="font-size:2.5rem; font-weight:900; color:var(--text-main);">مغامرة صالح 🏃‍♂️</h2>
+                <p style="color:var(--text-sec); margin:10px 0 20px;">لعبة التحدي والقفز، هل يمكنك تحقيق رقم قياسي جديد؟</p>
+                <span style="color:var(--primary); font-weight:700; text-decoration:underline;">اضغط هنا للعب الآن</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="archive" class="container">
+        <div class="section-header">
+            <h2 class="section-title">الأرشيف والمشاريع</h2>
+            <p class="section-desc">سجل البطولات، الفعاليات الرمضانية، وأبرز اللحظات.</p>
+        </div>
+
+        <div class="bento-card full">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('events')">🏆 البطولات</button>
+                <button class="tab-btn" onclick="switchTab('ramadan')">🌙 رمضانيات</button>
+                <button class="tab-btn" onclick="switchTab('highlights')">🎬 لقطات</button>
+            </div>
+
+            <div id="events" class="archive-content active">
+                <h3 style="color:var(--primary); font-weight:900; margin-bottom:20px;">بطولة ثلاثيات تحداني</h3>
+                <div class="team-row"><span class="team-name">الفريق الأول</span><span class="team-list">Spitfire57, iDexter89, imRashly</span></div>
+                <div class="team-row"><span class="team-name">الفريق الثاني</span><span class="team-list">PYWQ, BDR1, 7og9</span></div>
+                <div class="team-row"><span class="team-name">الفريق الثالث</span><span class="team-list">IIKhaled77, Raheeb, Mohammd</span></div>
+                <div class="team-row"><span class="team-name">الفريق الرابع</span><span class="team-list">HIR0, MEDO_DV, Mr8asm</span></div>
+                
+                <div style="margin-top:30px; display:flex; gap:10px; flex-wrap:wrap;">
+                    <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="tab-btn">الحلقة 1</a>
+                    <a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="tab-btn">الحلقة 2</a>
+                    <a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="tab-btn">الحلقة 3</a>
+                    <a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="tab-btn" style="border-color:var(--primary); color:var(--primary);">النهائي 🔥</a>
                 </div>
+            </div>
+
+            <div id="ramadan" class="archive-content">
+                <div style="text-align:center; padding:40px;">
+                    <h3 style="font-size:2rem; margin-bottom:20px;">🌙 باقي على 1 رمضان</h3>
+                    <div style="font-size:3rem; font-weight:900; color:var(--primary);" id="countdown">00:00:00:00</div>
+                    <p style="margin-top:20px;">انتظرونا في سلسلة رمضانية خاصة.</p>
+                </div>
+            </div>
+
+            <div id="highlights" class="archive-content">
+                <p style="text-align:center; padding:40px; color:var(--text-sec);">جاري العمل على تجميع اللقطات... 🏗️</p>
             </div>
         </div>
     </section>
 
-    <div id="games-library" class="library-container">
-        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🎮 مكتبة ألعاب 2026</h2>
-        
-        <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card">
+    <section id="games" class="container" style="margin-top:100px;">
+        <div class="section-header">
+            <h2 class="section-title">مكتبة الألعاب</h2>
+            <p class="section-desc">ماذا ألعب الآن، وماذا سألعب مستقبلاً، وما أنهيته.</p>
+        </div>
+
+        <h3 style="color:var(--text-main); margin: 30px 0 15px;">ألعبها حاليًا</h3>
+        <div class="games-wrapper">
+            <div class="game-item">
                 <img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">ألعاب عشوائية</div>
-                </div>
+                <div class="game-title">ألعاب عشوائية</div>
             </div>
         </div>
 
-        <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Supraworld</div></div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Let me out</div></div></div>
-        </div>
-
-        <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
-        <div class="games-grid reveal">
-            <div class="game-card">
+        <h3 style="color:var(--text-main); margin: 30px 0 15px;">الألعاب اللي لعبناها</h3>
+        <div class="games-wrapper">
+            <div class="game-item">
                 <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img">
-                <div class="game-info">
-                    <div class="game-name">Fateel - فتيل</div>
-                    <div class="game-note">تقييم صالح: ⭐⭐</div>
-                    <div class="game-note">تقييم الشات: ⭐✫✫✫✫ </div>
-                </div>
+                <div class="game-title">Fateel</div>
+                <div class="rating">صالح: ⭐⭐ | الشات: ⭐</div>
             </div>
-
-            <div class="game-card"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
-            <div class="game-card"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"><div class="game-info"><div class="game-name">Viewfinder</div><div class="game-note">صالح: ⭐⭐⭐⭐⭐</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
-            <div class="game-card"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"><div class="game-info"><div class="game-name">Hytale</div><div class="game-note">صالح: ⭐⭐⭐✫✫</div><div class="game-note">الشات: ⭐⭐⭐✫✫</div></div></div>
-            <div class="game-card"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Candleman</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">الشات: ⭐⭐⭐⭐✫</div></div></div>
-            
-            <div class="game-card hidden-game" style="display: none;"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"><div class="game-info"><div class="game-name">Fever Meme</div><div class="game-note">صالح: ⭐⭐✫✫✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐⭐✫ </div></div></div>
-            <div class="game-card hidden-game" style="display: none;"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"><div class="game-info"><div class="game-name">Superliminal</div><div class="game-note">صالح: ⭐⭐⭐⭐✫</div><div class="game-note">تقييم الشات: ⭐⭐⭐✫✫ </div></div></div>
-        </div>
-        <button id="show-more-btn" class="show-more-btn" onclick="toggleGames()">عرض المزيد من الألعاب</button>
-    </div>
-
-    <div id="my-socials" class="library-container">
-        <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
-        <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
-        </div>
-    </div>
-
-    <section id="s4leeh-game" class="content-section reveal">
-        <h2 style="text-align:center; color:var(--gold); margin-bottom:20px; font-weight:800;">مغامرة صالح</h2>
-        
-        <style>
-            .game-link-card {
-                background: var(--card-bg);
-                border-radius: 20px;
-                border: 1px solid var(--border-color);
-                text-decoration: none;
-                display: block;
-                transition: 0.3s;
-                padding: 30px;
-                text-align: center;
-                position: relative;
-            }
-            .game-link-card:hover {
-                transform: translateY(-5px);
-                border-color: var(--gold);
-                box-shadow: 0 0 30px var(--gold-glow);
-            }
-            .play-now-text {
-                display: inline-block;
-                color: var(--gold);
-                font-weight: 900;
-                font-size: 18px;
-                text-decoration: underline;
-                margin-top: 15px;
-            }
-        </style>
-
-        <a href="Games.html" class="game-link-card">
-            <div class="game-info-wrapper">
-                <p style="color:#ccc; font-size:16px; line-height:1.6; margin: 0;">
-                    يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول ؟
-                </p>
-                <div class="play-now-text">اضغط هنا لبدء اللعب الآن 🏃‍♂️</div>
+            <div class="game-item">
+                <img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img">
+                <div class="game-title">Minecraft</div>
+                <div class="rating">فوق التقييم 👑</div>
             </div>
-        </a>
+            <div class="game-item">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img">
+                <div class="game-title">Viewfinder</div>
+                <div class="rating">صالح: ⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="game-item hidden-game">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img">
+                <div class="game-title">Fever Meme</div>
+                <div class="rating">صالح: ⭐⭐</div>
+            </div>
+            <div class="game-item hidden-game">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img">
+                <div class="game-title">Superliminal</div>
+                <div class="rating">صالح: ⭐⭐⭐⭐</div>
+            </div>
+        </div>
+        <button id="toggle-games-btn" class="btn-outline" onclick="toggleGames()">عرض المزيد</button>
     </section>
 
-    <section id="suggestions" class="form-box reveal">
-        <div id="suggestion-container">
-            <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">💡 ارسل اقتراحك</h2>
-            <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST" target="_blank">
-                <input type="text" name="_gotcha" class="honey">
-                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>نوع الاقتراح</label>
-                    <select name="type">
-                        <option value="لعبة جديدة">لعبة جديدة</option>
-                        <option value="فكرة مقطع">فكرة مقطع</option>
-                        <option value="فكرة بث">فكرة بث</option>
-                        <option value="تحسين للموقع">تحسين للموقع</option>
-                    </select>
+    <section id="contact" class="container" style="margin-top:100px;">
+        <div class="bento-grid">
+            <div class="bento-card large">
+                <h3 style="font-size:2rem; font-weight:900; margin-bottom:20px;">تواصل معي</h3>
+                <div class="socials-flex">
+                    <a href="https://kick.com/S4leeh" target="_blank" class="social-chip"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"> Kick</a>
+                    <a href="https://www.youtube.com/@S4leeh" target="_blank" class="social-chip"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"> YouTube</a>
+                    <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-chip"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"> Discord</a>
+                    <a href="https://x.com/iS4leeh" target="_blank" class="social-chip"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"> Twitter</a>
+                    <a href="https://www.instagram.com/iS4leeh" target="_blank" class="social-chip"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"> Instagram</a>
                 </div>
-                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="3" required title="عند الارسال، سيتم فتح صفحة مستقلة، كملها عشان يوصل الاقتراح"></textarea></div>
-                <button type="submit" class="submit-btn">إرسال الاقتراح</button>
-            </form>
+            </div>
+            <div class="bento-card">
+                <h4 style="font-weight:900; margin-bottom:20px;">عندك اقتراح؟</h4>
+                <form action="https://formspree.io/f/mwvewwew" method="POST" class="form-clean">
+                    <label class="form-label">الاسم</label>
+                    <input type="text" name="name" required>
+                    <label class="form-label">الاقتراح</label>
+                    <textarea name="message" rows="2" required></textarea>
+                    <button type="submit" class="btn-primary">إرسال</button>
+                </form>
+            </div>
         </div>
-        <div id="success-message">تم استلام ملاحظتك بنجاح، شكراً لك! 🧡</div>
     </section>
 
-    <footer><p>© جميع الحقوق محفوظة لـ <b>S4leeh | صالح</b> | 2026</p></footer>
+    <footer>
+        <p>© 2026 جميع الحقوق محفوظة لـ <b>S4leeh</b></p>
+    </footer>
 
     <script>
-        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
-        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
-
-        const cursor = document.getElementById('s4-cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+        // إعدادات الماوس
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('a, button, input, textarea, .game-item, .bento-card').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
         });
 
-        function refreshCursorEvents() {
-            const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card, .social-item';
-            document.querySelectorAll(hoverTags).forEach(item => {
-                item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-                item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-            });
-        }
-        refreshCursorEvents();
+        // البيانات والعدادات
+        const YT_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
+        const CH_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
-            }
-            draw() { ctx.fillStyle = 'rgba(212, 175, 55, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
-        }
-        function handleParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
-            requestAnimationFrame(handleParticles);
-        }
-        for (let i = 0; i < 100; i++) particles.push(new Particle());
-        initCanvas(); handleParticles();
-        window.addEventListener('resize', initCanvas);
-
-        function updateCountdown() {
-            const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = ramadanDate - now;
-            if (gap <= 0) {
-                const timerTitle = document.getElementById('countdown-title');
-                if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
-                return;
-            }
-            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
-            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
-        }
-        setInterval(updateCountdown, 1000);
-
-        function toggleMainArchive(type) {
-            const area = document.getElementById('archive-content-area');
-            const bodies = document.querySelectorAll('.archive-body');
-            const tabs = document.querySelectorAll('.tab-btn');
-            if (area.style.display === "block" && document.getElementById(type + '-tab').classList.contains('active')) {
-                area.style.display = "none";
-                tabs.forEach(t => t.classList.remove('active'));
-            } else {
-                area.style.display = "block";
-                bodies.forEach(b => b.classList.remove('active'));
-                tabs.forEach(t => t.classList.remove('active'));
-                document.getElementById(type + '-body').classList.add('active');
-                document.getElementById(type + '-tab').classList.add('active');
-                document.getElementById('tahadani-details').classList.remove('active');
-                document.getElementById('tahadani-main-btn').classList.remove('active');
-            }
-            refreshCursorEvents();
-        }
-        function showTournamentDetails(id) {
-            const content = document.getElementById(id);
-            const btn = document.getElementById('tahadani-main-btn');
-            content.classList.toggle('active'); btn.classList.toggle('active');
-            if(content.classList.contains('active')) showEp('ep-1', document.querySelector('.ep-node'));
-            refreshCursorEvents();
-        }
-        function showEp(epId, node) {
-            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
-            document.getElementById(epId).classList.add('active'); node.classList.add('active');
-            refreshCursorEvents();
-        }
-        
-        // تم تعديل دالة تبديل الألعاب لتخفي وتظهر البطاقات مباشرة في الشبكة
-        function toggleGames() {
-            const hiddenGames = document.querySelectorAll('.hidden-game');
-            const btn = document.getElementById('show-more-btn');
-            
-            // التحقق من حالة أول عنصر مخفي
-            const isHidden = hiddenGames[0].style.display === "none";
-
-            hiddenGames.forEach(game => {
-                // نعيد العرض إلى flex لأن البطاقات مصممة كـ flex في الـ CSS
-                game.style.display = isHidden ? "flex" : "none";
-            });
-
-            if (isHidden) { 
-                btn.innerText = "إخفاء الألعاب"; 
-            } else { 
-                btn.innerText = "عرض المزيد من الألعاب"; 
-            }
-            refreshCursorEvents();
-        }
-
-        const form = document.getElementById("suggestion-form");
-        form.onsubmit = function() {
-            setTimeout(() => {
-                document.getElementById("suggestion-container").style.display = "none";
-                document.getElementById("success-message").style.display = "block";
-            }, 100);
-        };
-
-        // Scroll Reveal Logic (Intersection Observer)
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        revealElements.forEach(el => observer.observe(el));
-
-        async function updateYouTubeSubs() {
+        async function initData() {
+            // YouTube Subs
             try {
-                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
+                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CH_ID}&key=${YT_KEY}`);
                 const data = await res.json();
                 document.getElementById('sub-count').innerText = Number(data.items[0].statistics.subscriberCount).toLocaleString();
-            } catch (e) { document.getElementById('sub-count').innerText = "1,531"; }
-        }
-        function updateStats() {
-            const startExp = new Date('2022-06-02'); const now = new Date();
-            let y = now.getFullYear() - startExp.getFullYear(); let m = now.getMonth() - startExp.getMonth();
-            if (m < 0) { y--; m += 12; }
-            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+            } catch { document.getElementById('sub-count').innerText = "1,531"; }
+
+            // Experience
+            const start = new Date('2022-06-02'), now = new Date();
+            let y = now.getFullYear() - start.getFullYear(), m = now.getMonth() - start.getMonth();
+            if(m < 0) { y--; m += 12; }
+            document.getElementById('exp').innerText = `${y} سنوات`;
+
+            // Kick Live
+            checkLive(); setInterval(checkLive, 60000);
+            
+            // Countdown
+            updateTimer(); setInterval(updateTimer, 1000);
         }
 
-        async function checkKick() {
-            const container = document.getElementById('live-bar-container');
-            const txt = document.getElementById('live-text');
-            const proxyUrl = 'https://api.allorigins.win/get?url=';
-            const targetUrl = encodeURIComponent('https://kick.com/api/v1/channels/s4leeh');
+        async function checkLive() {
             try {
-                const res = await fetch(proxyUrl + targetUrl);
-                const dataRaw = await res.json();
-                const data = JSON.parse(dataRaw.contents);
+                const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://kick.com/api/v1/channels/s4leeh'));
+                const json = await res.json();
+                const data = JSON.parse(json.contents);
+                const badge = document.getElementById('live-badge');
+                const txt = document.getElementById('live-text');
+                
                 if (data.livestream) {
-                    container.classList.add('is-live');
-                    txt.innerText = "صالح فاتح بث مباشر الآن! 🔥";
+                    badge.classList.add('active');
+                    txt.innerText = "بث مباشر الآن 🔥";
                 } else {
-                    container.classList.remove('is-live');
-                    txt.innerText = "البث المباشر مغلق حالياً";
+                    badge.classList.remove('active');
+                    txt.innerText = "غير متصل";
                 }
-            } catch (e) {
-                txt.innerText = "فشل التحقق من البث";
-            }
+            } catch { console.log('Live check failed'); }
         }
 
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
+        function updateTimer() {
+            const target = new Date('February 18, 2026 20:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+            
+            if (diff <= 0) { document.getElementById('countdown').innerText = "بدأ الحدث!"; return; }
+            
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('countdown').innerText = `${d}ي ${h}س`;
+        }
+
+        // التفاعلات
+        function switchTab(tabId) {
+            document.querySelectorAll('.archive-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleGames() {
+            const hidden = document.querySelectorAll('.hidden-game');
+            const btn = document.getElementById('toggle-games-btn');
+            const isHidden = hidden[0].style.display === 'none' || hidden[0].style.display === '';
+            
+            hidden.forEach(el => el.style.display = isHidden ? 'block' : 'none');
+            btn.innerText = isHidden ? "إخفاء" : "عرض المزيد";
+        }
+
+        window.onload = initData;
     </script>
 </body>
 </html>
