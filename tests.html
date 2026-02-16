@@ -12,13 +12,16 @@
     <style>
         /* --- المتغيرات والتنسيقات الأساسية --- */
         :root {
-            --gold-primary: #D4AF37;       /* ذهبي أساسي */
-            --gold-light: #F1D878;         /* ذهبي فاتح للإضاءة */
-            --gold-dark: #AA8C2C;          /* ذهبي غامق للظلال */
-            --bg-dark: #050505;            /* أسود عميق */
-            --bg-card: #121212;            /* رمادي داكن للكروت */
+            --gold-primary: #D4AF37;
+            --gold-light: #F9E496;
+            --gold-dark: #8E7012;
+            --bg-dark: #050505;
+            --bg-card: #0F0F0F;
             --text-light: #ffffff;
-            --text-gray: #b0b0b0;
+            --text-gray: #a0a0a0;
+            --discord-color: #5865F2; /* لون ديسكورد المميز عند التحويم */
+            --twitch-color: #9146FF;
+            --kick-color: #53FC18;
             --transition: all 0.3s ease;
         }
 
@@ -27,6 +30,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -39,12 +43,12 @@
         a { text-decoration: none; color: inherit; transition: var(--transition); }
         ul { list-style: none; }
 
-        /* شريط التمرير المخصص */
-        ::-webkit-scrollbar { width: 10px; }
+        /* شريط التمرير */
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 4px; }
 
-        /* --- الهيدر والقائمة --- */
+        /* --- الهيدر --- */
         header {
             position: fixed;
             top: 0;
@@ -54,102 +58,37 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            transition: var(--transition);
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
         }
 
         header.scrolled {
             padding: 0.8rem 5%;
-            background-color: rgba(0, 0, 0, 0.95);
             border-bottom: 1px solid var(--gold-primary);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* تنسيق الشعار */
-        .logo-img {
-            max-height: 50px; /* تحكم في ارتفاع الشعار */
-            width: auto;
-        }
-
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-img { max-height: 50px; width: auto; object-fit: contain; }
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
             background: linear-gradient(to bottom, var(--gold-light), var(--gold-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            font-weight: 600;
-            font-size: 1.1rem;
-            position: relative;
-        }
-
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { font-weight: 700; font-size: 1rem; color: var(--text-light); }
         .nav-links a:hover { color: var(--gold-primary); }
         
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            right: 0;
-            background-color: var(--gold-primary);
-            transition: var(--transition);
-        }
+        .hamburger { display: none; color: var(--gold-primary); font-size: 1.8rem; cursor: pointer; }
 
-        .nav-links a:hover::after { width: 100%; }
-
-        /* القائمة المنسدلة */
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0; /* لليمين لأن الموقع عربي */
-            background-color: var(--bg-card);
-            border: 1px solid var(--gold-dark);
-            min-width: 180px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: var(--transition);
-            border-radius: 8px;
-            padding: 0.5rem 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-
-        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-        
-        .dropdown-menu li a {
-            display: block;
-            padding: 0.8rem 1.2rem;
-            font-size: 0.95rem;
-            color: var(--text-gray);
-        }
-
-        .dropdown-menu li a:hover {
-            background-color: rgba(212, 175, 55, 0.1);
-            color: var(--gold-primary);
-            padding-right: 1.5rem; /* حركة بسيطة عند التحويم */
-        }
-
-        .hamburger { display: none; cursor: pointer; color: var(--gold-primary); font-size: 1.8rem; }
-
-        /* --- قسم البداية (Hero) --- */
+        /* --- قسم الهيرو (Hero) --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -158,301 +97,192 @@
             align-items: center;
             text-align: center;
             padding: 0 1rem;
-            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, rgba(5, 5, 5, 1) 70%);
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08) 0%, rgba(5, 5, 5, 1) 70%);
             position: relative;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
-            z-index: -1;
-        }
-
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            font-size: 4.5rem;
+            margin-bottom: 0.5rem;
             font-weight: 900;
+            line-height: 1.1;
         }
 
         .hero h1 span {
-            background: linear-gradient(to right, var(--gold-light), var(--gold-dark));
+            background: linear-gradient(to right, #fff, var(--gold-light), var(--gold-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .dynamic-wrapper {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--text-gray);
             height: 3rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .dynamic-text {
-            color: var(--gold-primary);
-            border-left: 3px solid var(--gold-primary); /* المؤشر */
-            padding-left: 5px;
-            animation: blink 0.75s step-end infinite;
-        }
-
-        .btn-gold {
-            margin-top: 2rem;
-            padding: 1rem 3rem;
-            background: linear-gradient(45deg, var(--gold-dark), var(--gold-primary));
-            color: #000;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-gold:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
-        }
-
-        /* --- الأقسام العامة --- */
-        .section { padding: 6rem 10%; }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
-        }
-        
-        .section-title h2 {
-            font-size: 3rem;
-            color: var(--text-light);
-            display: inline-block;
-            padding-bottom: 15px;
-        }
-
-        .section-title h2 span { color: var(--gold-primary); }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 3px;
-            background-color: var(--gold-primary);
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* --- الإحصائيات (أرقام) --- */
-        .stats-grid {
-            display: flex;
             justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 2rem;
         }
 
-        .stat-item {
-            background: var(--bg-card);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            min-width: 200px;
-            transition: var(--transition);
-        }
+        .dynamic-text { color: var(--gold-primary); font-weight: 700; }
+        
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
-        .stat-item:hover { border-color: var(--gold-primary); transform: translateY(-5px); }
-        .stat-item h3 { font-size: 2.5rem; color: var(--gold-primary); margin-bottom: 0.5rem; }
-        .stat-item p { color: var(--text-gray); }
-
-        /* --- معرض المحتوى --- */
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid var(--gold-dark);
-            color: var(--gold-primary);
-            padding: 0.6rem 2rem;
-            border-radius: 30px;
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
         }
 
-        .filter-btn.active, .filter-btn:hover {
-            background-color: var(--gold-primary);
+        .btn-gold {
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold-primary));
             color: #000;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
 
-        .portfolio-item {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            height: 220px;
-            background-color: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
-        }
-        
-        .portfolio-item:hover { border-color: var(--gold-primary); }
-
-        .portfolio-thumb {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #222, #111);
-        }
-
-        .portfolio-thumb i { font-size: 3rem; color: rgba(212, 175, 55, 0.3); }
-
-        .portfolio-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: var(--transition);
+        .btn-outline {
+            background: transparent;
             border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
         }
 
-        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
-        .portfolio-overlay h4 { color: var(--gold-primary); margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .btn-outline:hover { background: rgba(212, 175, 55, 0.1); color: #fff; border-color: #fff; }
 
-        .portfolio-item.hide { display: none; }
+        /* --- الأقسام --- */
+        .section { padding: 6rem 10%; position: relative; }
+        .section-title { text-align: center; margin-bottom: 4rem; }
+        .section-title h2 { font-size: 2.8rem; color: #fff; margin-bottom: 0.5rem; }
+        .section-title span { color: var(--gold-primary); }
+        .section-title p { color: var(--text-gray); }
 
-        /* --- التواصل الاجتماعي (Grid) --- */
+        /* --- شبكة الحسابات (Social Grid) --- */
         .social-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .social-card {
-            background-color: var(--bg-card);
+            background: rgba(20, 20, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
-            text-decoration: none;
+            border-radius: 16px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--gold-dark);
+            transition: var(--transition);
         }
 
         .social-card:hover {
-            border-color: var(--gold-primary);
-            background-color: rgba(212, 175, 55, 0.05);
             transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(212, 175, 55, 0.3);
         }
 
-        .social-icon { font-size: 2.5rem; color: var(--gold-primary); }
-        .social-name { font-weight: 700; font-size: 1.2rem; }
-        .social-action { font-size: 0.9rem; color: var(--text-gray); }
+        .social-card:hover::before { background: var(--gold-primary); }
 
-        /* --- تذييل الصفحة --- */
+        .social-icon-box {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            color: var(--text-gray);
+            transition: var(--transition);
+        }
+
+        .social-info h3 { font-size: 1.4rem; color: #fff; margin-bottom: 0.2rem; }
+        .social-info p { color: var(--gold-primary); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* ألوان خاصة لكل منصة عند التحويم */
+        .social-card.discord:hover .social-icon-box { background: var(--discord-color); color: #fff; }
+        .social-card.twitch:hover .social-icon-box { background: var(--twitch-color); color: #fff; }
+        .social-card.kick:hover .social-icon-box { background: var(--kick-color); color: #000; }
+        .social-card.youtube:hover .social-icon-box { background: #FF0000; color: #fff; }
+        .social-card.twitter:hover .social-icon-box { background: #fff; color: #000; }
+        .social-card.instagram:hover .social-icon-box { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+
+        /* --- قسم المجتمع (Discord Focus) --- */
+        .community-banner {
+            background: linear-gradient(90deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid var(--gold-dark);
+            border-radius: 20px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comm-text h3 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .comm-text p { color: var(--text-gray); max-width: 500px; }
+        
+        /* --- الفوتر --- */
         footer {
+            background: #000;
+            padding: 2rem;
             text-align: center;
-            padding: 3rem 1rem;
-            background-color: #000;
-            border-top: 1px solid var(--gold-dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
             color: var(--text-gray);
         }
 
-        footer strong { color: var(--gold-primary); }
-
-        /* --- الحركات --- */
-        @keyframes blink { 50% { border-color: transparent; } }
-
-        /* --- التجاوب (Media Queries) --- */
+        /* --- تجاوب الشاشات --- */
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
-                top: 0;
-                right: -100%; /* تعديل لليمين */
-                width: 75%;
-                height: 100vh;
-                background-color: #0f0f0f;
+                top: 0; right: -100%; width: 75%; height: 100vh;
+                background: #0f0f0f;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                transition: 0.4s ease;
-                box-shadow: -5px 0 20px rgba(0,0,0,0.8);
+                transition: 0.4s;
                 border-left: 1px solid var(--gold-dark);
             }
-
             .nav-links.active { right: 0; }
             .hamburger { display: block; z-index: 1001; }
-            
-            .hero h1 { font-size: 2.5rem; }
-            .section { padding: 4rem 5%; }
-            
-            /* تعديل القائمة المنسدلة في الموبايل */
-            .dropdown-menu {
-                position: static;
-                background: transparent;
-                border: none;
-                box-shadow: none;
-                text-align: center;
-                display: none;
-                padding-top: 0;
-            }
-            .dropdown.active .dropdown-menu { display: block; opacity: 1; visibility: visible; }
+            .hero h1 { font-size: 3rem; }
+            .community-banner { text-align: center; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <header id="navbar">
+    <header>
         <div class="logo-container">
-            <img src="logo.png" alt="S4leeh" class="logo-img" onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';">
-            <span class="logo-text" style="display: none;">S4leeh</span>
+            <img src="logo.png" alt="S4leeh Logo" class="logo-img" onerror="this.style.display='none'; document.getElementById('txt-logo').style.display='block';">
+            <span id="txt-logo" class="logo-text" style="display: none;">S4LEEH</span>
         </div>
         <nav>
             <ul class="nav-links">
                 <li><a href="#home">الرئيسية</a></li>
-                <li><a href="#about">من أنا</a></li>
-                <li class="dropdown" onclick="toggleMobileDropdown(this)">
-                    <a href="#content">المحتوى <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">يوتيوب</a></li>
-                        <li><a href="#">تويتش</a></li>
-                        <li><a href="#">شروحات</a></li>
-                    </ul>
-                </li>
-                <li><a href="#socials">التواصل</a></li>
+                <li><a href="#platforms">المنصات</a></li>
+                <li><a href="#community">المجتمع</a></li>
             </ul>
         </nav>
         <div class="hamburger" onclick="toggleMenu()">
@@ -461,209 +291,138 @@
     </header>
 
     <section id="home" class="hero">
-        <p style="color: var(--gold-primary); letter-spacing: 2px; margin-bottom: 10px;">عالم من الإبداع</p>
-        <h1>أهلاً بك في عالم <span>S4leeh</span></h1>
+        <p style="color: var(--gold-light); letter-spacing: 3px; font-size: 0.9rem; margin-bottom: 1rem;">THE GOLDEN ERA</p>
+        <h1>S4LEEH</h1>
         <div class="dynamic-wrapper">
-            <span>أقدم لكم</span>
             <span class="dynamic-text" id="typing-text"></span>
         </div>
-        <button class="btn-gold" onclick="document.getElementById('socials').scrollIntoView({behavior: 'smooth'})">تابعني الآن</button>
-    </section>
-
-    <section id="about" class="section">
-        <div class="section-title">
-            <h2>إحصائيات <span>المحتوى</span></h2>
-            <p style="color: var(--text-gray); margin-top: 10px;">أرقامنا تتحدث عن شغفنا ومجتمعنا الرائع</p>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3>+500K</h3>
-                <p>مشترك يوتيوب</p>
-            </div>
-            <div class="stat-item">
-                <h3>+10M</h3>
-                <p>إجمالي المشاهدات</p>
-            </div>
-            <div class="stat-item">
-                <h3>+50K</h3>
-                <p>متابع انستقرام</p>
-            </div>
+        <div class="hero-buttons">
+            <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="btn btn-gold">
+                <i class="fab fa-discord"></i> انضم للديسكورد
+            </a>
+            <a href="#platforms" class="btn btn-outline">جميع الحسابات</a>
         </div>
     </section>
 
-    <section id="content" class="section">
+    <section id="platforms" class="section">
         <div class="section-title">
-            <h2>أحدث <span>الأعمال</span></h2>
-        </div>
-        
-        <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterPortfolio('all')">الكل</button>
-            <button class="filter-btn" onclick="filterPortfolio('gaming')">جيمنج</button>
-            <button class="filter-btn" onclick="filterPortfolio('tech')">تقنية</button>
-            <button class="filter-btn" onclick="filterPortfolio('vlog')">فلوقات</button>
+            <h2>شبكة <span>التواصل</span></h2>
+            <p>تابعني على جميع المنصات لتكون في قلب الحدث</p>
         </div>
 
-        <div class="portfolio-grid">
-            <div class="portfolio-item gaming">
-                <div class="portfolio-thumb"><i class="fas fa-gamepad"></i></div>
-                <div class="portfolio-overlay">
-                    <h4>تختيم لعبة حصرية</h4>
-                    <p>جيمنج</p>
-                </div>
-            </div>
-            <div class="portfolio-item tech">
-                <div class="portfolio-thumb"><i class="fas fa-laptop-code"></i></div>
-                <div class="portfolio-overlay">
-                    <h4>مراجعة سيت أب</h4>
-                    <p>تقنية</p>
-                </div>
-            </div>
-            <div class="portfolio-item vlog">
-                <div class="portfolio-thumb"><i class="fas fa-camera"></i></div>
-                <div class="portfolio-overlay">
-                    <h4>رحلة إلى اليابان</h4>
-                    <p>فلوقات</p>
-                </div>
-            </div>
-            <div class="portfolio-item tech">
-                <div class="portfolio-thumb"><i class="fas fa-microchip"></i></div>
-                <div class="portfolio-overlay">
-                    <h4>أفضل تجميعة PC</h4>
-                    <p>تقنية</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="socials" class="section" style="background: linear-gradient(to top, #000, var(--bg-dark));">
-        <div class="section-title">
-            <h2>حساباتي <span>الرسمية</span></h2>
-            <p style="color: var(--text-gray); margin-top: 10px;">تواصل معي عبر المنصات التالية</p>
-        </div>
-        
         <div class="social-grid">
-            <a href="#" class="social-card">
-                <i class="fab fa-youtube social-icon"></i>
-                <div class="social-name">YouTube</div>
-                <div class="social-action">اشترك بالقناة</div>
+            <a href="https://kick.com/S4leeh" target="_blank" class="social-card kick">
+                <div class="social-icon-box"><i class="fas fa-bolt"></i></div> <div class="social-info">
+                    <h3>Kick</h3>
+                    <p>@S4leeh</p>
+                </div>
             </a>
-            <a href="#" class="social-card">
-                <i class="fab fa-x-twitter social-icon"></i>
-                <div class="social-name">Twitter / X</div>
-                <div class="social-action">تابع آخر التغريدات</div>
+
+            <a href="https://twitch.tv/S4leeh" target="_blank" class="social-card twitch">
+                <div class="social-icon-box"><i class="fab fa-twitch"></i></div>
+                <div class="social-info">
+                    <h3>Twitch</h3>
+                    <p>@S4leeh</p>
+                </div>
             </a>
-            <a href="#" class="social-card">
-                <i class="fab fa-instagram social-icon"></i>
-                <div class="social-name">Instagram</div>
-                <div class="social-action">كواليس ويوميات</div>
+
+            <a href="https://youtube.com/@S4leeh" target="_blank" class="social-card youtube">
+                <div class="social-icon-box"><i class="fab fa-youtube"></i></div>
+                <div class="social-info">
+                    <h3>YouTube</h3>
+                    <p>@S4leeh</p>
+                </div>
             </a>
-            <a href="#" class="social-card">
-                <i class="fab fa-tiktok social-icon"></i>
-                <div class="social-name">TikTok</div>
-                <div class="social-action">مقاطع قصيرة</div>
+
+            <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="social-card discord">
+                <div class="social-icon-box"><i class="fab fa-discord"></i></div>
+                <div class="social-info">
+                    <h3>Discord</h3>
+                    <p>Community Server</p>
+                </div>
             </a>
-            <a href="mailto:contact@s4leeh.com" class="social-card" style="border-color: rgba(255,255,255,0.2);">
-                <i class="fas fa-envelope social-icon"></i>
-                <div class="social-name">Business</div>
-                <div class="social-action">للاعلانات والرعاية</div>
+
+            <a href="https://x.com/iS4leeh" target="_blank" class="social-card twitter">
+                <div class="social-icon-box"><i class="fab fa-x-twitter"></i></div>
+                <div class="social-info">
+                    <h3>X / Twitter</h3>
+                    <p>@iS4leeh</p>
+                </div>
+            </a>
+
+            <a href="https://instagram.com/iS4leeh" target="_blank" class="social-card instagram">
+                <div class="social-icon-box"><i class="fab fa-instagram"></i></div>
+                <div class="social-info">
+                    <h3>Instagram</h3>
+                    <p>@iS4leeh</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="community" class="section">
+        <div class="community-banner">
+            <div class="comm-text">
+                <h3>مجتمع S4LEEH <span style="color: #5865F2;">DISCORD</span></h3>
+                <p>المكان الذي يجتمع فيه الجميع. فعاليات، أخبار البثوث، وسوالف الجيمرز. لا تفوت الفرصة وكن جزءاً من العائلة.</p>
+            </div>
+            <a href="https://discord.com/invite/YQ8aBxMznV" target="_blank" class="btn" style="background-color: #5865F2; color: white;">
+                <i class="fab fa-discord"></i> انضم للسيرفر الآن
             </a>
         </div>
     </section>
 
     <footer>
-        <p>جميع الحقوق محفوظة &copy; 2024 للمبدع <strong>S4leeh</strong></p>
+        <p>جميع الحقوق محفوظة &copy; 2024 لصانع المحتوى <strong>S4leeh</strong></p>
     </footer>
 
     <script>
-        // --- 1. الهيدر الثابت ---
-        window.addEventListener("scroll", function() {
+        // 1. الكتابة التلقائية
+        const textElement = document.getElementById("typing-text");
+        const phrases = ["STREAMER", "CONTENT CREATOR", "GAMER", "S4LEEH"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.innerText = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.innerText = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000; // انتظار بعد اكتمال الكلمة
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+        
+        document.addEventListener('DOMContentLoaded', typeEffect);
+
+        // 2. الهيدر والقائمة
+        window.addEventListener("scroll", () => {
             const header = document.querySelector("header");
             header.classList.toggle("scrolled", window.scrollY > 50);
         });
 
-        // --- 2. القائمة في الموبايل ---
         function toggleMenu() {
             const nav = document.querySelector(".nav-links");
-            const hamburgerIcon = document.querySelector(".hamburger i");
+            const icon = document.querySelector(".hamburger i");
             nav.classList.toggle("active");
-            
-            // تغيير أيقونة الهامبرغر
-            if(nav.classList.contains("active")) {
-                hamburgerIcon.classList.remove("fa-bars");
-                hamburgerIcon.classList.add("fa-times");
-            } else {
-                hamburgerIcon.classList.remove("fa-times");
-                hamburgerIcon.classList.add("fa-bars");
-            }
-        }
-
-        // التعامل مع القائمة المنسدلة في الموبايل
-        function toggleMobileDropdown(element) {
-            if (window.innerWidth <= 768) {
-                element.classList.toggle('active');
-            }
-        }
-
-        // إغلاق القائمة عند الضغط على رابط
-        document.querySelectorAll(".nav-links a").forEach(n => n.addEventListener("click", () => {
-             if(!n.parentElement.classList.contains('dropdown')) {
-                 document.querySelector(".nav-links").classList.remove("active");
-                 document.querySelector(".hamburger i").classList.remove("fa-times");
-                 document.querySelector(".hamburger i").classList.add("fa-bars");
-             }
-        }));
-
-        // --- 3. تأثير الكتابة التلقائية ---
-        const words = ["محتوى تقني", "بثوث مباشرة", "مراجعات ألعاب", "فلوقات يومية"];
-        let i = 0;
-        let timer;
-
-        function typeWriter() {
-            const element = document.getElementById("typing-text");
-            const word = words[i];
-            let currentText = element.textContent;
-            
-            if (element.classList.contains("deleting")) {
-                element.textContent = currentText.substring(0, currentText.length - 1);
-                if (element.textContent === "") {
-                    element.classList.remove("deleting");
-                    i = (i + 1) % words.length;
-                    timer = setTimeout(typeWriter, 500);
-                } else {
-                    timer = setTimeout(typeWriter, 50);
-                }
-            } else {
-                if (currentText === word) {
-                    element.classList.add("deleting");
-                    timer = setTimeout(typeWriter, 2000);
-                } else {
-                    element.textContent = word.substring(0, currentText.length + 1);
-                    timer = setTimeout(typeWriter, 100);
-                }
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(typeWriter, 1000);
-        });
-
-        // --- 4. فلتر المعرض ---
-        function filterPortfolio(category) {
-            const items = document.querySelectorAll('.portfolio-item');
-            const buttons = document.querySelectorAll('.filter-btn');
-
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            items.forEach(item => {
-                if (category === 'all' || item.classList.contains(category)) {
-                    item.classList.remove('hide');
-                    item.style.opacity = '0';
-                    setTimeout(() => item.style.opacity = '1', 50);
-                } else {
-                    item.classList.add('hide');
-                }
-            });
+            icon.classList.toggle("fa-times");
+            icon.classList.toggle("fa-bars");
         }
     </script>
 </body>
