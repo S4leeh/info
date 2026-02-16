@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Creative | Digital Agency</title>
+    <title>S4leeh | صانع محتوى</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- المتغيرات والتنسيقات الأساسية --- */
         :root {
-            --primary-color: #6C63FF;
-            --secondary-color: #00d2ff;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
+            --gold-primary: #D4AF37;       /* ذهبي أساسي */
+            --gold-light: #F1D878;         /* ذهبي فاتح للإضاءة */
+            --gold-dark: #AA8C2C;          /* ذهبي غامق للظلال */
+            --bg-dark: #050505;            /* أسود عميق */
+            --bg-card: #121212;            /* رمادي داكن للكروت */
+            --text-light: #ffffff;
+            --text-gray: #b0b0b0;
             --transition: all 0.3s ease;
         }
 
@@ -20,7 +26,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
 
         body {
@@ -30,89 +36,120 @@
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
         ul { list-style: none; }
 
-        /* --- HEADER & NAV --- */
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 5px; }
+
+        /* --- الهيدر والقائمة --- */
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 1.5rem 5%;
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
             transition: var(--transition);
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
         }
 
         header.scrolled {
-            background-color: rgba(15, 23, 42, 0.95);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            padding: 1rem 5%;
+            padding: 0.8rem 5%;
+            background-color: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid var(--gold-primary);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* تنسيق الشعار */
+        .logo-img {
+            max-height: 50px; /* تحكم في ارتفاع الشعار */
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .nav-links a {
-            font-weight: 500;
-            transition: color 0.3s;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
         }
 
-        .nav-links a:hover { color: var(--secondary-color); }
-
-        /* Dropdown Menu */
-        .dropdown { position: relative; }
+        .nav-links a:hover { color: var(--gold-primary); }
         
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: var(--gold-primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        /* القائمة المنسدلة */
+        .dropdown { position: relative; }
         .dropdown-menu {
             position: absolute;
             top: 100%;
-            left: 0;
+            right: 0; /* لليمين لأن الموقع عربي */
             background-color: var(--bg-card);
-            min-width: 150px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid var(--gold-dark);
+            min-width: 180px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(10px);
             transition: var(--transition);
-            border-radius: 5px;
+            border-radius: 8px;
             padding: 0.5rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
 
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        
         .dropdown-menu li a {
             display: block;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            color: var(--text-gray);
         }
 
         .dropdown-menu li a:hover {
-            background-color: rgba(255,255,255,0.05);
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--gold-primary);
+            padding-right: 1.5rem; /* حركة بسيطة عند التحويم */
         }
 
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
+        .hamburger { display: none; cursor: pointer; color: var(--gold-primary); font-size: 1.8rem; }
 
-        /* --- HERO SECTION --- */
+        /* --- قسم البداية (Hero) --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -121,207 +158,276 @@
             align-items: center;
             text-align: center;
             padding: 0 1rem;
-            background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.1), transparent);
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, rgba(5, 5, 5, 1) 70%);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: -1;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, var(--gold-light), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dynamic-wrapper {
+            font-size: 2rem;
+            color: var(--text-gray);
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .dynamic-text {
-            color: var(--secondary-color);
-            border-right: 2px solid var(--secondary-color);
-            white-space: nowrap;
-            overflow: hidden;
+            color: var(--gold-primary);
+            border-left: 3px solid var(--gold-primary); /* المؤشر */
+            padding-left: 5px;
             animation: blink 0.75s step-end infinite;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            max-width: 600px;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
+        .btn-gold {
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold-primary));
+            color: #000;
             border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.2s;
-            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
             border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn:hover { transform: scale(1.05); }
+        .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+        }
 
-        /* --- SERVICES SECTION --- */
-        .section { padding: 5rem 10%; }
+        /* --- الأقسام العامة --- */
+        .section { padding: 6rem 10%; }
         
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
         }
         
-        .section-title h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .section-title span { color: var(--primary-color); }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+        .section-title h2 {
+            font-size: 3rem;
+            color: var(--text-light);
+            display: inline-block;
+            padding-bottom: 15px;
         }
 
-        .card {
-            background-color: var(--bg-card);
+        .section-title h2 span { color: var(--gold-primary); }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--gold-primary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* --- الإحصائيات (أرقام) --- */
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             padding: 2rem;
-            border-radius: 12px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 200px;
             transition: var(--transition);
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-color);
-        }
+        .stat-item:hover { border-color: var(--gold-primary); transform: translateY(-5px); }
+        .stat-item h3 { font-size: 2.5rem; color: var(--gold-primary); margin-bottom: 0.5rem; }
+        .stat-item p { color: var(--text-gray); }
 
-        .card h3 { margin-bottom: 1rem; }
-        .card p { color: var(--text-gray); font-size: 0.95rem; }
-
-        /* --- PORTFOLIO (FILTERABLE) --- */
+        /* --- معرض المحتوى --- */
         .filter-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             flex-wrap: wrap;
         }
 
         .filter-btn {
             background: transparent;
-            border: 1px solid var(--text-gray);
-            color: var(--text-gray);
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-primary);
+            padding: 0.6rem 2rem;
+            border-radius: 30px;
             cursor: pointer;
             transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
         }
 
         .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: white;
+            background-color: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
 
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         .portfolio-item {
             position: relative;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            height: 250px;
-            background-color: #2d3748;
-            display: flex; /* Centering text for demo */
-            align-items: center;
+            height: 220px;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        
+        .portfolio-item:hover { border-color: var(--gold-primary); }
+
+        .portfolio-thumb {
+            width: 100%;
+            height: 100%;
+            display: flex;
             justify-content: center;
-            font-weight: bold;
-            color: rgba(255,255,255,0.1);
-            font-size: 3rem;
+            align-items: center;
+            background: linear-gradient(135deg, #222, #111);
         }
 
-        .portfolio-item.hide { display: none; }
-        
+        .portfolio-thumb i { font-size: 3rem; color: rgba(212, 175, 55, 0.3); }
+
         .portfolio-overlay {
             position: absolute;
-            bottom: -100%;
+            top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(108, 99, 255, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            opacity: 0;
             transition: var(--transition);
+            border: 1px solid var(--gold-primary);
         }
 
-        .portfolio-item:hover .portfolio-overlay { bottom: 0; }
-        .portfolio-overlay h4 { color: white; margin-bottom: 0.5rem; }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-overlay h4 { color: var(--gold-primary); margin-bottom: 0.5rem; font-size: 1.2rem; }
 
-        /* --- CONTACT --- */
-        .contact-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 3rem;
+        .portfolio-item.hide { display: none; }
+
+        /* --- التواصل الاجتماعي (Grid) --- */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-card {
             background-color: var(--bg-card);
-            padding: 3rem;
-            border-radius: 15px;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .contact-info, .contact-form { flex: 1; min-width: 300px; }
-        
-        .form-group { margin-bottom: 1.5rem; }
-        
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--bg-dark);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: white;
-            outline: none;
+        .social-card:hover {
+            border-color: var(--gold-primary);
+            background-color: rgba(212, 175, 55, 0.05);
+            transform: translateY(-5px);
         }
 
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--primary-color);
-        }
+        .social-icon { font-size: 2.5rem; color: var(--gold-primary); }
+        .social-name { font-weight: 700; font-size: 1.2rem; }
+        .social-action { font-size: 0.9rem; color: var(--text-gray); }
 
-        /* --- FOOTER --- */
+        /* --- تذييل الصفحة --- */
         footer {
             text-align: center;
-            padding: 2rem;
-            background-color: #020617;
+            padding: 3rem 1rem;
+            background-color: #000;
+            border-top: 1px solid var(--gold-dark);
             color: var(--text-gray);
-            font-size: 0.9rem;
         }
 
-        /* --- ANIMATIONS --- */
+        footer strong { color: var(--gold-primary); }
+
+        /* --- الحركات --- */
         @keyframes blink { 50% { border-color: transparent; } }
 
-        /* --- MEDIA QUERIES --- */
+        /* --- التجاوب (Media Queries) --- */
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
                 top: 0;
-                right: -100%;
-                width: 70%;
+                right: -100%; /* تعديل لليمين */
+                width: 75%;
                 height: 100vh;
-                background-color: var(--bg-card);
+                background-color: #0f0f0f;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 transition: 0.4s ease;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+                box-shadow: -5px 0 20px rgba(0,0,0,0.8);
+                border-left: 1px solid var(--gold-dark);
             }
 
             .nav-links.active { right: 0; }
             .hamburger { display: block; z-index: 1001; }
             
             .hero h1 { font-size: 2.5rem; }
+            .section { padding: 4rem 5%; }
             
-            /* Mobile Dropdown adjustment */
+            /* تعديل القائمة المنسدلة في الموبايل */
             .dropdown-menu {
                 position: static;
                 background: transparent;
+                border: none;
                 box-shadow: none;
                 text-align: center;
                 display: none;
+                padding-top: 0;
             }
             .dropdown.active .dropdown-menu { display: block; opacity: 1; visibility: visible; }
         }
@@ -330,168 +436,185 @@
 <body>
 
     <header id="navbar">
-        <div class="logo">Lumina.</div>
+        <div class="logo-container">
+            <img src="logo.png" alt="S4leeh" class="logo-img" onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';">
+            <span class="logo-text" style="display: none;">S4leeh</span>
+        </div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#about">من أنا</a></li>
                 <li class="dropdown" onclick="toggleMobileDropdown(this)">
-                    <a href="#work">Work ▾</a>
+                    <a href="#content">المحتوى <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">Branding</a></li>
-                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">يوتيوب</a></li>
+                        <li><a href="#">تويتش</a></li>
+                        <li><a href="#">شروحات</a></li>
                     </ul>
                 </li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#contact" class="btn" style="padding: 0.5rem 1.5rem;">Let's Talk</a></li>
+                <li><a href="#socials">التواصل</a></li>
             </ul>
         </nav>
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
     </header>
 
     <section id="home" class="hero">
-        <h1>We Create <span class="dynamic-text" id="typing-text"></span></h1>
-        <p>Lumina Creative transforms digital concepts into engaging experiences. We build brands that speak to the future.</p>
-        <button class="btn" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">Explore Our Work</button>
+        <p style="color: var(--gold-primary); letter-spacing: 2px; margin-bottom: 10px;">عالم من الإبداع</p>
+        <h1>أهلاً بك في عالم <span>S4leeh</span></h1>
+        <div class="dynamic-wrapper">
+            <span>أقدم لكم</span>
+            <span class="dynamic-text" id="typing-text"></span>
+        </div>
+        <button class="btn-gold" onclick="document.getElementById('socials').scrollIntoView({behavior: 'smooth'})">تابعني الآن</button>
     </section>
 
-    <section id="services" class="section">
+    <section id="about" class="section">
         <div class="section-title">
-            <h2>Our <span>Expertise</span></h2>
-            <p>Comprehensive digital solutions for modern businesses.</p>
+            <h2>إحصائيات <span>المحتوى</span></h2>
+            <p style="color: var(--text-gray); margin-top: 10px;">أرقامنا تتحدث عن شغفنا ومجتمعنا الرائع</p>
         </div>
-        <div class="services-grid">
-            <div class="card">
-                <h3>UI/UX Design</h3>
-                <p>Crafting intuitive and visually stunning interfaces that users love to interact with.</p>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>+500K</h3>
+                <p>مشترك يوتيوب</p>
             </div>
-            <div class="card">
-                <h3>Web Development</h3>
-                <p>Robust, scalable, and high-performance code using the latest web technologies.</p>
+            <div class="stat-item">
+                <h3>+10M</h3>
+                <p>إجمالي المشاهدات</p>
             </div>
-            <div class="card">
-                <h3>Digital Strategy</h3>
-                <p>Data-driven insights to help your brand grow and reach the right audience effectively.</p>
+            <div class="stat-item">
+                <h3>+50K</h3>
+                <p>متابع انستقرام</p>
             </div>
         </div>
     </section>
 
-    <section id="work" class="section">
+    <section id="content" class="section">
         <div class="section-title">
-            <h2>Featured <span>Projects</span></h2>
+            <h2>أحدث <span>الأعمال</span></h2>
         </div>
         
         <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterPortfolio('all')">All</button>
-            <button class="filter-btn" onclick="filterPortfolio('design')">Design</button>
-            <button class="filter-btn" onclick="filterPortfolio('dev')">Development</button>
+            <button class="filter-btn active" onclick="filterPortfolio('all')">الكل</button>
+            <button class="filter-btn" onclick="filterPortfolio('gaming')">جيمنج</button>
+            <button class="filter-btn" onclick="filterPortfolio('tech')">تقنية</button>
+            <button class="filter-btn" onclick="filterPortfolio('vlog')">فلوقات</button>
         </div>
 
         <div class="portfolio-grid">
-            <div class="portfolio-item design">
-                01
+            <div class="portfolio-item gaming">
+                <div class="portfolio-thumb"><i class="fas fa-gamepad"></i></div>
                 <div class="portfolio-overlay">
-                    <h4>Neon Brand Identity</h4>
-                    <p>Design</p>
+                    <h4>تختيم لعبة حصرية</h4>
+                    <p>جيمنج</p>
                 </div>
             </div>
-            <div class="portfolio-item dev">
-                02
+            <div class="portfolio-item tech">
+                <div class="portfolio-thumb"><i class="fas fa-laptop-code"></i></div>
                 <div class="portfolio-overlay">
-                    <h4>E-Commerce Platform</h4>
-                    <p>Development</p>
+                    <h4>مراجعة سيت أب</h4>
+                    <p>تقنية</p>
                 </div>
             </div>
-            <div class="portfolio-item design">
-                03
+            <div class="portfolio-item vlog">
+                <div class="portfolio-thumb"><i class="fas fa-camera"></i></div>
                 <div class="portfolio-overlay">
-                    <h4>Mobile App UI</h4>
-                    <p>Design</p>
+                    <h4>رحلة إلى اليابان</h4>
+                    <p>فلوقات</p>
                 </div>
             </div>
-            <div class="portfolio-item dev">
-                04
+            <div class="portfolio-item tech">
+                <div class="portfolio-thumb"><i class="fas fa-microchip"></i></div>
                 <div class="portfolio-overlay">
-                    <h4>FinTech Dashboard</h4>
-                    <p>Development</p>
+                    <h4>أفضل تجميعة PC</h4>
+                    <p>تقنية</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="section">
+    <section id="socials" class="section" style="background: linear-gradient(to top, #000, var(--bg-dark));">
         <div class="section-title">
-            <h2>Get In <span>Touch</span></h2>
+            <h2>حساباتي <span>الرسمية</span></h2>
+            <p style="color: var(--text-gray); margin-top: 10px;">تواصل معي عبر المنصات التالية</p>
         </div>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Let's start a project together</h3>
-                <p style="color: var(--text-gray); margin-top: 1rem;">Have an idea? We'd love to hear about it. Fill out the form or drop us an email.</p>
-                <div style="margin-top: 2rem;">
-                    <p><strong>Email:</strong> hello@lumina.com</p>
-                    <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-                    <p><strong>Location:</strong> San Francisco, CA</p>
-                </div>
-            </div>
-            <form class="contact-form" onsubmit="event.preventDefault(); alert('Thanks for reaching out! We will get back to you soon.');">
-                <div class="form-group">
-                    <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea rows="5" placeholder="Tell us about your project" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
+        
+        <div class="social-grid">
+            <a href="#" class="social-card">
+                <i class="fab fa-youtube social-icon"></i>
+                <div class="social-name">YouTube</div>
+                <div class="social-action">اشترك بالقناة</div>
+            </a>
+            <a href="#" class="social-card">
+                <i class="fab fa-x-twitter social-icon"></i>
+                <div class="social-name">Twitter / X</div>
+                <div class="social-action">تابع آخر التغريدات</div>
+            </a>
+            <a href="#" class="social-card">
+                <i class="fab fa-instagram social-icon"></i>
+                <div class="social-name">Instagram</div>
+                <div class="social-action">كواليس ويوميات</div>
+            </a>
+            <a href="#" class="social-card">
+                <i class="fab fa-tiktok social-icon"></i>
+                <div class="social-name">TikTok</div>
+                <div class="social-action">مقاطع قصيرة</div>
+            </a>
+            <a href="mailto:contact@s4leeh.com" class="social-card" style="border-color: rgba(255,255,255,0.2);">
+                <i class="fas fa-envelope social-icon"></i>
+                <div class="social-name">Business</div>
+                <div class="social-action">للاعلانات والرعاية</div>
+            </a>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2024 Lumina Creative. All Rights Reserved.</p>
+        <p>جميع الحقوق محفوظة &copy; 2024 للمبدع <strong>S4leeh</strong></p>
     </footer>
 
     <script>
-        // --- 1. Sticky Navigation ---
+        // --- 1. الهيدر الثابت ---
         window.addEventListener("scroll", function() {
             const header = document.querySelector("header");
             header.classList.toggle("scrolled", window.scrollY > 50);
         });
 
-        // --- 2. Mobile Menu Toggle ---
+        // --- 2. القائمة في الموبايل ---
         function toggleMenu() {
             const nav = document.querySelector(".nav-links");
-            const hamburger = document.querySelector(".hamburger");
+            const hamburgerIcon = document.querySelector(".hamburger i");
             nav.classList.toggle("active");
             
-            // Toggle hamburger icon
+            // تغيير أيقونة الهامبرغر
             if(nav.classList.contains("active")) {
-                hamburger.innerHTML = "✕";
+                hamburgerIcon.classList.remove("fa-bars");
+                hamburgerIcon.classList.add("fa-times");
             } else {
-                hamburger.innerHTML = "☰";
+                hamburgerIcon.classList.remove("fa-times");
+                hamburgerIcon.classList.add("fa-bars");
             }
         }
 
-        // Handle Dropdown click on Mobile
+        // التعامل مع القائمة المنسدلة في الموبايل
         function toggleMobileDropdown(element) {
             if (window.innerWidth <= 768) {
                 element.classList.toggle('active');
             }
         }
 
-        // Close menu when clicking a link
+        // إغلاق القائمة عند الضغط على رابط
         document.querySelectorAll(".nav-links a").forEach(n => n.addEventListener("click", () => {
-             // Only close if it's not a dropdown parent or if it's a dropdown link
              if(!n.parentElement.classList.contains('dropdown')) {
                  document.querySelector(".nav-links").classList.remove("active");
-                 document.querySelector(".hamburger").innerHTML = "☰";
+                 document.querySelector(".hamburger i").classList.remove("fa-times");
+                 document.querySelector(".hamburger i").classList.add("fa-bars");
              }
         }));
 
-        // --- 3. Dynamic Typewriter Effect ---
-        const words = ["Experiences.", "Brands.", "Digital Solutions.", "Futures."];
+        // --- 3. تأثير الكتابة التلقائية ---
+        const words = ["محتوى تقني", "بثوث مباشرة", "مراجعات ألعاب", "فلوقات يومية"];
         let i = 0;
         let timer;
 
@@ -500,7 +623,6 @@
             const word = words[i];
             let currentText = element.textContent;
             
-            // If deleting
             if (element.classList.contains("deleting")) {
                 element.textContent = currentText.substring(0, currentText.length - 1);
                 if (element.textContent === "") {
@@ -510,12 +632,10 @@
                 } else {
                     timer = setTimeout(typeWriter, 50);
                 }
-            } 
-            // If typing
-            else {
+            } else {
                 if (currentText === word) {
                     element.classList.add("deleting");
-                    timer = setTimeout(typeWriter, 2000); // Wait before deleting
+                    timer = setTimeout(typeWriter, 2000);
                 } else {
                     element.textContent = word.substring(0, currentText.length + 1);
                     timer = setTimeout(typeWriter, 100);
@@ -523,26 +643,23 @@
             }
         }
         
-        // Start typing effect
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(typeWriter, 1000);
         });
 
-        // --- 4. Portfolio Filter ---
+        // --- 4. فلتر المعرض ---
         function filterPortfolio(category) {
             const items = document.querySelectorAll('.portfolio-item');
             const buttons = document.querySelectorAll('.filter-btn');
 
-            // Toggle active button
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
             items.forEach(item => {
                 if (category === 'all' || item.classList.contains(category)) {
                     item.classList.remove('hide');
-                    // Add fade in animation logic here if desired
-                    item.style.opacity = '1'; 
-                    item.style.transform = 'scale(1)';
+                    item.style.opacity = '0';
+                    setTimeout(() => item.style.opacity = '1', 50);
                 } else {
                     item.classList.add('hide');
                 }
