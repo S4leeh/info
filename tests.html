@@ -49,6 +49,10 @@
         /* الهيرو */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         .hero { text-align: center; padding: 100px 0 60px; }
+        
+        /* تعديل: إضافة تنسيق شعار الهيرو */
+        .hero-logo { width: 150px; height: 150px; margin-bottom: 20px; border-radius: 50%; border: 2px solid var(--primary); padding: 10px; }
+        
         .hero h1 { font-size: 4rem; font-weight: 900; margin-bottom: 10px; }
         /* تم تعديل max-width لحل مشكلة السطر الأخير */
         .hero p { color: #888; font-size: 1.2rem; max-width: 800px; margin: 0 auto 30px; }
@@ -108,6 +112,9 @@
         .content-pane { display: none; animation: fade 0.5s; padding-top: 20px; border-top: 1px solid var(--border); }
         .content-pane.active { display: block; }
         
+        /* تعديل: إضافة مسافة أسفل قسم الألعاب المنتهية */
+        #games { margin-bottom: 80px; }
+        
         .games-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
         .game-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-align: center; padding-bottom: 15px; transition: 0.3s; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--primary); }
@@ -115,9 +122,15 @@
         .hidden-game { display: none; }
         
         .socials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .social-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; text-decoration: none; transition: 0.3s; display: block; }
+        
+        /* تعديل: توسيط محتوى الحسابات */
+        .social-item { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; 
+            text-align: center; text-decoration: none; transition: 0.3s; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
         .social-item:hover { border-color: #fff; transform: translateY(-3px); }
-        .social-item img { width: 24px; filter: invert(1); margin-bottom: 5px; }
+        .social-item img { width: 24px; filter: invert(1); margin-bottom: 10px; }
         
         /* العداد */
         .countdown-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
@@ -151,6 +164,8 @@
     </nav>
 
     <header class="hero container">
+        <img src="logo.png" alt="S4leeh Logo" class="hero-logo">
+        <br>
         <a href="https://kick.com/S4leeh" target="_blank" class="live-badge">
             <span class="live-dot"></span> <span>غير متصل (اضغط للذهاب للقناة)</span>
         </a>
@@ -189,12 +204,12 @@
         <h2 class="section-title">📂 الأرشيف</h2>
         <div class="archive-box">
             <div class="tabs">
-                <button class="tab-btn active" onclick="openTab(event, 'events')">🏆 الفعاليات</button>
-                <button class="tab-btn" onclick="openTab(event, 'ramadan')">🌙 رمضانيات</button>
-                <button class="tab-btn" onclick="openTab(event, 'highlights')">🎬 لقطات</button>
+                <button class="tab-btn" onclick="openTab(event, 'events')">🏆 الفعاليات</button>
+                <button class="tab-btn" onclick="toggleTabDisplay(event, 'ramadan')">🌙 رمضانيات</button>
+                <button class="tab-btn" onclick="toggleTabDisplay(event, 'highlights')">🎬 لقطات</button>
             </div>
 
-            <div id="events" class="content-pane active">
+            <div id="events" class="content-pane">
                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:15px;">
                     <h3 style="color:#fff;">🏆 ثلاثيات تحداني</h3>
                     <a href="https://www.youtube.com/playlist?list=PL..." target="_blank" style="color:var(--primary); font-weight:700;">شاهد القائمة الكاملة &larr;</a>
@@ -303,12 +318,23 @@
             el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
 
-        // التبويب
+        // التبويب (معدل ليسمح بالإخفاء والظهور)
         function openTab(evt, id) {
+            const pane = document.getElementById(id);
+            const isAlreadyActive = pane.classList.contains('active');
+            
             document.querySelectorAll('.content-pane').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            evt.currentTarget.classList.add('active');
+            
+            if (!isAlreadyActive) {
+                pane.classList.add('active');
+                evt.currentTarget.classList.add('active');
+            }
+        }
+        
+        // دالة بديلة لاستخدامها مع الأزرار الأخرى في الأرشيف لضمان نفس السلوك
+        function toggleTabDisplay(evt, id) {
+            openTab(evt, id);
         }
 
         // إظهار المزيد
