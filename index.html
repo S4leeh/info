@@ -199,14 +199,14 @@
     <section class="stats-grid reveal">
         <div class="stat-card"><div class="stat-value" id="exp">...</div><div class="stat-label">رحلة صناعة المحتوى</div></div>
         <div class="stat-card"><div class="stat-value" id="sub-count">...</div><div class="stat-label">عدد مشتركين قناة اليوتيوب</div></div>
-        <div class="stat-card"><div class="stat-value" id="live-count">14</div><div class="stat-label">عدد البثوث في 2026</div></div>
+        <div class="stat-card"><div class="stat-value" id="live-count">13</div><div class="stat-label">عدد البثوث في 2026</div></div>
     </section>
 
     <section id="last-video" class="content-section reveal">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">📺 المقطع الأخير في اليوتيوب</h2>
-        <a href="https://www.youtube.com/watch?v=TiD6HoCbIXM" class="yt-card" target="_blank">
-            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"></div>
-            <div class="yt-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div>
+        <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" class="yt-card" target="_blank">
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"></div>
+            <div class="yt-details"><h2>رمضانيات مع صالح 🌙 | البصل فاكهة !! 😂</h2></div>
         </a>
     </section>
 
@@ -262,16 +262,12 @@
 
                 <div id="ramadan-body" class="archive-body">
                     <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🌙 رمضانيّات مع صالح</h3>
-                    <p style="text-align:center; color:#ccc; line-height:1.6;">انتظرونا في شهر رمضان المبارك مع حلقات خاصة وحصرية في الشهر الفضيل</p>
-                    <div style="margin-top:40px; text-align:center;">
-                        <h4 id="countdown-title" style="color:var(--gold); margin-bottom:20px;">⏳ العد التنازلي للحلقة الأولى</h4>
-                        <div class="countdown-container">
-                            <div class="countdown-box"><span id="days" class="countdown-value">00</span><span class="countdown-label">يوم</span></div>
-                            <div class="countdown-box"><span id="hours" class="countdown-value">00</span><span class="countdown-label">ساعة</span></div>
-                            <div class="countdown-box"><span id="minutes" class="countdown-value">00</span><span class="countdown-label">دقيقة</span></div>
-                            <div class="countdown-box"><span id="seconds" class="countdown-value">00</span><span class="countdown-label">ثانية</span></div>
-                        </div>
-                        <p style="margin-top:20px; font-size:14px; color:var(--gold);">موعدنا: 1 رمضان (18 فبراير 2026 - 8:00 مساءً)</p>
+                    
+                    <div style="margin-top:20px;">
+                        <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="large-ep-card">
+                            <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"></div>
+                            <div class="large-ep-details"><h2>الحلقة الأولى: البصل فاكهة !! 😂</h2></div>
+                        </a>
                     </div>
                 </div>
 
@@ -446,22 +442,6 @@
         initCanvas(); handleParticles();
         window.addEventListener('resize', initCanvas);
 
-        function updateCountdown() {
-            const ramadanDate = new Date('February 18, 2026 20:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = ramadanDate - now;
-            if (gap <= 0) {
-                const timerTitle = document.getElementById('countdown-title');
-                if (timerTitle) timerTitle.innerText = "الحلقة الأولى بدأت الآن! 🔥";
-                return;
-            }
-            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
-            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
-            const dEl = document.getElementById('days'), hEl = document.getElementById('hours'), mEl = document.getElementById('minutes'), sEl = document.getElementById('seconds');
-            if (dEl) dEl.innerText = d < 10 ? '0'+d : d; if (hEl) hEl.innerText = h < 10 ? '0'+h : h; if (mEl) mEl.innerText = m < 10 ? '0'+m : m; if (sEl) sEl.innerText = s < 10 ? '0'+s : s;
-        }
-        setInterval(updateCountdown, 1000);
-
         function toggleMainArchive(type) {
             const area = document.getElementById('archive-content-area');
             const bodies = document.querySelectorAll('.archive-body');
@@ -564,7 +544,7 @@
             }
         }
 
-        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); updateCountdown(); };
+        window.onload = () => { updateStats(); updateYouTubeSubs(); checkKick(); setInterval(checkKick, 60000); };
     </script>
 </body>
 </html>
