@@ -263,15 +263,32 @@
                 <div id="ramadan-body" class="archive-body">
                     <h3 style="color:var(--gold); font-size:22px; margin-bottom:15px; text-align:center;">🌙 رمضانيّات مع صالح</h3>
                     
-                    <div style="margin-top:20px;">
-                        <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="large-ep-card">
-                            <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"></div>
-                            <div class="large-ep-details"><h2>الحلقة الأولى: البصل فاكهة !! 😂</h2></div>
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" target="_blank" class="large-ep-card">
-                            <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"></div>
-                            <div class="large-ep-details"><h2>الحلقة الثانية: قارة آسيا مافيها صحراء !! 😂</h2></div>
-                        </a>
+                    <div class="episodes-selector" style="border-top: none; padding-top: 10px;">
+                        <div class="ep-node active" onclick="showRamadanEp('ramadan-ep-1', this)">الحلقة الأولى</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-2', this)">الحلقة الثانية</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-3', this)">الحلقة الثالثة</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-4', this)">الحلقة الرابعة</div>
+                    </div>
+
+                    <div id="ramadan-ep-display">
+                        <div id="ramadan-ep-1" class="archive-body active">
+                            <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="large-ep-card">
+                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"></div>
+                                <div class="large-ep-details"><h2>الحلقة الأولى: البصل فاكهة !! 😂</h2></div>
+                            </a>
+                        </div>
+                        <div id="ramadan-ep-2" class="archive-body">
+                            <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" target="_blank" class="large-ep-card">
+                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"></div>
+                                <div class="large-ep-details"><h2>الحلقة الثانية: قارة آسيا مافيها صحراء !! 😂</h2></div>
+                            </a>
+                        </div>
+                        <div id="ramadan-ep-3" class="archive-body">
+                            <p style="text-align:center; padding:40px; color:#666; font-weight:800;">الحلقة الثالثة قريباً... ⏳</p>
+                        </div>
+                        <div id="ramadan-ep-4" class="archive-body">
+                            <p style="text-align:center; padding:40px; color:#666; font-weight:800;">الحلقة الرابعة قريباً... ⏳</p>
+                        </div>
                     </div>
                 </div>
 
@@ -474,6 +491,13 @@
         function showEp(epId, node) {
             document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.ep-node').forEach(n => n.classList.remove('active'));
+            document.getElementById(epId).classList.add('active'); node.classList.add('active');
+            refreshCursorEvents();
+        }
+        
+        function showRamadanEp(epId, node) {
+            document.querySelectorAll('#ramadan-ep-display .archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#ramadan-body .ep-node').forEach(n => n.classList.remove('active'));
             document.getElementById(epId).classList.add('active'); node.classList.add('active');
             refreshCursorEvents();
         }
