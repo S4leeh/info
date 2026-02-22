@@ -1,377 +1,1224 @@
 <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4leeh | صالح</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-bg: #141414;
+            --card-bg2: #1a1a1a;
+            --gold: #d4af37;
+            --gold-light: #f0cc55;
+            --gold-dark: #a8892a;
+            --gold-glow: rgba(212, 175, 55, 0.35);
+            --gold-glow-soft: rgba(212, 175, 55, 0.12);
+            --border-color: rgba(212, 175, 55, 0.18);
+            --border-hover: rgba(212, 175, 55, 0.55);
+            --kick-green: #53fc18;
+            --live-red: #ea1d2c;
+            --text-main: #f0f0f0;
+            --text-muted: #888;
+            --text-dim: #555;
+        }
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Match Details: Falcons vs D3M</title>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#590df2",
-                        "background-light": "#f6f5f8",
-                        "background-dark": "#161022",
-                    },
-                    fontFamily: {
-                        "display": ["Space Grotesk", "sans-serif"],
-                        "body": ["Noto Sans", "sans-serif"],
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
+        /* =================== CURSOR =================== */
+        html, body, a, button, select, textarea, input, .ep-node, .game-card, .social-item, .tab-btn {
+            cursor: none !important;
         }
-    </script>
-<style>
-        /* Custom scrollbar for webkit */
-        ::-webkit-scrollbar {
-            width: 8px;
+        #s4-cursor {
+            width: 32px; height: 32px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000000;
+            transform: translate(-50%, -50%);
+            transition: width 0.18s ease-out, height 0.18s ease-out, filter 0.18s;
         }
-        ::-webkit-scrollbar-track {
-            background: #161022; 
+        .cursor-hover {
+            width: 54px !important;
+            height: 54px !important;
+            filter: drop-shadow(0 0 14px var(--gold)) !important;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #2f2249; 
-            border-radius: 4px;
+        @media (pointer: coarse) {
+            #s4-cursor { display: none !important; }
+            html, body, a, button, input, textarea, select, .social-item, .game-card, .ep-node, .tab-btn { cursor: auto !important; }
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #590df2; 
+
+        /* =================== BASE =================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        section, div[id] { scroll-margin-top: 140px; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
-        .text-glow {
-            text-shadow: 0 0 20px rgba(89, 13, 242, 0.5);
+
+        /* =================== BACKGROUND =================== */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+
+        /* Noise grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.5;
         }
-        .vs-glow {
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(89, 13, 242, 0.6);
+
+        /* =================== SCROLL REVEAL =================== */
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s cubic-bezier(.23,1,.32,1), transform 0.75s cubic-bezier(.23,1,.32,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(30px); transition: opacity 0.75s ease-out, transform 0.75s ease-out; }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+
+        /* =================== LIVE BAR =================== */
+        .live-status-bar {
+            width: 100%;
+            background: rgba(5,5,5,0.96);
+            border-bottom: 1px solid var(--border-color);
+            padding: 11px;
+            position: sticky;
+            top: 0;
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            text-decoration: none;
+            backdrop-filter: blur(20px);
+            transition: background 0.3s;
+        }
+        .is-live .live-status-bar { background: rgba(10,20,10,0.96); border-bottom-color: rgba(83,252,24,0.3); }
+        .status-content { display: flex; align-items: center; gap: 12px; }
+        .status-dot {
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            background-color: var(--live-red);
+            transition: background 0.4s;
+        }
+        .is-live .status-dot {
+            background-color: var(--kick-green);
+            box-shadow: 0 0 12px var(--kick-green), 0 0 25px rgba(83,252,24,0.4);
+            animation: pulse 1.2s infinite;
+        }
+        .status-text { color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 0.3px; }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+
+        /* =================== NAV =================== */
+        .nav-bar {
+            width: fit-content;
+            background: rgba(20,20,20,0.85);
+            border: 1px solid var(--border-color);
+            padding: 8px 28px;
+            position: sticky;
+            top: 50px;
+            z-index: 10000;
+            margin: 16px auto 0;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .nav-link {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 2px;
+            font-family: 'Cairo', sans-serif;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px;
+            bottom: 0; right: 0;
+            background: linear-gradient(90deg, transparent, var(--gold));
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        .nav-link:hover::after { width: 100%; left: 0; right: auto; }
+        .nav-link:hover { color: var(--gold); }
+
+        /* =================== HEADER / HERO =================== */
+        header {
+            text-align: center;
+            padding: 70px 20px 50px;
+            position: relative;
+        }
+
+        /* Decorative ring behind logo */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 28px;
+        }
+        .logo-ring {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            animation: ring-rotate 12s linear infinite;
+        }
+        .logo-ring::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: 50%;
+            transform: translateX(-50%);
+            width: 6px; height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold);
+        }
+        @keyframes ring-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .logo {
+            width: 145px; height: 145px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 0 6px rgba(212,175,55,0.07), 0 0 40px var(--gold-glow);
+            animation: float 5s ease-in-out infinite;
+            object-fit: cover;
+            display: block;
+        }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+        .owner-name {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 52px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        .bio {
+            color: #999;
+            font-size: 15px;
+            max-width: 520px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        /* Hero scroll indicator */
+        .scroll-hint {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-dim);
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 20px;
+            animation: bobble 2s ease-in-out infinite;
+        }
+        .scroll-hint svg { width: 18px; opacity: 0.4; }
+        @keyframes bobble { 0%,100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(6px); opacity: 1; } }
+
+        /* =================== STATS =================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            max-width: 900px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        .stat-card {
+            background: linear-gradient(145deg, rgba(26,26,26,0.9), rgba(18,18,18,0.9));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: transform 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px var(--gold-glow-soft); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-icon { font-size: 22px; margin-bottom: 10px; }
+        .stat-value {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-top: 8px; }
+
+        /* =================== SECTION TITLES =================== */
+        .section-title {
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 30px;
+            font-weight: 900;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 24px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .section-title::before, .section-title::after {
+            content: '';
+            flex: 1;
+            max-width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+            opacity: 0.4;
+        }
+        .section-title::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+        /* =================== YOUTUBE CARD =================== */
+        .content-section { max-width: 850px; margin: 0 auto 65px; padding: 0 20px; }
+        .yt-card {
+            background: var(--card-bg);
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            display: block;
+            transition: transform 0.35s cubic-bezier(.23,1,.32,1), box-shadow 0.35s, border-color 0.3s;
+            position: relative;
+        }
+        .yt-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,0.03), transparent);
+            pointer-events: none;
+        }
+        .yt-card:hover { transform: scale(1.02) translateY(-4px); border-color: var(--border-hover); box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 40px var(--gold-glow-soft); }
+        .yt-thumbnail {
+            width: 100%; height: 340px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .yt-thumbnail::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+        }
+        .play-btn {
+            width: 68px; height: 68px;
+            background: rgba(255,0,0,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px rgba(255,0,0,0.5);
+        }
+        .yt-card:hover .play-btn { transform: scale(1.12); box-shadow: 0 0 50px rgba(255,0,0,0.7); }
+        .play-btn::after { content: ''; border-style: solid; border-width: 11px 0 11px 20px; border-color: transparent transparent transparent white; margin-right: -3px; }
+        .yt-details { padding: 22px 28px; text-align: center; }
+        .yt-details h2 { color: #eee; font-size: 18px; font-weight: 800; line-height: 1.5; }
+
+        /* =================== ARCHIVE =================== */
+        .archive-container { max-width: 1100px; margin: 0 auto 65px; padding: 0 20px; }
+        .archive-wrapper {
+            background: linear-gradient(145deg, rgba(20,20,20,0.95), rgba(14,14,14,0.95));
+            border-radius: 28px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .archive-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        .tab-btn {
+            background: rgba(10,10,10,0.8);
+            border: 1px solid #2a2a2a;
+            color: #888;
+            padding: 11px 28px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            transition: all 0.35s cubic-bezier(.23,1,.32,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tab-btn:hover::before, .tab-btn.active::before { opacity: 1; }
+        .tab-btn:hover, .tab-btn.active {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow-soft);
+            transform: translateY(-2px);
+        }
+
+        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 30px; }
+        .tournament-details { display: none; }
+        .tournament-details.active { display: block; animation: fadeInUp 0.45s ease; }
+        .archive-body { display: none; }
+        .archive-body.active { display: block; animation: fadeInUp 0.45s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 20px; }
+        .team-card {
+            background: rgba(0,0,0,0.5);
+            padding: 16px;
+            border-radius: 14px;
+            border-right: 3px solid var(--gold);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .team-card:hover { transform: translateX(-4px); box-shadow: 4px 0 20px var(--gold-glow-soft); }
+        .team-title { font-weight: 900; font-size: 13px; color: var(--gold); margin-bottom: 6px; }
+        .team-members { font-size: 12px; color: #bbb; line-height: 1.6; }
+
+        .episodes-selector { display: flex; justify-content: center; gap: 12px; margin: 28px 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 28px; flex-wrap: wrap; }
+        .ep-node {
+            width: 140px; height: 48px;
+            background: rgba(8,8,8,0.9);
+            border: 1px solid #252525;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.35s cubic-bezier(.23,1,.32,1);
+            color: #666;
+        }
+        .ep-node:hover, .ep-node.active {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow-soft), inset 0 0 20px rgba(212,175,55,0.04);
+            transform: scale(1.06);
+        }
+
+        .large-ep-card {
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto 20px;
+            background: #080808;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.35s cubic-bezier(.23,1,.32,1);
+            text-decoration: none;
+            display: block;
+        }
+        .large-ep-card:hover { transform: scale(1.01) translateY(-4px); border-color: var(--border-hover); box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px var(--gold-glow-soft); }
+        .large-ep-thumbnail {
+            width: 100%; height: 420px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .large-ep-thumbnail::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+        }
+        .large-ep-play {
+            width: 65px; height: 65px;
+            background: rgba(212,175,55,0.9);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+        .large-ep-card:hover .large-ep-play { transform: scale(1.15); box-shadow: 0 0 50px var(--gold-glow); }
+        .large-ep-play::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent #000; margin-right: -4px; }
+        .large-ep-details { padding: 22px 28px; text-align: center; background: var(--card-bg); }
+        .large-ep-details h2 { color: #eee; font-size: 17px; font-weight: 800; line-height: 1.5; }
+
+        /* =================== GAMES LIBRARY =================== */
+        .library-container { max-width: 1100px; margin: 0 auto 70px; padding: 0 20px; }
+        .sub-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 35px 0 18px;
+            color: var(--gold);
+            font-weight: 800;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 17px;
+        }
+        .sub-title::before {
+            content: '';
+            width: 4px; height: 22px;
+            background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
+        .game-card {
+            background: linear-gradient(180deg, rgba(26,26,26,0.95), rgba(16,16,16,0.95));
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s, box-shadow 0.3s;
+            height: 195px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .game-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,0.04), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .game-card:hover { transform: translateY(-10px) scale(1.03); border-color: var(--border-hover); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 25px var(--gold-glow-soft); }
+        .game-card:hover::after { opacity: 1; }
+
+        /* Hover overlay on game image */
+        .game-img-wrap { width: 100%; height: 110px; overflow: hidden; flex-shrink: 0; position: relative; }
+        .game-img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(16,16,16,1) 0%, transparent 60%);
+        }
+        .game-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+        .game-card:hover .game-img { transform: scale(1.08); }
+
+        .game-info { padding: 10px 10px 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+        .game-name { font-size: 13px; font-weight: 700; color: #e8e8e8; }
+        .game-note { font-size: 11px; color: var(--gold); font-weight: 800; line-height: 1.3; }
+
+        /* Star ratings upgrade */
+        .star-row { display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 10px; }
+        .star-row .who { color: var(--text-dim); font-size: 10px; margin-left: 4px; }
+
+        .hidden-game { display: none; }
+        .show-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 28px auto 0;
+            padding: 13px 38px;
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(.23,1,.32,1);
+        }
+        .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold-glow); transform: translateY(-3px); }
+        .show-more-btn svg { width: 16px; transition: transform 0.3s; }
+        .show-more-btn.open svg { transform: rotate(180deg); }
+
+        /* =================== SOCIALS =================== */
+        .socials-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 14px;
+            max-width: 1100px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+        .social-item {
+            background: linear-gradient(145deg, rgba(22,22,22,0.9), rgba(14,14,14,0.9));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px 10px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(.23,1,.32,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .social-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--platform-color, var(--gold));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+            border-radius: 0 0 18px 18px;
+        }
+        .social-item:hover::before { transform: scaleX(1); }
+        .social-item:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .social-item img { width: 28px; filter: invert(1); margin-bottom: 10px; transition: transform 0.3s; opacity: 0.85; }
+        .social-item:hover img { transform: scale(1.15); opacity: 1; }
+        .social-item div { color: #eee; font-weight: 800; font-size: 13px; }
+        .social-item span { color: #555; font-size: 10px; display: block; margin-top: 5px; }
+
+        /* Platform-specific accents */
+        [href*="kick.com"] { --platform-color: #53fc18; }
+        [href*="youtube.com"] { --platform-color: #ff0000; }
+        [href*="discord.com"] { --platform-color: #5865F2; }
+        [href*="instagram.com"] { --platform-color: #E1306C; }
+        [href*="tiktok.com"] { --platform-color: #69C9D0; }
+        [href*="x.com"] { --platform-color: #eee; }
+
+        /* =================== GAME ADVENTURE SECTION =================== */
+        .adventure-card {
+            background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(12,12,12,0.95));
+            border-radius: 22px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 35px 40px;
+            transition: all 0.35s cubic-bezier(.23,1,.32,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .adventure-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,0.04), transparent 60%);
+            pointer-events: none;
+        }
+        .adventure-card:hover { transform: translateY(-5px); border-color: var(--border-hover); box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 40px var(--gold-glow-soft); }
+        .adventure-emoji { font-size: 60px; flex-shrink: 0; filter: drop-shadow(0 0 20px rgba(212,175,55,0.4)); }
+        .adventure-text p { color: #bbb; font-size: 15px; line-height: 1.8; }
+        .adventure-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #000;
+            font-weight: 900;
+            font-size: 14px;
+            padding: 10px 24px;
+            border-radius: 30px;
+            margin-top: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        .adventure-card:hover .adventure-cta { transform: translateX(-4px); box-shadow: 0 0 20px var(--gold-glow); }
+
+        /* =================== SUGGESTIONS FORM =================== */
+        .form-box {
+            max-width: 600px;
+            margin: 0 auto 70px;
+            background: linear-gradient(145deg, rgba(22,22,22,0.95), rgba(14,14,14,0.95));
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .form-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 200px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .form-box:hover { border-color: var(--border-hover); box-shadow: 0 0 50px var(--gold-glow-soft); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #777; font-size: 13px; font-weight: 700; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(8,8,8,0.8);
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: var(--text-main);
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px var(--gold-glow-soft);
+        }
+        .form-group select option { background: #141414; }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            color: #000;
+            transition: all 0.3s cubic-bezier(.23,1,.32,1);
+        }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--gold-glow); background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
+        #success-message { display: none; text-align: center; padding: 35px; background: rgba(212,175,55,0.06); border: 1px dashed rgba(212,175,55,0.4); border-radius: 16px; color: var(--gold); font-weight: 900; font-size: 18px; }
+        .honey { display: none; }
+
+        /* =================== FOOTER =================== */
+        footer {
+            text-align: center;
+            padding: 45px 20px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.5);
+            position: relative;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        footer p { color: #555; font-size: 13px; font-weight: 700; }
+        footer b { color: var(--gold); text-shadow: 0 0 15px var(--gold-glow); }
+
+        /* =================== ABOUT SECTION (NEW) =================== */
+        .about-info-bar {
+            background: rgba(212,175,55,0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px 28px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .about-info-bar .icon { font-size: 22px; flex-shrink: 0; }
+        .about-info-bar p { font-size: 14px; line-height: 1.7; color: #ccc; }
+        .about-info-bar strong { color: var(--gold); }
+
+        /* =================== SCROLL TO TOP =================== */
+        #scroll-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 44px; height: 44px;
+            background: rgba(212,175,55,0.15);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 18px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+        #scroll-top.visible { opacity: 1; pointer-events: all; }
+        #scroll-top:hover { background: var(--gold); color: #000; transform: translateY(-4px); }
+
+        /* =================== RESPONSIVE =================== */
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .socials-grid { grid-template-columns: repeat(3, 1fr); }
+            .nav-bar { gap: 12px; padding: 8px 18px; width: 95%; }
+            .nav-link { font-size: 11.5px; }
+            .large-ep-thumbnail { height: 220px; }
+            .archive-wrapper { padding: 24px 20px; }
+            .adventure-card { flex-direction: column; text-align: center; padding: 28px 24px; }
+        }
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .owner-name { font-size: 40px; }
+            .form-box { padding: 28px 22px; }
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col overflow-x-hidden">
-<!-- Top Navigation -->
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#2f2249] bg-white dark:bg-[#161023] px-4 md:px-10 py-3 sticky top-0 z-50">
-<div class="flex items-center gap-4 md:gap-8">
-<div class="flex items-center gap-4">
-<div class="size-6 text-primary">
-<span class="material-symbols-outlined text-2xl">sports_esports</span>
-</div>
-<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] hidden sm:block">RL Esports</h2>
-</div>
-<nav class="hidden md:flex items-center gap-6 lg:gap-9">
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Tournaments</a>
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Bracket</a>
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Stats</a>
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Community</a>
-</nav>
-</div>
-<div class="flex flex-1 justify-end gap-4 md:gap-8">
-<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-[#2f2249] border border-transparent focus-within:border-primary">
-<div class="text-slate-400 dark:text-[#a490cb] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
-<span class="material-symbols-outlined text-[20px]">search</span>
-</div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg bg-transparent border-none text-slate-900 dark:text-white focus:outline-0 focus:ring-0 h-full placeholder:text-slate-400 dark:placeholder:text-[#a490cb] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search teams, players..." value=""/>
-</div>
-</label>
-<div class="flex gap-2">
-<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary/90 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-primary/20">
-<span class="truncate">Log In</span>
-</button>
-<button class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-[#2f2249] hover:bg-slate-300 dark:hover:bg-[#3d2c5e] transition-colors text-slate-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Sign Up</span>
-</button>
-</div>
-</div>
-</header>
-<main class="flex-grow flex flex-col">
-<!-- Breadcrumbs -->
-<div class="container mx-auto px-4 md:px-6 lg:px-8 py-4">
-<div class="flex flex-wrap items-center gap-2 text-sm">
-<a class="text-slate-500 dark:text-[#a490cb] hover:text-primary font-medium" href="#">Tournaments</a>
-<span class="text-slate-500 dark:text-[#a490cb] font-medium">/</span>
-<a class="text-slate-500 dark:text-[#a490cb] hover:text-primary font-medium" href="#">RLCS 2024</a>
-<span class="text-slate-500 dark:text-[#a490cb] font-medium">/</span>
-<span class="text-slate-900 dark:text-white font-bold">Match Preview</span>
-</div>
-</div>
-<!-- Hero Section -->
-<section class="relative w-full min-h-[500px] flex items-center justify-center overflow-hidden">
-<!-- Background Image with Overlay -->
-<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="Abstract blurry colorful gaming arena background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDeko8mIvb6Dm5apRPi8yagHZKfcVVbIO5HR7sy1efITRIVrHnvOjBNhCJ_ve9mUiiPvONtdn0smW5YHMJwqO1TBMoS_gWU15EvNZ-E-sWYyCqVYz7EHUU1QOuFuz5Fa9eV7dpkln0UPnQFe45jXfA59fjFpeljAJeWr-Dv4qX7kZCmZL8v50edqINyEhiy7hk7JiM6g3xgG9VyjjUtc4I0-iSAmenkCBUiaG5m7IpfEfjNT3fXAi4kPoCX4pxTDgSR_s070H5feh0');">
-<div class="absolute inset-0 bg-gradient-to-t from-background-light via-background-light/90 to-background-light/40 dark:from-background-dark dark:via-background-dark/90 dark:to-background-dark/60"></div>
-<div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
-</div>
-<div class="relative z-10 container mx-auto px-4 flex flex-col items-center gap-8 py-12">
-<!-- Match Meta -->
-<div class="flex flex-col items-center gap-2 text-center">
-<span class="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
-                        Upper Bracket Quarter-Finals • BO7
-                    </span>
-<h1 class="text-slate-900 dark:text-white text-3xl md:text-5xl font-bold tracking-tight text-glow">RLCS Major 1</h1>
-<div class="flex items-center gap-2 text-slate-500 dark:text-slate-300 font-medium">
-<span class="material-symbols-outlined text-lg">calendar_today</span>
-<span>Oct 24, 2024</span>
-<span class="mx-1">•</span>
-<span class="material-symbols-outlined text-lg">schedule</span>
-<span>20:00 UTC</span>
-</div>
-</div>
-<!-- VS Component -->
-<div class="w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24">
-<!-- Team 1 -->
-<div class="flex flex-col items-center gap-4 flex-1 order-2 md:order-1">
-<div class="relative group cursor-pointer">
-<div class="absolute -inset-4 bg-gradient-to-br from-[#00d588] to-transparent rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-500"></div>
-<div class="size-32 md:size-40 lg:size-48 bg-slate-900 rounded-full border-4 border-[#00d588]/20 flex items-center justify-center relative shadow-2xl overflow-hidden" data-alt="Team Falcons Logo">
-<span class="material-symbols-outlined text-6xl md:text-8xl text-[#00d588]">flight</span> <!-- Placeholder Icon -->
-</div>
-</div>
-<div class="text-center">
-<h3 class="text-3xl font-bold text-slate-900 dark:text-white">FALCONS</h3>
-<p class="text-[#00d588] font-medium text-sm">#1 Seed • MENA</p>
-</div>
-<!-- Recent Form -->
-<div class="flex gap-1 mt-2">
-<div class="size-6 rounded flex items-center justify-center bg-[#00d588] text-black text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#00d588] text-black text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#00d588] text-black text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-red-500 text-white text-xs font-bold" title="Loss">L</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#00d588] text-black text-xs font-bold" title="Win">W</div>
-</div>
-</div>
-<!-- VS Divider -->
-<div class="flex flex-col items-center justify-center order-1 md:order-2">
-<span class="text-6xl md:text-8xl font-black italic text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 vs-glow">VS</span>
-<div class="mt-6">
-<button class="group flex items-center gap-3 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-[0_0_30px_-5px_rgba(89,13,242,0.6)] hover:shadow-[0_0_40px_-5px_rgba(89,13,242,0.8)] transition-all duration-300 transform hover:scale-105">
-<span class="material-symbols-outlined animate-pulse">live_tv</span>
-                                WATCH LIVE
-                            </button>
-</div>
-</div>
-<!-- Team 2 -->
-<div class="flex flex-col items-center gap-4 flex-1 order-3">
-<div class="relative group cursor-pointer">
-<div class="absolute -inset-4 bg-gradient-to-bl from-[#3b82f6] to-transparent rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-500"></div>
-<div class="size-32 md:size-40 lg:size-48 bg-slate-900 rounded-full border-4 border-[#3b82f6]/20 flex items-center justify-center relative shadow-2xl overflow-hidden" data-alt="Team D3M Logo">
-<span class="material-symbols-outlined text-6xl md:text-8xl text-[#3b82f6]">bolt</span> <!-- Placeholder Icon -->
-</div>
-</div>
-<div class="text-center">
-<h3 class="text-3xl font-bold text-slate-900 dark:text-white">TEAM D3M</h3>
-<p class="text-[#3b82f6] font-medium text-sm">#4 Seed • EU</p>
-</div>
-<!-- Recent Form -->
-<div class="flex gap-1 mt-2">
-<div class="size-6 rounded flex items-center justify-center bg-red-500 text-white text-xs font-bold" title="Loss">L</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#3b82f6] text-white text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#3b82f6] text-white text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#3b82f6] text-white text-xs font-bold" title="Win">W</div>
-<div class="size-6 rounded flex items-center justify-center bg-[#3b82f6] text-white text-xs font-bold" title="Win">W</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Stats & Details Content -->
-<div class="container mx-auto px-4 md:px-6 lg:px-8 py-12">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-<!-- Left: Rosters (Mobile: Stacked, Desktop: Left Col) -->
-<div class="lg:col-span-3 space-y-6">
-<div class="bg-white dark:bg-[#1f1632] rounded-xl p-6 border border-slate-200 dark:border-[#2f2249] shadow-lg">
-<div class="flex items-center gap-3 mb-6 border-b border-slate-200 dark:border-[#2f2249] pb-4">
-<span class="material-symbols-outlined text-[#00d588]">flight</span>
-<h3 class="text-lg font-bold text-slate-900 dark:text-white">Falcons Roster</h3>
-</div>
-<div class="space-y-4">
-<!-- Player 1 -->
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="trk511 profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZBYJ7GYfJHGq-pdrDxqcuotB0sa2VYu8qBDtiFtouVqUmkLX1GoDEBCIR4ce7RPeRvnwBOqW2w2rpFFQQz3ggjfE5NtRaJAg5F93cBuDmW4sRwqWaUdYdrwIMnOHOlLn_l-qrH5hOSbfE7UWDKkYQcBdoSuABoPxLkAQh3UgfhT2TFpoMam1i9n6nwmn_-9GCdX11RLZZmghLdUdfVwQJyw2FtTDrMBUa9Wxnbh_MssJI86mtw62Pqc_Q5cIsIf_5NH7zVBa56EA');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">trk511</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Captain</p>
-</div>
-</div>
-<!-- Player 2 -->
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Rw9 profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBcaOBOPEVSqqVcE7ItEdbdUsPhsXt1ifRdMvTugdWTRAlBfg8G4cFNLOuukGSHcGCoKT537b2DEkE7JPOXPzmMr4_PozN0Hy01INcuHFUFzBJkz9226l8_GdjVbPVHsIc_721MpC0YMXuUZeRnzBjDLqQ_wy9wIY-NH2MnaC8ShAOsYz7G08_VgiJ1Uv3VE6oU6GZltJKKRTPZAyEAHXO7AN0eSs93JCI--kzjj8oYWu7VFXQYugitAGJ7wIb8KOfOp-gU315DRng');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">Rw9</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Defender</p>
-</div>
-</div>
-<!-- Player 3 -->
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Kiileerrz profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWRGz4f656SSzaTDQoAK0dVJ7j36GElaU8Fyt4cHv0B2ESt9Sd5dSWExiafAd4aHXoVjuw_xgl25OUmwm0PJrr7hM1DfCzFwEjRE4p_l_CVukgP2B7emQ-ifaekV6Bysb-eyVXfHztzeETQOIbwhGkAcMXx5w5sJpQdnaaKPs2H12Jl_Eowq3YaFxSrCC7dQ3JrqNbov6m4T49B9bm5R76qeIkal_n1zL-lDqQQjCORJulYTlk8dvZ1j5a-bH6hUNPj6c0KKHfxeU');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">Kiileerrz</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Striker</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Center: Head-to-Head & Stats -->
-<div class="lg:col-span-6 space-y-6">
-<!-- Prediction Card -->
-<div class="bg-gradient-to-r from-[#2f2249] to-[#1f1632] rounded-xl p-6 border border-primary/20 shadow-lg relative overflow-hidden">
-<div class="absolute top-0 right-0 p-4 opacity-10">
-<span class="material-symbols-outlined text-9xl">poll</span>
-</div>
-<div class="relative z-10">
-<h3 class="text-xl font-bold text-white mb-2">Community Prediction</h3>
-<p class="text-slate-300 text-sm mb-6">Who do you think will win this series?</p>
-<div class="flex justify-between text-sm font-bold mb-2">
-<span class="text-[#00d588]">65% Falcons</span>
-<span class="text-[#3b82f6]">35% D3M</span>
-</div>
-<div class="h-4 w-full bg-slate-800 rounded-full overflow-hidden flex">
-<div class="h-full bg-[#00d588] w-[65%] shadow-[0_0_10px_rgba(0,213,136,0.5)]"></div>
-<div class="h-full bg-[#3b82f6] flex-1 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
-</div>
-<div class="flex gap-4 mt-6">
-<button class="flex-1 py-2 px-4 rounded-lg bg-[#1f1632] border border-[#00d588]/30 hover:bg-[#00d588]/10 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                                    Vote Falcons
-                                </button>
-<button class="flex-1 py-2 px-4 rounded-lg bg-[#1f1632] border border-[#3b82f6]/30 hover:bg-[#3b82f6]/10 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                                    Vote D3M
-                                </button>
-</div>
-</div>
-</div>
-<!-- Comparison Stats -->
-<div class="bg-white dark:bg-[#1f1632] rounded-xl p-6 border border-slate-200 dark:border-[#2f2249] shadow-lg">
-<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">analytics</span>
-                            Team Comparison (Tournament Avg)
-                        </h3>
-<!-- Stat Row 1 -->
-<div class="mb-6">
-<div class="flex justify-between text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-<span>2.4</span>
-<span class="text-slate-900 dark:text-white uppercase tracking-wider text-xs">Goals per Game</span>
-<span>1.9</span>
-</div>
-<div class="flex gap-2 items-center h-2">
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-l-full overflow-hidden flex justify-end">
-<div class="h-full bg-[#00d588] w-[70%]"></div>
-</div>
-<div class="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-r-full overflow-hidden">
-<div class="h-full bg-[#3b82f6] w-[50%]"></div>
-</div>
-</div>
-</div>
-<!-- Stat Row 2 -->
-<div class="mb-6">
-<div class="flex justify-between text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-<span>68%</span>
-<span class="text-slate-900 dark:text-white uppercase tracking-wider text-xs">Shot Accuracy</span>
-<span>72%</span>
-</div>
-<div class="flex gap-2 items-center h-2">
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-l-full overflow-hidden flex justify-end">
-<div class="h-full bg-[#00d588] w-[68%]"></div>
-</div>
-<div class="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-r-full overflow-hidden">
-<div class="h-full bg-[#3b82f6] w-[72%]"></div>
-</div>
-</div>
-</div>
-<!-- Stat Row 3 -->
-<div>
-<div class="flex justify-between text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
-<span>1.8</span>
-<span class="text-slate-900 dark:text-white uppercase tracking-wider text-xs">Saves per Game</span>
-<span>2.1</span>
-</div>
-<div class="flex gap-2 items-center h-2">
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-l-full overflow-hidden flex justify-end">
-<div class="h-full bg-[#00d588] w-[55%]"></div>
-</div>
-<div class="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-<div class="flex-1 h-full bg-slate-100 dark:bg-slate-800 rounded-r-full overflow-hidden">
-<div class="h-full bg-[#3b82f6] w-[65%]"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Right: Rosters (Team 2) -->
-<div class="lg:col-span-3 space-y-6">
-<div class="bg-white dark:bg-[#1f1632] rounded-xl p-6 border border-slate-200 dark:border-[#2f2249] shadow-lg">
-<div class="flex items-center gap-3 mb-6 border-b border-slate-200 dark:border-[#2f2249] pb-4">
-<span class="material-symbols-outlined text-[#3b82f6]">bolt</span>
-<h3 class="text-lg font-bold text-slate-900 dark:text-white">D3M Roster</h3>
-</div>
-<div class="space-y-4">
-<!-- Player 1 -->
-<div class="flex items-center gap-3 flex-row-reverse text-right lg:flex-row lg:text-left">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Nass profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBf_Z1GzTJ_ql-REPGjb0NeraYvaXZSdlQkJnj_c1tGjEVrzTs1ftR37-BV2OcYbm_XG5UoVklYPrHHnwFtPzSPs-JmHyItwNzc926KtQKyUTTtoEkUWw0kjuWVEwAVmT0Uu5oUA-iXLsaBJeYMf-9MC5LYeF9AyEdlBCyZSSu9GDNlz3_N0Hmc_oE3SCbOOQKRlVwhIbtO75lxRbXw5bLgYXvTUgAUl9OAaDfpBe4DfKAwzRc2E7cl4eaf8GO0FT1xbRAfYJKTDdw');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">Nass</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Striker</p>
-</div>
-</div>
-<!-- Player 2 -->
-<div class="flex items-center gap-3 flex-row-reverse text-right lg:flex-row lg:text-left">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="AztraL profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBiKxABfYCBrY2ek6wQbqP4geLhIG2Txmep3uHB1O0G4cm-R82jzzMhRLVwD03OOnHdcgpEKjEwby5x7NKC6jWY43O2_ed9mGocBFDDhg-LO5TU1GBd1BuzUkavA-172oA_e6CP5yC7wT-BUo8mc2CjAoEsFXpbLenIttKecBK3s-FtpXZIjHxFokJeONlNjISz0HUP7d0OWnfQ3utReSRlF-h2qIw8QELIFzypvVirEkYsuygCRw11wjaA-9hVB19aiZEpWdO0QZQ');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">AztraL</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Midfield</p>
-</div>
-</div>
-<!-- Player 3 -->
-<div class="flex items-center gap-3 flex-row-reverse text-right lg:flex-row lg:text-left">
-<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Extra profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCv5zf_8oiFIrbSuEOfiXdqOGhkKD3AqlyBtu_CEACDX1-QjgTjqz2c1wJcEnC7w1xrCTYggGkZhVfiWia0_-_OTyha32X3W031jVyU9uZFhhIheAnb_tbBicZy7exUHy_vZoit8Pz4KD9hSRn1O5Gux4hSZC6-bdV_aaiSstQ87_V_dFOT5MzcjRx7Hk2bAusuZ9LnLmcBCXmggHn0khCS-iwvz0sKmcKKB1Aegi2GBttD9oSKxeTdb0IZe00FJ_CiCGmeO2sip84');"></div>
-<div>
-<p class="font-bold text-slate-900 dark:text-white leading-tight">Extra</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Support</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Bracket Context -->
-<div class="mt-8 bg-[#161023] rounded-xl p-8 border border-[#2f2249] flex flex-col items-center justify-center text-center">
-<p class="text-sm font-medium text-[#a490cb] mb-4">Bracket View</p>
-<div class="flex items-center gap-2 md:gap-8 overflow-x-auto max-w-full pb-4 md:pb-0">
-<!-- Previous Match (Dummy) -->
-<div class="flex flex-col items-center opacity-50 scale-90">
-<div class="bg-[#2f2249] p-3 rounded-lg w-32 border border-slate-700">
-<div class="flex justify-between text-xs text-white mb-1"><span>Falcons</span><span>3</span></div>
-<div class="flex justify-between text-xs text-slate-400"><span>Rule One</span><span>1</span></div>
-</div>
-<div class="h-4 w-px bg-slate-600"></div>
-</div>
-<div class="hidden md:block w-8 h-px bg-slate-600"></div>
-<!-- Current Match Focus -->
-<div class="flex flex-col items-center relative">
-<div class="absolute -top-3 text-[10px] text-primary bg-[#161023] px-2 font-bold uppercase tracking-widest border border-primary/30 rounded-full">Current</div>
-<div class="bg-primary/10 p-4 rounded-lg w-48 border border-primary/50 shadow-[0_0_15px_rgba(89,13,242,0.3)]">
-<div class="flex justify-between text-sm font-bold text-white mb-2"><span>Falcons</span><span class="text-slate-400">-</span></div>
-<div class="flex justify-between text-sm font-bold text-white"><span>D3M</span><span class="text-slate-400">-</span></div>
-</div>
-</div>
-<div class="hidden md:block w-8 h-px bg-slate-600"></div>
-<!-- Future Match (Dummy) -->
-<div class="flex flex-col items-center opacity-50 scale-90">
-<div class="bg-[#2f2249] p-3 rounded-lg w-32 border border-slate-700 border-dashed">
-<div class="flex justify-between text-xs text-slate-500 mb-1"><span>TBD</span><span>-</span></div>
-<div class="flex justify-between text-xs text-slate-500"><span>TBD</span><span>-</span></div>
-</div>
-<div class="h-4 w-px bg-slate-600"></div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</body></html>
+<body id="top-page">
+
+    <div id="s4-cursor"></div>
+    <canvas id="bg-canvas"></canvas>
+    <a href="#top-page" id="scroll-top">↑</a>
+
+    <!-- LIVE BAR -->
+    <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
+        <div class="status-content">
+            <span class="status-dot"></span>
+            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
+        </div>
+    </a>
+
+    <!-- NAV -->
+    <nav class="nav-bar">
+        <a href="#top-page" class="nav-link">أعلى الصفحة</a>
+        <a href="#last-video" class="nav-link">آخر مقطع</a>
+        <a href="#archive-section" class="nav-link">الأرشيف</a>
+        <a href="#games-library" class="nav-link">الألعاب</a>
+        <a href="#my-socials" class="nav-link">حساباتي</a>
+        <a href="#suggestions" class="nav-link">الاقتراحات</a>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="reveal">
+        <div class="logo-wrapper">
+            <div class="logo-ring"></div>
+            <img src="logo.png" class="logo" alt="S4leeh">
+        </div>
+        <h1 class="owner-name">صالح</h1>
+        <p class="bio">
+            صانع محتوى في اليوتيوب و ستريمر في منصة كيك
+            <br>
+            تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي
+        </p>
+        <div class="scroll-hint">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+    </header>
+
+    <!-- STATS -->
+    <section class="stats-grid reveal">
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-value" id="exp">...</div>
+            <div class="stat-label">رحلة صناعة المحتوى</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔴</div>
+            <div class="stat-value" id="sub-count">...</div>
+            <div class="stat-label">مشترك في يوتيوب</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎙️</div>
+            <div class="stat-value" id="live-count">14</div>
+            <div class="stat-label">بث مباشر في 2026</div>
+        </div>
+    </section>
+
+    <!-- LAST VIDEO -->
+    <section id="last-video" class="content-section reveal">
+        <h2 class="section-title">📺 المقطع الأخير في يوتيوب</h2>
+        <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" class="yt-card" target="_blank">
+            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')">
+                <div class="play-btn"></div>
+            </div>
+            <div class="yt-details"><h2>رمضانيّات مع صالح 🌙 | قارة آسيا مافيها صحراء !! 😂</h2></div>
+        </a>
+    </section>
+
+    <!-- ARCHIVE -->
+    <section id="archive-section" class="archive-container reveal">
+        <h2 class="section-title">📂 الأرشيف</h2>
+        <div class="archive-wrapper">
+            <div class="archive-tabs">
+                <button id="events-tab" class="tab-btn" onclick="toggleMainArchive('events')">🏆 أرشيف الفعاليات</button>
+                <button id="ramadan-tab" class="tab-btn" onclick="toggleMainArchive('ramadan')">🌙 رمضانيّات مع صالح</button>
+                <button id="highlights-tab" class="tab-btn" onclick="toggleMainArchive('highlights')">🎬 البثوث المميزة</button>
+            </div>
+
+            <div id="archive-content-area" class="archive-main-content">
+
+                <!-- EVENTS -->
+                <div id="events-body" class="archive-body">
+                    <div style="display:flex; justify-content:center; margin-bottom:28px;">
+                        <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
+                    </div>
+                    <div id="tahadani-details" class="tournament-details">
+                        <div class="about-info-bar">
+                            <span class="icon">⚡</span>
+                            <p><strong>عن البطولة:</strong> صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها <strong>150$ و15 لعبة مجانية</strong>.</p>
+                        </div>
+                        <p style="color:var(--gold); font-weight:900; margin-bottom:12px;">👥 نخبة المشاركين (24 مشارك):</p>
+                        <div class="team-grid">
+                            <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
+                            <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
+                            <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">3Yazan, llYousf</div></div>
+                            <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
+                        </div>
+                        <div class="episodes-selector">
+                            <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
+                            <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
+                            <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
+                            <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
+                        </div>
+                        <div id="ep-display">
+                            <div id="ep-1" class="archive-body active">
+                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
+                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
+                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
+                                </a>
+                            </div>
+                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2></div></a></div>
+                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h2></div></a></div>
+                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div></a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RAMADAN -->
+                <div id="ramadan-body" class="archive-body">
+                    <h3 style="color:var(--gold); font-size:20px; margin-bottom:16px; text-align:center; font-family:'Tajawal',sans-serif;">🌙 رمضانيّات مع صالح</h3>
+                    <div class="episodes-selector" style="border-top:none; padding-top:10px;">
+                        <div class="ep-node active" onclick="showRamadanEp('ramadan-ep-1', this)">الحلقة الأولى</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-2', this)">الحلقة الثانية</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-3', this)">الحلقة الثالثة</div>
+                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-4', this)">الحلقة الرابعة</div>
+                    </div>
+                    <div id="ramadan-ep-display">
+                        <div id="ramadan-ep-1" class="archive-body active">
+                            <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="large-ep-card">
+                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
+                                <div class="large-ep-details"><h2>الحلقة الأولى: البصل فاكهة !! 😂</h2></div>
+                            </a>
+                        </div>
+                        <div id="ramadan-ep-2" class="archive-body">
+                            <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" target="_blank" class="large-ep-card">
+                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
+                                <div class="large-ep-details"><h2>الحلقة الثانية: قارة آسيا مافيها صحراء !! 😂</h2></div>
+                            </a>
+                        </div>
+                        <div id="ramadan-ep-3" class="archive-body"><p style="text-align:center; padding:50px; color:#444; font-weight:800; font-size:16px;">الحلقة الثالثة قريباً... ⏳</p></div>
+                        <div id="ramadan-ep-4" class="archive-body"><p style="text-align:center; padding:50px; color:#444; font-weight:800; font-size:16px;">الحلقة الرابعة قريباً... ⏳</p></div>
+                    </div>
+                </div>
+
+                <!-- HIGHLIGHTS -->
+                <div id="highlights-body" class="archive-body">
+                    <p style="text-align:center; padding:60px; color:#3a3a3a; font-weight:800; font-size:16px;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GAMES LIBRARY -->
+    <div id="games-library" class="library-container">
+        <h2 class="section-title reveal">🎮 مكتبة ألعاب 2026</h2>
+
+        <h3 class="sub-title reveal">ألعبها حاليًا</h3>
+        <div class="games-grid reveal">
+            <div class="game-card">
+                <div class="game-img-wrap">
+                    <img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" class="game-img" style="object-fit:contain; background:#111;">
+                </div>
+                <div class="game-info">
+                    <div class="game-name">ألعاب عشوائية</div>
+                    <div class="game-note">🎲 كل بث مفاجأة!</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
+        <div class="games-grid reveal">
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Supraworld</div><div class="game-note">قريباً 🔜</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Let me out</div><div class="game-note">قريباً 🔜</div></div></div>
+        </div>
+
+        <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
+        <div class="games-grid reveal" id="played-games-grid">
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"></div><div class="game-info"><div class="game-name">Fateel - فتيل</div><div class="star-row"><span class="who">صالح</span>⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"></div><div class="game-info"><div class="game-name">Viewfinder</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Hytale</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐</div></div></div>
+            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Candleman</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
+
+            <div class="game-card hidden-game"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"></div><div class="game-info"><div class="game-name">Fever Meme</div><div class="star-row"><span class="who">صالح</span>⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
+            <div class="game-card hidden-game"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Superliminal</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐</div></div></div>
+        </div>
+
+        <button id="show-more-btn" class="show-more-btn reveal" onclick="toggleGames()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            عرض المزيد من الألعاب
+        </button>
+    </div>
+
+    <!-- SOCIALS -->
+    <div id="my-socials" class="library-container">
+        <h2 class="section-title reveal">🔗 حساباتي في مواقع التواصل</h2>
+        <div class="socials-grid reveal">
+            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
+        </div>
+    </div>
+
+    <!-- GAME ADVENTURE -->
+    <section id="s4leeh-game" class="content-section reveal">
+        <h2 class="section-title">🏃‍♂️ مغامرة صالح</h2>
+        <a href="Games.html" class="adventure-card">
+            <div class="adventure-emoji">🕹️</div>
+            <div class="adventure-text">
+                <p>يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول؟</p>
+                <span class="adventure-cta">ابدأ اللعب الآن 🚀</span>
+            </div>
+        </a>
+    </section>
+
+    <!-- SUGGESTIONS -->
+    <section id="suggestions" class="form-box reveal">
+        <div id="suggestion-container">
+            <h2 class="section-title" style="margin-bottom:28px;">💡 ارسل اقتراحك</h2>
+            <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST" target="_blank">
+                <input type="text" name="_gotcha" class="honey">
+                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>نوع الاقتراح</label>
+                    <select name="type">
+                        <option value="لعبة جديدة">لعبة جديدة</option>
+                        <option value="فكرة مقطع">فكرة مقطع</option>
+                        <option value="فكرة بث">فكرة بث</option>
+                        <option value="تحسين للموقع">تحسين للموقع</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="4" required></textarea></div>
+                <button type="submit" class="submit-btn">إرسال الاقتراح 🧡</button>
+            </form>
+        </div>
+        <div id="success-message">تم استلام ملاحظتك بنجاح، شكراً لك! 🧡</div>
+    </section>
+
+    <footer>
+        <p>© جميع الحقوق محفوظة لـ <b>S4leeh | صالح</b> | 2026</p>
+    </footer>
+
+    <script>
+        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
+        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+
+        // ======= CURSOR =======
+        const cursor = document.getElementById('s4-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        function refreshCursorEvents() {
+            document.querySelectorAll('a, button, input, textarea, select, .ep-node, .game-card, .social-item, .tab-btn').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+            });
+        }
+        refreshCursorEvents();
+
+        // ======= PARTICLE CANVAS =======
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let W, H;
+
+        function initCanvas() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * W;
+                this.y = Math.random() * H;
+                this.size = Math.random() * 1.8 + 0.2;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.4 + 0.05;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > W || this.x < 0 || this.y > H || this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(212,175,55,${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, W, H);
+            // Subtle radial gradient bg
+            const grad = ctx.createRadialGradient(W * 0.5, H * 0.15, 0, W * 0.5, H * 0.15, H * 0.8);
+            grad.addColorStop(0, '#181818');
+            grad.addColorStop(1, '#0a0a0a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        initCanvas();
+        for (let i = 0; i < 120; i++) particles.push(new Particle());
+        animate();
+        window.addEventListener('resize', initCanvas);
+
+        // ======= SCROLL REVEAL =======
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+
+        // ======= SCROLL TO TOP =======
+        const scrollTopBtn = document.getElementById('scroll-top');
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+        });
+
+        // ======= ARCHIVE FUNCTIONS =======
+        function toggleMainArchive(type) {
+            const area = document.getElementById('archive-content-area');
+            const bodies = document.querySelectorAll('.archive-body');
+            const tabs = document.querySelectorAll('.tab-btn');
+            const activeTab = document.getElementById(type + '-tab');
+
+            if (area.style.display === 'block' && activeTab.classList.contains('active')) {
+                area.style.display = 'none';
+                tabs.forEach(t => t.classList.remove('active'));
+            } else {
+                area.style.display = 'block';
+                bodies.forEach(b => b.classList.remove('active'));
+                tabs.forEach(t => t.classList.remove('active'));
+                document.getElementById(type + '-body').classList.add('active');
+                activeTab.classList.add('active');
+                document.getElementById('tahadani-details').classList.remove('active');
+                document.getElementById('tahadani-main-btn').classList.remove('active');
+            }
+            refreshCursorEvents();
+        }
+
+        function showTournamentDetails(id) {
+            const content = document.getElementById(id);
+            const btn = document.getElementById('tahadani-main-btn');
+            content.classList.toggle('active');
+            btn.classList.toggle('active');
+            if (content.classList.contains('active')) showEp('ep-1', document.querySelector('#ep-display .ep-node'));
+            refreshCursorEvents();
+        }
+
+        function showEp(epId, node) {
+            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#tahadani-details .ep-node').forEach(n => n.classList.remove('active'));
+            document.getElementById(epId).classList.add('active');
+            if (node) node.classList.add('active');
+            refreshCursorEvents();
+        }
+
+        function showRamadanEp(epId, node) {
+            document.querySelectorAll('#ramadan-ep-display .archive-body').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#ramadan-body .ep-node').forEach(n => n.classList.remove('active'));
+            document.getElementById(epId).classList.add('active');
+            node.classList.add('active');
+            refreshCursorEvents();
+        }
+
+        // ======= GAMES TOGGLE =======
+        function toggleGames() {
+            const hiddenGames = document.querySelectorAll('.hidden-game');
+            const btn = document.getElementById('show-more-btn');
+            const isHidden = hiddenGames[0].style.display === 'none' || hiddenGames[0].style.display === '';
+            hiddenGames.forEach(g => g.style.display = isHidden ? 'flex' : 'none');
+            btn.innerHTML = isHidden
+                ? '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg> إخفاء الألعاب'
+                : '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg> عرض المزيد من الألعاب';
+            btn.classList.toggle('open', isHidden);
+            refreshCursorEvents();
+        }
+
+        // ======= FORM =======
+        document.getElementById('suggestion-form').onsubmit = function() {
+            setTimeout(() => {
+                document.getElementById('suggestion-container').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+            }, 100);
+        };
+
+        // ======= STATS =======
+        function updateStats() {
+            const start = new Date('2022-06-02');
+            const now = new Date();
+            let y = now.getFullYear() - start.getFullYear();
+            let m = now.getMonth() - start.getMonth();
+            if (m < 0) { y--; m += 12; }
+            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
+        }
+
+        async function updateYouTubeSubs() {
+            try {
+                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
+                const data = await res.json();
+                const count = Number(data.items[0].statistics.subscriberCount);
+                document.getElementById('sub-count').innerText = count.toLocaleString('ar-SA');
+            } catch (e) {
+                document.getElementById('sub-count').innerText = '1,531';
+            }
+        }
+
+        async function checkKick() {
+            const container = document.getElementById('live-bar-container');
+            const txt = document.getElementById('live-text');
+            try {
+                const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://kick.com/api/v1/channels/s4leeh'));
+                const raw = await res.json();
+                const data = JSON.parse(raw.contents);
+                if (data.livestream) {
+                    document.body.classList.add('is-live');
+                    txt.innerText = '🔥 صالح يبث الآن على Kick — اضغط للمشاهدة!';
+                } else {
+                    document.body.classList.remove('is-live');
+                    txt.innerText = 'البث المباشر مغلق حالياً';
+                }
+            } catch (e) {
+                txt.innerText = 'تعذّر التحقق من حالة البث';
+            }
+        }
+
+        window.onload = () => {
+            updateStats();
+            updateYouTubeSubs();
+            checkKick();
+            setInterval(checkKick, 60000);
+        };
+    </script>
+</body>
+</html>
