@@ -5,1007 +5,431 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S4leeh | صالح</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #0a0a0a;
-            --card-bg: #141414;
-            --card-bg2: #1a1a1a;
-            --gold: #d4af37;
-            --gold-light: #f0cc55;
-            --gold-dark: #a8892a;
-            --gold-glow: rgba(212, 175, 55, 0.35);
-            --gold-glow-soft: rgba(212, 175, 55, 0.12);
-            --border-color: rgba(212, 175, 55, 0.18);
-            --border-hover: rgba(212, 175, 55, 0.55);
-            --kick-green: #53fc18;
-            --live-red: #ea1d2c;
-            --text-main: #f0f0f0;
-            --text-muted: #888;
-            --text-dim: #555;
-        }
+    :root {
+        --void:#050505;--void2:#0c0c0c;--void3:#111111;--panel:#0f0f0f;
+        --edge:rgba(212,175,55,.1);--edge2:rgba(212,175,55,.22);
+        --gold:#D4AF37;--gold-light:#F0CC55;--gold-dark:#A8892A;
+        --gold-dim:rgba(212,175,55,.15);--gold-glow:rgba(212,175,55,.35);
+        --snow:#F2F2F0;--mist:#7A7A72;--fog:#303028;
+        --kick:#53FC18;--red:#FF3A3A;
+        --font:'Tajawal',sans-serif;
+        --r-xl:24px;--r-lg:16px;--ease:cubic-bezier(.23,1,.32,1);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--void);color:var(--snow);font-family:var(--font);overflow-x:hidden;}
+    section,div[id]{scroll-margin-top:130px;}
+    a{text-decoration:none;color:inherit;}
+    img{display:block;}
 
-        /* =================== CURSOR =================== */
-        html, body, a, button, select, textarea, input, .ep-node, .game-card, .social-item, .tab-btn {
-            cursor: none !important;
-        }
-        #s4-cursor {
-            width: 32px; height: 32px;
-            background-image: url('logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000000;
-            transform: translate(-50%, -50%);
-            transition: width 0.18s ease-out, height 0.18s ease-out, filter 0.18s;
-        }
-        .cursor-hover {
-            width: 54px !important;
-            height: 54px !important;
-            filter: drop-shadow(0 0 14px var(--gold)) !important;
-        }
-        @media (pointer: coarse) {
-            #s4-cursor { display: none !important; }
-            html, body, a, button, input, textarea, select, .social-item, .game-card, .ep-node, .tab-btn { cursor: auto !important; }
-        }
+    /* CURSOR */
+    html,body,a,button,select,textarea,input,.ep-node,.game-card,.social-item,.tab-btn{cursor:none!important;}
+    #s4-cursor{position:fixed;width:34px;height:34px;background-image:url('logo.png');background-size:contain;background-repeat:no-repeat;pointer-events:none;z-index:999999;transform:translate(-50%,-50%);transition:width .18s var(--ease),height .18s var(--ease),filter .18s;}
+    #s4-cursor.big{width:54px;height:54px;filter:drop-shadow(0 0 10px var(--gold));}
+    @media(pointer:coarse){#s4-cursor{display:none!important;}html,body,a,button,input,textarea,select,.social-item,.game-card,.ep-node,.tab-btn{cursor:auto!important;}}
 
-        /* =================== BASE =================== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        section, div[id] { scroll-margin-top: 140px; }
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Cairo', sans-serif;
-            overflow-x: hidden;
-            position: relative;
-        }
+    /* BG */
+    #bg-canvas{position:fixed;inset:0;z-index:-2;width:100%;height:100%;}
+    body::before{content:'';position:fixed;inset:0;z-index:-1;
+        background-image:linear-gradient(rgba(212,175,55,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.018) 1px,transparent 1px);
+        background-size:70px 70px;pointer-events:none;}
 
-        /* =================== BACKGROUND =================== */
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+    /* LOADER */
+    #loader{position:fixed;inset:0;z-index:99999;background:var(--void);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .6s,visibility .6s;}
+    #loader.done{opacity:0;visibility:hidden;}
+    .loader-logo{width:80px;height:80px;border-radius:50%;border:2px solid var(--gold);box-shadow:0 0 30px var(--gold-glow);object-fit:cover;animation:lspin 1.5s var(--ease);}
+    .loader-bar{width:200px;height:2px;background:var(--void3);border-radius:2px;overflow:hidden;}
+    .loader-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));animation:lfill 1.2s var(--ease) forwards;}
+    @keyframes lspin{from{transform:rotate(-180deg) scale(.5);opacity:0;}to{transform:rotate(0) scale(1);opacity:1;}}
+    @keyframes lfill{from{width:0;}to{width:100%;}}
 
-        /* Noise grain overlay */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none;
-            opacity: 0.5;
-        }
+    /* LIVE BAR */
+    .live-bar{width:100%;background:rgba(8,8,8,.97);border-bottom:1px solid var(--edge);padding:10px 20px;position:sticky;top:0;z-index:10001;display:flex;justify-content:center;backdrop-filter:blur(24px);}
+    body.is-live .live-bar{border-bottom-color:rgba(83,252,24,.25);}
+    .live-inner{display:flex;align-items:center;gap:10px;}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--red);}
+    body.is-live .live-dot{background:var(--kick);box-shadow:0 0 10px var(--kick);animation:blink 1.1s infinite;}
+    @keyframes blink{50%{opacity:.3;transform:scale(.8);}}
+    .live-text{font-size:13px;font-weight:700;color:var(--snow);}
 
-        /* =================== SCROLL REVEAL =================== */
-        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s cubic-bezier(.23,1,.32,1), transform 0.75s cubic-bezier(.23,1,.32,1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-left { opacity: 0; transform: translateX(30px); transition: opacity 0.75s ease-out, transform 0.75s ease-out; }
-        .reveal-left.active { opacity: 1; transform: translateX(0); }
+    /* NAV */
+    .nav{position:sticky;top:43px;z-index:10000;display:flex;justify-content:center;padding:14px 20px 0;}
+    .nav-inner{display:flex;gap:2px;background:rgba(12,12,12,.9);border:1px solid var(--edge);border-radius:50px;padding:5px 8px;backdrop-filter:blur(24px);}
+    .nav-link{color:var(--mist);font-size:13px;font-weight:700;padding:6px 18px;border-radius:50px;transition:color .25s,background .25s;white-space:nowrap;}
+    .nav-link:hover{color:var(--gold);background:var(--gold-dim);}
 
-        /* =================== LIVE BAR =================== */
-        .live-status-bar {
-            width: 100%;
-            background: rgba(5,5,5,0.96);
-            border-bottom: 1px solid var(--border-color);
-            padding: 11px;
-            position: sticky;
-            top: 0;
-            z-index: 10001;
-            display: flex;
-            justify-content: center;
-            text-decoration: none;
-            backdrop-filter: blur(20px);
-            transition: background 0.3s;
-        }
-        .is-live .live-status-bar { background: rgba(10,20,10,0.96); border-bottom-color: rgba(83,252,24,0.3); }
-        .status-content { display: flex; align-items: center; gap: 12px; }
-        .status-dot {
-            width: 9px; height: 9px;
-            border-radius: 50%;
-            background-color: var(--live-red);
-            transition: background 0.4s;
-        }
-        .is-live .status-dot {
-            background-color: var(--kick-green);
-            box-shadow: 0 0 12px var(--kick-green), 0 0 25px rgba(83,252,24,0.4);
-            animation: pulse 1.2s infinite;
-        }
-        .status-text { color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 0.3px; }
-        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+    /* HERO */
+    .hero{min-height:93vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px 60px;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(212,175,55,.07) 0%,transparent 70%);pointer-events:none;animation:orb 7s ease-in-out infinite;}
+    @keyframes orb{50%{transform:translateX(-50%) scale(1.2);opacity:.6;}}
+    .avatar-wrap{position:relative;display:inline-block;margin-bottom:38px;}
+    .avatar-ring{position:absolute;inset:-18px;border-radius:50%;border:1px dashed rgba(212,175,55,.25);animation:ring 20s linear infinite;}
+    .avatar-ring::before,.avatar-ring::after{content:'';position:absolute;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);}
+    .avatar-ring::before{top:-3.5px;left:50%;transform:translateX(-50%);}
+    .avatar-ring::after{bottom:-3.5px;left:50%;transform:translateX(-50%);opacity:.35;}
+    @keyframes ring{to{transform:rotate(360deg);}}
+    .avatar-glow-ring{position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(212,175,55,.15);}
+    .avatar{width:148px;height:148px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 0 8px rgba(212,175,55,.05),0 0 50px var(--gold-glow);animation:float 5s ease-in-out infinite;position:relative;z-index:1;}
+    @keyframes float{50%{transform:translateY(-14px);}}
+    .status-chip{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:var(--void2);border:1px solid var(--edge2);border-radius:30px;padding:4px 14px;font-size:11px;font-weight:700;white-space:nowrap;z-index:2;display:flex;align-items:center;gap:6px;}
+    .status-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--mist);}
+    body.is-live .status-chip .dot{background:var(--kick);box-shadow:0 0 6px var(--kick);animation:blink 1s infinite;}
 
-        /* =================== NAV =================== */
-        .nav-bar {
-            width: fit-content;
-            background: rgba(20,20,20,0.85);
-            border: 1px solid var(--border-color);
-            padding: 8px 28px;
-            position: sticky;
-            top: 50px;
-            z-index: 10000;
-            margin: 16px auto 0;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
-        }
-        .nav-link {
-            color: #aaa;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            transition: color 0.3s;
-            position: relative;
-            padding: 5px 2px;
-            font-family: 'Cairo', sans-serif;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0; height: 2px;
-            bottom: 0; right: 0;
-            background: linear-gradient(90deg, transparent, var(--gold));
-            transition: width 0.3s ease;
-            border-radius: 2px;
-        }
-        .nav-link:hover::after { width: 100%; left: 0; right: auto; }
-        .nav-link:hover { color: var(--gold); }
+    .hero-name{font-size:clamp(52px,9vw,100px);font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:6px;background:linear-gradient(160deg,var(--gold-light) 0%,var(--gold) 45%,var(--gold-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-tag{font-size:clamp(13px,2vw,17px);font-weight:400;color:var(--mist);letter-spacing:2px;margin-bottom:24px;}
+    .hero-bio{color:#888;font-size:15px;line-height:2;max-width:460px;margin:0 auto 42px;}
+    .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-weight:900;font-size:14px;padding:13px 30px;border-radius:50px;border:none;font-family:var(--font);transition:transform .3s var(--ease),box-shadow .3s;}
+    .btn-gold:hover{transform:translateY(-3px);box-shadow:0 12px 36px var(--gold-glow);}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--snow);font-weight:700;font-size:14px;padding:12px 28px;border-radius:50px;border:1px solid var(--edge2);font-family:var(--font);transition:all .3s var(--ease);}
+    .btn-outline:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);transform:translateY(-3px);}
+    .hero-scroll{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--fog);font-size:11px;font-weight:700;animation:bob 2s ease-in-out infinite;}
+    @keyframes bob{50%{transform:translateX(-50%) translateY(7px);}}
+    .hero-scroll-line{width:1px;height:38px;background:linear-gradient(to bottom,var(--fog),transparent);}
 
-        /* =================== HEADER / HERO =================== */
-        header {
-            text-align: center;
-            padding: 70px 20px 50px;
-            position: relative;
-        }
+    /* STATS */
+    .stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);margin-bottom:90px;}
+    .stat-cell{background:var(--void2);padding:36px 20px;text-align:center;transition:background .3s;position:relative;overflow:hidden;}
+    .stat-cell::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));transition:width .4s var(--ease);border-radius:2px;}
+    .stat-cell:hover{background:var(--void3);}
+    .stat-cell:hover::after{width:50%;}
+    .stat-icon{font-size:18px;margin-bottom:12px;opacity:.45;}
+    .stat-val{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:8px;}
+    .stat-lbl{font-size:12px;color:var(--mist);font-weight:700;}
 
-        /* Decorative ring behind logo */
-        .logo-wrapper {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 28px;
-        }
-        .logo-ring {
-            position: absolute;
-            inset: -12px;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            animation: ring-rotate 12s linear infinite;
-        }
-        .logo-ring::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: 50%;
-            transform: translateX(-50%);
-            width: 6px; height: 6px;
-            background: var(--gold);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--gold);
-        }
-        @keyframes ring-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    /* SECTION */
+    .section{max-width:1080px;margin:0 auto 90px;padding:0 24px;}
+    .section-head{display:flex;align-items:center;gap:16px;margin-bottom:36px;}
+    .section-num{font-size:11px;font-weight:900;color:var(--gold);letter-spacing:4px;white-space:nowrap;opacity:.6;}
+    .section-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--snow);}
+    .section-line{flex:1;height:1px;background:linear-gradient(to left,transparent,var(--edge2));}
 
-        .logo {
-            width: 145px; height: 145px;
-            border-radius: 50%;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 0 6px rgba(212,175,55,0.07), 0 0 40px var(--gold-glow);
-            animation: float 5s ease-in-out infinite;
-            object-fit: cover;
-            display: block;
-        }
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    /* YT CARD */
+    .yt-card{display:block;border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--edge);background:var(--panel);transition:transform .4s var(--ease),box-shadow .4s,border-color .3s;position:relative;}
+    .yt-card:hover{transform:scale(1.015) translateY(-4px);border-color:rgba(212,175,55,.3);box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 40px var(--gold-dim);}
+    .yt-thumb{width:100%;height:340px;background-size:cover;background-position:center;position:relative;display:flex;align-items:center;justify-content:center;}
+    .yt-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.85) 0%,transparent 55%);}
+    .yt-play{width:68px;height:68px;border-radius:50%;background:rgba(255,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:2;position:relative;box-shadow:0 0 30px rgba(255,0,0,.5);transition:transform .3s,box-shadow .3s;}
+    .yt-card:hover .yt-play{transform:scale(1.12);box-shadow:0 0 50px rgba(255,0,0,.7);}
+    .yt-play::after{content:'';border-style:solid;border-width:11px 0 11px 20px;border-color:transparent transparent transparent #fff;margin-right:-4px;}
+    .yt-info{padding:24px 28px;}
+    .yt-info h3{font-size:17px;font-weight:800;line-height:1.7;color:var(--snow);}
 
-        .owner-name {
-            font-family: 'Tajawal', sans-serif;
-            font-size: 52px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-        .bio {
-            color: #999;
-            font-size: 15px;
-            max-width: 520px;
-            margin: 0 auto 30px;
-            line-height: 1.8;
-        }
+    /* ARCHIVE */
+    .archive-shell{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-xl);overflow:hidden;}
+    .archive-tabs{display:flex;border-bottom:1px solid var(--edge);overflow-x:auto;scrollbar-width:none;}
+    .archive-tabs::-webkit-scrollbar{display:none;}
+    .tab-btn{flex:1;min-width:130px;background:transparent;border:none;color:var(--mist);font-family:var(--font);font-size:13px;font-weight:700;padding:18px 14px;border-bottom:2px solid transparent;transition:all .3s;cursor:none!important;}
+    .tab-btn:hover{color:var(--snow);background:var(--gold-dim);}
+    .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(212,175,55,.04);}
+    .archive-content{display:none;padding:32px;}
+    .archive-content.active{display:block;animation:fadeUp .4s var(--ease);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-        /* Hero scroll indicator */
-        .scroll-hint {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-dim);
-            font-size: 11px;
-            font-weight: 700;
-            margin-top: 20px;
-            animation: bobble 2s ease-in-out infinite;
-        }
-        .scroll-hint svg { width: 18px; opacity: 0.4; }
-        @keyframes bobble { 0%,100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(6px); opacity: 1; } }
+    .about-banner{background:rgba(212,175,55,.04);border:1px solid rgba(212,175,55,.12);border-right:3px solid var(--gold);border-radius:var(--r-lg);padding:18px 22px;margin-bottom:24px;}
+    .about-banner p{font-size:14px;color:#bbb;line-height:1.9;}
+    .about-banner strong{color:var(--gold);}
+    .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:28px;}
+    .team-tile{background:var(--void3);border:1px solid var(--edge);border-radius:var(--r-lg);padding:14px 16px;border-right:3px solid var(--gold);transition:transform .25s;}
+    .team-tile:hover{transform:translateX(-3px);}
+    .team-name{font-weight:900;font-size:12px;color:var(--gold);margin-bottom:5px;}
+    .team-members{font-size:12px;color:#888;line-height:1.7;}
+    .ep-strip{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:24px 0;border-top:1px solid var(--edge);}
+    .ep-node{width:148px;height:46px;background:var(--void3);border:1px solid var(--edge);border-radius:50px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--mist);font-family:var(--font);transition:all .3s var(--ease);}
+    .ep-node:hover,.ep-node.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);box-shadow:0 0 20px var(--gold-dim);transform:scale(1.05);}
+    .ep-display{display:none;}
+    .ep-display.active{display:block;animation:fadeUp .4s var(--ease);}
+    .ep-card{display:block;border-radius:var(--r-xl);overflow:hidden;background:var(--void3);border:1px solid var(--edge);max-width:860px;margin:0 auto;transition:all .4s var(--ease);}
+    .ep-card:hover{border-color:rgba(212,175,55,.25);box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 30px var(--gold-dim);transform:scale(1.01);}
+    .ep-thumb{width:100%;height:400px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;position:relative;}
+    .ep-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,5,.8) 0%,transparent 55%);}
+    .ep-play{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .3s,box-shadow .3s;box-shadow:0 0 30px var(--gold-glow);}
+    .ep-card:hover .ep-play{transform:scale(1.15);box-shadow:0 0 50px var(--gold-glow);}
+    .ep-play::after{content:'';border-style:solid;border-width:9px 0 9px 16px;border-color:transparent transparent transparent #000;margin-right:-4px;}
+    .ep-info{padding:22px 28px;text-align:center;}
+    .ep-info h3{font-size:16px;font-weight:800;color:var(--snow);line-height:1.7;}
+    .coming-soon{padding:60px 20px;text-align:center;color:var(--fog);font-size:15px;font-weight:700;}
 
-        /* =================== STATS =================== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            max-width: 900px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
-        }
-        .stat-card {
-            background: linear-gradient(145deg, rgba(26,26,26,0.9), rgba(18,18,18,0.9));
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 28px 20px;
-            text-align: center;
-            transition: transform 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px var(--gold-glow-soft); }
-        .stat-card:hover::before { opacity: 1; }
-        .stat-icon { font-size: 22px; margin-bottom: 10px; }
-        .stat-value {
-            font-family: 'Tajawal', sans-serif;
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--gold);
-            line-height: 1;
-        }
-        .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-top: 8px; }
+    /* GAMES */
+    .games-label{display:inline-flex;align-items:center;gap:10px;margin:36px 0 16px;font-size:12px;font-weight:900;color:var(--mist);letter-spacing:3px;}
+    .games-label::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--gold-light),var(--gold-dark));border-radius:2px;}
+    .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+    .game-card{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-lg);overflow:hidden;height:192px;display:flex;flex-direction:column;transition:all .35s var(--ease);position:relative;}
+    .game-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(212,175,55,.05),transparent);opacity:0;transition:opacity .3s;pointer-events:none;}
+    .game-card:hover{transform:translateY(-10px) scale(1.03);border-color:rgba(212,175,55,.25);box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 20px var(--gold-dim);}
+    .game-card:hover::after{opacity:1;}
+    .game-img-box{width:100%;height:110px;overflow:hidden;flex-shrink:0;position:relative;}
+    .game-img-box::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--panel) 0%,transparent 60%);}
+    .game-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+    .game-card:hover .game-img-box img{transform:scale(1.08);}
+    .game-body{padding:10px 10px 12px;display:flex;flex-direction:column;justify-content:center;gap:3px;flex-grow:1;text-align:center;}
+    .game-name{font-size:12.5px;font-weight:700;color:var(--snow);}
+    .game-score{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;}
+    .game-score .who{color:var(--fog);}
+    .game-score .stars{color:var(--gold);letter-spacing:1px;}
+    .game-badge{font-size:10px;color:var(--gold);font-weight:800;}
+    .hidden-game{display:none;}
+    .show-more{display:flex;align-items:center;gap:10px;margin:24px auto 0;background:transparent;border:1px solid var(--edge2);color:var(--snow);font-family:var(--font);font-size:13px;font-weight:700;padding:12px 28px;border-radius:50px;transition:all .3s var(--ease);}
+    .show-more:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+    .show-more svg{width:15px;transition:transform .3s;}
+    .show-more.open svg{transform:rotate(180deg);}
 
-        /* =================== SECTION TITLES =================== */
-        .section-title {
-            text-align: center;
-            color: var(--gold);
-            margin-bottom: 30px;
-            font-weight: 900;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 24px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        .section-title::before, .section-title::after {
-            content: '';
-            flex: 1;
-            max-width: 80px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold));
-            opacity: 0.4;
-        }
-        .section-title::after { background: linear-gradient(90deg, var(--gold), transparent); }
+    /* SOCIALS */
+    .socials-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+    .social-item{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-xl);padding:24px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:all .35s var(--ease);position:relative;overflow:hidden;}
+    .social-item::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--pcolor,var(--gold));transform:scaleX(0);transition:transform .35s var(--ease);}
+    .social-item:hover{transform:translateY(-8px);border-color:var(--edge2);box-shadow:0 20px 50px rgba(0,0,0,.5);}
+    .social-item:hover::before{transform:scaleX(1);}
+    .social-item img{width:26px;filter:invert(1);opacity:.7;transition:opacity .3s,transform .3s;}
+    .social-item:hover img{opacity:1;transform:scale(1.12);}
+    .social-name{font-size:12px;font-weight:800;color:var(--snow);}
+    .social-desc{font-size:10px;color:var(--fog);}
+    [href*="kick.com"]{--pcolor:#53FC18;}[href*="youtube.com"]{--pcolor:#FF0000;}[href*="discord.com"]{--pcolor:#5865F2;}[href*="instagram.com"]{--pcolor:#E1306C;}[href*="tiktok.com"]{--pcolor:#69C9D0;}[href*="x.com"]{--pcolor:#f0f0f0;}
 
-        /* =================== YOUTUBE CARD =================== */
-        .content-section { max-width: 850px; margin: 0 auto 65px; padding: 0 20px; }
-        .yt-card {
-            background: var(--card-bg);
-            border-radius: 22px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            display: block;
-            transition: transform 0.35s cubic-bezier(.23,1,.32,1), box-shadow 0.35s, border-color 0.3s;
-            position: relative;
-        }
-        .yt-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(212,175,55,0.03), transparent);
-            pointer-events: none;
-        }
-        .yt-card:hover { transform: scale(1.02) translateY(-4px); border-color: var(--border-hover); box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 40px var(--gold-glow-soft); }
-        .yt-thumbnail {
-            width: 100%; height: 340px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .yt-thumbnail::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
-        }
-        .play-btn {
-            width: 68px; height: 68px;
-            background: rgba(255,0,0,0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 30px rgba(255,0,0,0.5);
-        }
-        .yt-card:hover .play-btn { transform: scale(1.12); box-shadow: 0 0 50px rgba(255,0,0,0.7); }
-        .play-btn::after { content: ''; border-style: solid; border-width: 11px 0 11px 20px; border-color: transparent transparent transparent white; margin-right: -3px; }
-        .yt-details { padding: 22px 28px; text-align: center; }
-        .yt-details h2 { color: #eee; font-size: 18px; font-weight: 800; line-height: 1.5; }
+    /* ADVENTURE */
+    .adventure-card{display:flex;align-items:center;gap:36px;background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-xl);padding:40px;transition:all .4s var(--ease);position:relative;overflow:hidden;}
+    .adventure-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(212,175,55,.06),transparent 70%);pointer-events:none;}
+    .adventure-card:hover{border-color:rgba(212,175,55,.2);box-shadow:0 25px 70px rgba(0,0,0,.6),0 0 40px var(--gold-dim);transform:translateY(-4px);}
+    .adv-icon{font-size:64px;flex-shrink:0;filter:drop-shadow(0 0 20px rgba(212,175,55,.3));}
+    .adv-body p{font-size:15px;color:#999;line-height:2;margin-bottom:20px;}
+    .adv-cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-weight:900;font-size:14px;font-family:var(--font);padding:11px 26px;border-radius:50px;transition:transform .3s,box-shadow .3s;}
+    .adventure-card:hover .adv-cta{transform:translateX(-5px);box-shadow:0 0 24px var(--gold-glow);}
 
-        /* =================== ARCHIVE =================== */
-        .archive-container { max-width: 1100px; margin: 0 auto 65px; padding: 0 20px; }
-        .archive-wrapper {
-            background: linear-gradient(145deg, rgba(20,20,20,0.95), rgba(14,14,14,0.95));
-            border-radius: 28px;
-            border: 1px solid var(--border-color);
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-        .archive-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .archive-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-        .tab-btn {
-            background: rgba(10,10,10,0.8);
-            border: 1px solid #2a2a2a;
-            color: #888;
-            padding: 11px 28px;
-            border-radius: 50px;
-            font-weight: 800;
-            font-family: 'Cairo', sans-serif;
-            font-size: 14px;
-            transition: all 0.35s cubic-bezier(.23,1,.32,1);
-            position: relative;
-            overflow: hidden;
-        }
-        .tab-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .tab-btn:hover::before, .tab-btn.active::before { opacity: 1; }
-        .tab-btn:hover, .tab-btn.active {
-            border-color: var(--gold);
-            color: var(--gold);
-            box-shadow: 0 0 20px var(--gold-glow-soft);
-            transform: translateY(-2px);
-        }
+    /* FORM */
+    .form-shell{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-xl);padding:44px 48px;max-width:580px;margin:0 auto;position:relative;overflow:hidden;}
+    .form-shell::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+    .fgroup{margin-bottom:18px;}
+    .fgroup label{display:block;margin-bottom:8px;font-size:12.5px;font-weight:700;color:var(--mist);letter-spacing:.5px;}
+    .fgroup input,.fgroup select,.fgroup textarea{width:100%;padding:13px 16px;background:rgba(255,255,255,.02);border:1px solid var(--edge);border-radius:var(--r-lg);color:var(--snow);font-family:var(--font);font-size:14px;outline:none;transition:border-color .3s,box-shadow .3s;}
+    .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--gold);box-shadow:0 0 18px var(--gold-dim);}
+    .fgroup select option{background:var(--void2);}
+    .fsubmit{width:100%;padding:15px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;border:none;border-radius:var(--r-lg);font-weight:900;font-family:var(--font);font-size:15px;transition:all .3s var(--ease);}
+    .fsubmit:hover{transform:translateY(-3px);box-shadow:0 12px 36px var(--gold-glow);}
+    #success-msg{display:none;padding:40px;text-align:center;font-size:18px;font-weight:900;color:var(--gold);}
+    .honey{display:none;}
 
-        .archive-main-content { display: none; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 30px; }
-        .tournament-details { display: none; }
-        .tournament-details.active { display: block; animation: fadeInUp 0.45s ease; }
-        .archive-body { display: none; }
-        .archive-body.active { display: block; animation: fadeInUp 0.45s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    /* FOOTER */
+    footer{border-top:1px solid var(--edge);padding:40px 24px;text-align:center;background:var(--void2);position:relative;}
+    footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+    footer p{font-size:13px;color:var(--fog);font-weight:700;}
+    footer span{color:var(--gold);}
 
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 20px; }
-        .team-card {
-            background: rgba(0,0,0,0.5);
-            padding: 16px;
-            border-radius: 14px;
-            border-right: 3px solid var(--gold);
-            transition: transform 0.25s, box-shadow 0.25s;
-        }
-        .team-card:hover { transform: translateX(-4px); box-shadow: 4px 0 20px var(--gold-glow-soft); }
-        .team-title { font-weight: 900; font-size: 13px; color: var(--gold); margin-bottom: 6px; }
-        .team-members { font-size: 12px; color: #bbb; line-height: 1.6; }
+    /* SCROLL TOP */
+    #scroll-top{position:fixed;bottom:28px;left:28px;width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:1px solid rgba(212,175,55,.2);color:var(--gold);font-size:20px;display:flex;align-items:center;justify-content:center;z-index:9990;opacity:0;pointer-events:none;transition:all .3s var(--ease);backdrop-filter:blur(12px);}
+    #scroll-top.show{opacity:1;pointer-events:all;}
+    #scroll-top:hover{background:var(--gold);color:#000;transform:translateY(-4px);box-shadow:0 8px 24px var(--gold-glow);}
 
-        .episodes-selector { display: flex; justify-content: center; gap: 12px; margin: 28px 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 28px; flex-wrap: wrap; }
-        .ep-node {
-            width: 140px; height: 48px;
-            background: rgba(8,8,8,0.9);
-            border: 1px solid #252525;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 900;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.35s cubic-bezier(.23,1,.32,1);
-            color: #666;
-        }
-        .ep-node:hover, .ep-node.active {
-            border-color: var(--gold);
-            color: var(--gold);
-            box-shadow: 0 0 20px var(--gold-glow-soft), inset 0 0 20px rgba(212,175,55,0.04);
-            transform: scale(1.06);
-        }
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s var(--ease),transform .75s var(--ease);}
+    .reveal.on{opacity:1;transform:translateY(0);}
 
-        .large-ep-card {
-            width: 100%;
-            max-width: 860px;
-            margin: 0 auto 20px;
-            background: #080808;
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: all 0.35s cubic-bezier(.23,1,.32,1);
-            text-decoration: none;
-            display: block;
-        }
-        .large-ep-card:hover { transform: scale(1.01) translateY(-4px); border-color: var(--border-hover); box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px var(--gold-glow-soft); }
-        .large-ep-thumbnail {
-            width: 100%; height: 420px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .large-ep-thumbnail::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
-        }
-        .large-ep-play {
-            width: 65px; height: 65px;
-            background: rgba(212,175,55,0.9);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 2;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 30px var(--gold-glow);
-        }
-        .large-ep-card:hover .large-ep-play { transform: scale(1.15); box-shadow: 0 0 50px var(--gold-glow); }
-        .large-ep-play::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent #000; margin-right: -4px; }
-        .large-ep-details { padding: 22px 28px; text-align: center; background: var(--card-bg); }
-        .large-ep-details h2 { color: #eee; font-size: 17px; font-weight: 800; line-height: 1.5; }
-
-        /* =================== GAMES LIBRARY =================== */
-        .library-container { max-width: 1100px; margin: 0 auto 70px; padding: 0 20px; }
-        .sub-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 35px 0 18px;
-            color: var(--gold);
-            font-weight: 800;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 17px;
-        }
-        .sub-title::before {
-            content: '';
-            width: 4px; height: 22px;
-            background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
-        .game-card {
-            background: linear-gradient(180deg, rgba(26,26,26,0.95), rgba(16,16,16,0.95));
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: transform 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s, box-shadow 0.3s;
-            height: 195px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .game-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(212,175,55,0.04), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .game-card:hover { transform: translateY(-10px) scale(1.03); border-color: var(--border-hover); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 25px var(--gold-glow-soft); }
-        .game-card:hover::after { opacity: 1; }
-
-        /* Hover overlay on game image */
-        .game-img-wrap { width: 100%; height: 110px; overflow: hidden; flex-shrink: 0; position: relative; }
-        .game-img-wrap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(16,16,16,1) 0%, transparent 60%);
-        }
-        .game-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
-        .game-card:hover .game-img { transform: scale(1.08); }
-
-        .game-info { padding: 10px 10px 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
-        .game-name { font-size: 13px; font-weight: 700; color: #e8e8e8; }
-        .game-note { font-size: 11px; color: var(--gold); font-weight: 800; line-height: 1.3; }
-
-        /* Star ratings upgrade */
-        .star-row { display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 10px; }
-        .star-row .who { color: var(--text-dim); font-size: 10px; margin-left: 4px; }
-
-        .hidden-game { display: none; }
-        .show-more-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 28px auto 0;
-            padding: 13px 38px;
-            background: transparent;
-            border: 1.5px solid var(--gold);
-            color: var(--gold);
-            border-radius: 50px;
-            font-weight: 900;
-            font-family: 'Cairo', sans-serif;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(.23,1,.32,1);
-        }
-        .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px var(--gold-glow); transform: translateY(-3px); }
-        .show-more-btn svg { width: 16px; transition: transform 0.3s; }
-        .show-more-btn.open svg { transform: rotate(180deg); }
-
-        /* =================== SOCIALS =================== */
-        .socials-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 14px;
-            max-width: 1100px;
-            margin: 0 auto 80px;
-            padding: 0 20px;
-        }
-        .social-item {
-            background: linear-gradient(145deg, rgba(22,22,22,0.9), rgba(14,14,14,0.9));
-            border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 22px 10px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.35s cubic-bezier(.23,1,.32,1);
-            position: relative;
-            overflow: hidden;
-        }
-        .social-item::before {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: var(--platform-color, var(--gold));
-            transform: scaleX(0);
-            transition: transform 0.3s;
-            border-radius: 0 0 18px 18px;
-        }
-        .social-item:hover::before { transform: scaleX(1); }
-        .social-item:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .social-item img { width: 28px; filter: invert(1); margin-bottom: 10px; transition: transform 0.3s; opacity: 0.85; }
-        .social-item:hover img { transform: scale(1.15); opacity: 1; }
-        .social-item div { color: #eee; font-weight: 800; font-size: 13px; }
-        .social-item span { color: #555; font-size: 10px; display: block; margin-top: 5px; }
-
-        /* Platform-specific accents */
-        [href*="kick.com"] { --platform-color: #53fc18; }
-        [href*="youtube.com"] { --platform-color: #ff0000; }
-        [href*="discord.com"] { --platform-color: #5865F2; }
-        [href*="instagram.com"] { --platform-color: #E1306C; }
-        [href*="tiktok.com"] { --platform-color: #69C9D0; }
-        [href*="x.com"] { --platform-color: #eee; }
-
-        /* =================== GAME ADVENTURE SECTION =================== */
-        .adventure-card {
-            background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(12,12,12,0.95));
-            border-radius: 22px;
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            padding: 35px 40px;
-            transition: all 0.35s cubic-bezier(.23,1,.32,1);
-            position: relative;
-            overflow: hidden;
-        }
-        .adventure-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(212,175,55,0.04), transparent 60%);
-            pointer-events: none;
-        }
-        .adventure-card:hover { transform: translateY(-5px); border-color: var(--border-hover); box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 40px var(--gold-glow-soft); }
-        .adventure-emoji { font-size: 60px; flex-shrink: 0; filter: drop-shadow(0 0 20px rgba(212,175,55,0.4)); }
-        .adventure-text p { color: #bbb; font-size: 15px; line-height: 1.8; }
-        .adventure-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #000;
-            font-weight: 900;
-            font-size: 14px;
-            padding: 10px 24px;
-            border-radius: 30px;
-            margin-top: 16px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-        }
-        .adventure-card:hover .adventure-cta { transform: translateX(-4px); box-shadow: 0 0 20px var(--gold-glow); }
-
-        /* =================== SUGGESTIONS FORM =================== */
-        .form-box {
-            max-width: 600px;
-            margin: 0 auto 70px;
-            background: linear-gradient(145deg, rgba(22,22,22,0.95), rgba(14,14,14,0.95));
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-            transition: border-color 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .form-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%; transform: translateX(-50%);
-            width: 200px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-        .form-box:hover { border-color: var(--border-hover); box-shadow: 0 0 50px var(--gold-glow-soft); }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #777; font-size: 13px; font-weight: 700; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 13px 16px;
-            background: rgba(8,8,8,0.8);
-            border: 1px solid #222;
-            border-radius: 12px;
-            color: var(--text-main);
-            outline: none;
-            font-family: 'Cairo', sans-serif;
-            font-size: 14px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px var(--gold-glow-soft);
-        }
-        .form-group select option { background: #141414; }
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border: none;
-            border-radius: 12px;
-            font-weight: 900;
-            font-family: 'Cairo', sans-serif;
-            font-size: 15px;
-            color: #000;
-            transition: all 0.3s cubic-bezier(.23,1,.32,1);
-        }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--gold-glow); background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
-        #success-message { display: none; text-align: center; padding: 35px; background: rgba(212,175,55,0.06); border: 1px dashed rgba(212,175,55,0.4); border-radius: 16px; color: var(--gold); font-weight: 900; font-size: 18px; }
-        .honey { display: none; }
-
-        /* =================== FOOTER =================== */
-        footer {
-            text-align: center;
-            padding: 45px 20px;
-            border-top: 1px solid var(--border-color);
-            background: rgba(0,0,0,0.5);
-            position: relative;
-        }
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%; transform: translateX(-50%);
-            width: 120px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-        footer p { color: #555; font-size: 13px; font-weight: 700; }
-        footer b { color: var(--gold); text-shadow: 0 0 15px var(--gold-glow); }
-
-        /* =================== ABOUT SECTION (NEW) =================== */
-        .about-info-bar {
-            background: rgba(212,175,55,0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px 28px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-        .about-info-bar .icon { font-size: 22px; flex-shrink: 0; }
-        .about-info-bar p { font-size: 14px; line-height: 1.7; color: #ccc; }
-        .about-info-bar strong { color: var(--gold); }
-
-        /* =================== SCROLL TO TOP =================== */
-        #scroll-top {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 44px; height: 44px;
-            background: rgba(212,175,55,0.15);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            font-size: 18px;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.35s;
-            backdrop-filter: blur(10px);
-            text-decoration: none;
-        }
-        #scroll-top.visible { opacity: 1; pointer-events: all; }
-        #scroll-top:hover { background: var(--gold); color: #000; transform: translateY(-4px); }
-
-        /* =================== RESPONSIVE =================== */
-        @media (max-width: 900px) {
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .socials-grid { grid-template-columns: repeat(3, 1fr); }
-            .nav-bar { gap: 12px; padding: 8px 18px; width: 95%; }
-            .nav-link { font-size: 11.5px; }
-            .large-ep-thumbnail { height: 220px; }
-            .archive-wrapper { padding: 24px 20px; }
-            .adventure-card { flex-direction: column; text-align: center; padding: 28px 24px; }
-        }
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .owner-name { font-size: 40px; }
-            .form-box { padding: 28px 22px; }
-        }
+    /* RESPONSIVE */
+    @media(max-width:900px){
+        .stats-strip{grid-template-columns:1fr 1fr;}
+        .stats-strip .stat-cell:last-child{grid-column:1/-1;}
+        .socials-grid{grid-template-columns:repeat(3,1fr);}
+        .ep-thumb{height:220px;}
+        .archive-content{padding:20px 16px;}
+        .adventure-card{flex-direction:column;text-align:center;padding:28px 22px;}
+        .form-shell{padding:32px 22px;}
+    }
+    @media(max-width:600px){
+        .stats-strip{grid-template-columns:1fr;}
+        .socials-grid{grid-template-columns:repeat(2,1fr);}
+        .nav-link{font-size:11.5px;padding:5px 13px;}
+        .hero-name{letter-spacing:-1px;}
+    }
     </style>
 </head>
 <body id="top-page">
 
-    <div id="s4-cursor"></div>
-    <canvas id="bg-canvas"></canvas>
-    <a href="#top-page" id="scroll-top">↑</a>
+<div id="loader"><img src="logo.png" class="loader-logo" alt=""><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<div id="s4-cursor"></div>
+<canvas id="bg-canvas"></canvas>
+<a href="#top-page" id="scroll-top">↑</a>
 
-    <!-- LIVE BAR -->
-    <a href="https://kick.com/S4leeh" target="_blank" class="live-status-bar" id="live-bar-container">
-        <div class="status-content">
-            <span class="status-dot"></span>
-            <span id="live-text" class="status-text">جاري فحص حالة البث...</span>
+<!-- شريط البث -->
+<a href="https://kick.com/S4leeh" target="_blank" class="live-bar" id="live-bar">
+    <div class="live-inner"><span class="live-dot"></span><span class="live-text" id="live-text">جاري فحص حالة البث...</span></div>
+</a>
+
+<!-- شريط التنقل -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="#top-page"        class="nav-link">الرئيسية</a>
+        <a href="#last-video"      class="nav-link">آخر مقطع</a>
+        <a href="#archive-section" class="nav-link">الأرشيف</a>
+        <a href="#games-library"   class="nav-link">الألعاب</a>
+        <a href="#my-socials"      class="nav-link">حساباتي</a>
+        <a href="#suggestions"     class="nav-link">اقتراح</a>
+    </div>
+</nav>
+
+<!-- الصفحة الرئيسية -->
+<header class="hero">
+    <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar-glow-ring"></div>
+        <img src="logo.png" class="avatar" alt="صالح">
+        <div class="status-chip"><span class="dot"></span><span id="chip-text">غير متصل</span></div>
+    </div>
+    <div class="hero-name">صالح</div>
+    <div class="hero-tag">صانع محتوى · ستريمر</div>
+    <p class="hero-bio">تجدون في الموقع كل ما يخصني<br>من مقاطع وبثوث وأرشيف للفعاليات وجميع حساباتي</p>
+    <div class="hero-ctas">
+        <a href="https://kick.com/S4leeh" target="_blank" class="btn-gold">🔴 تابع البث</a>
+        <a href="#archive-section" class="btn-outline">📂 الأرشيف</a>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div>انزل</div>
+</header>
+
+<!-- إحصائيات -->
+<div class="stats-strip reveal">
+    <div class="stat-cell"><div class="stat-icon">⏳</div><div class="stat-val" id="exp">—</div><div class="stat-lbl">رحلة صناعة المحتوى</div></div>
+    <div class="stat-cell"><div class="stat-icon">▶</div><div class="stat-val" id="sub-count">—</div><div class="stat-lbl">مشترك في يوتيوب</div></div>
+    <div class="stat-cell"><div class="stat-icon">🎙</div><div class="stat-val">14</div><div class="stat-lbl">بث مباشر في 2026</div></div>
+</div>
+
+<!-- آخر مقطع -->
+<section id="last-video" class="section reveal">
+    <div class="section-head"><span class="section-num">٠١</span><h2 class="section-title">آخر مقطع في يوتيوب</h2><div class="section-line"></div></div>
+    <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" class="yt-card" target="_blank">
+        <div class="yt-thumb" style="background-image:url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"><div class="yt-play"></div></div>
+        <div class="yt-info"><h3>رمضانيّات مع صالح 🌙 | قارة آسيا مافيها صحراء !! 😂</h3></div>
+    </a>
+</section>
+
+<!-- الأرشيف -->
+<section id="archive-section" class="section reveal">
+    <div class="section-head"><span class="section-num">٠٢</span><h2 class="section-title">الأرشيف</h2><div class="section-line"></div></div>
+    <div class="archive-shell">
+        <div class="archive-tabs">
+            <button id="tab-events"     class="tab-btn" onclick="switchTab('events')">🏆 الفعاليات</button>
+            <button id="tab-ramadan"    class="tab-btn" onclick="switchTab('ramadan')">🌙 رمضانيّات</button>
+            <button id="tab-highlights" class="tab-btn" onclick="switchTab('highlights')">🎬 البثوث المميزة</button>
+        </div>
+
+        <!-- الفعاليات -->
+        <div id="content-events" class="archive-content">
+            <div style="display:flex;justify-content:center;margin-bottom:24px;">
+                <button id="btn-tahadani" class="tab-btn" style="border:1px solid var(--edge);border-radius:50px;padding:12px 30px;min-width:auto;" onclick="toggleTournament()">🏆 ثلاثيّات تحداني</button>
+            </div>
+            <div id="tahadani-body" style="display:none;">
+                <div class="about-banner"><p><strong>عن البطولة:</strong> صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها <strong>150$ و15 لعبة مجانية</strong>.</p></div>
+                <p style="color:var(--gold);font-weight:900;margin-bottom:12px;font-size:13px;">👥 24 مشارك — 8 فرق</p>
+                <div class="teams-grid">
+                    <div class="team-tile"><div class="team-name">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق السابع</div><div class="team-members">3Yazan, llYousf</div></div>
+                    <div class="team-tile"><div class="team-name">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
+                </div>
+                <div class="ep-strip">
+                    <div class="ep-node" onclick="showEp('ep','ep-1',this)">الحلقة الأولى</div>
+                    <div class="ep-node" onclick="showEp('ep','ep-2',this)">الحلقة الثانية</div>
+                    <div class="ep-node" onclick="showEp('ep','ep-3',this)">الحلقة الثالثة</div>
+                    <div class="ep-node" onclick="showEp('ep','ep-4',this)">الحلقة الرابعة</div>
+                </div>
+                <div id="ep-ep-1" class="ep-display active"><a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h3></div></a></div>
+                <div id="ep-ep-2" class="ep-display"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>ثلاثيات تحداني 🧡: مباريات ربع النهائي، ومعرفة المتأهلين</h3></div></a></div>
+                <div id="ep-ep-3" class="ep-display"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h3></div></a></div>
+                <div id="ep-ep-4" class="ep-display"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h3></div></a></div>
+            </div>
+        </div>
+
+        <!-- رمضانيات -->
+        <div id="content-ramadan" class="archive-content">
+            <h3 style="text-align:center;color:var(--gold);margin-bottom:20px;font-size:19px;font-weight:900;">🌙 رمضانيّات مع صالح</h3>
+            <div class="ep-strip" style="border-top:none;padding-top:0;">
+                <div class="ep-node active" onclick="showEp('ram','ram-1',this)">الحلقة الأولى</div>
+                <div class="ep-node" onclick="showEp('ram','ram-2',this)">الحلقة الثانية</div>
+                <div class="ep-node" onclick="showEp('ram','ram-3',this)">الحلقة الثالثة</div>
+                <div class="ep-node" onclick="showEp('ram','ram-4',this)">الحلقة الرابعة</div>
+            </div>
+            <div id="ep-ram-1" class="ep-display active"><a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>الحلقة الأولى: البصل فاكهة !! 😂</h3></div></a></div>
+            <div id="ep-ram-2" class="ep-display"><a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" target="_blank" class="ep-card"><div class="ep-thumb" style="background-image:url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"><div class="ep-play"></div></div><div class="ep-info"><h3>الحلقة الثانية: قارة آسيا مافيها صحراء !! 😂</h3></div></a></div>
+            <div id="ep-ram-3" class="ep-display"><p class="coming-soon">الحلقة الثالثة قريباً... ⏳</p></div>
+            <div id="ep-ram-4" class="ep-display"><p class="coming-soon">الحلقة الرابعة قريباً... ⏳</p></div>
+        </div>
+
+        <!-- البثوث المميزة -->
+        <div id="content-highlights" class="archive-content">
+            <p class="coming-soon">يتم العمل على الأرشيف 🏗️</p>
+        </div>
+    </div>
+</section>
+
+<!-- مكتبة الألعاب -->
+<section id="games-library" class="section reveal">
+    <div class="section-head"><span class="section-num">٠٣</span><h2 class="section-title">مكتبة ألعاب 2026</h2><div class="section-line"></div></div>
+
+    <div class="games-label">ألعبها حاليًا</div>
+    <div class="games-grid">
+        <div class="game-card"><div class="game-img-box"><img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" style="object-fit:contain;background:#0c0c0c;"></div><div class="game-body"><div class="game-name">ألعاب عشوائية</div><div class="game-badge">🎲 كل بث مفاجأة</div></div></div>
+    </div>
+
+    <div class="games-label">مُخطط لها</div>
+    <div class="games-grid">
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg"></div><div class="game-body"><div class="game-name">Supraworld</div><div class="game-badge">قريباً 🔜</div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg"></div><div class="game-body"><div class="game-name">Parallel Experiment</div><div class="game-badge">مع BDR1 🤝</div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg"></div><div class="game-body"><div class="game-name">Let me out</div><div class="game-badge">قريباً 🔜</div></div></div>
+    </div>
+
+    <div class="games-label">لعبناها</div>
+    <div class="games-grid">
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679"></div><div class="game-body"><div class="game-name">Fateel - فتيل</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★</span></div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg"></div><div class="game-body"><div class="game-name">Minecraft</div><div class="game-badge">فوق التقييم 👑</div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475"></div><div class="game-body"><div class="game-name">Viewfinder</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★★★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★★★★</span></div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg"></div><div class="game-body"><div class="game-name">Hytale</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★★★</span></div></div></div>
+        <div class="game-card"><div class="game-img-box"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg"></div><div class="game-body"><div class="game-name">Candleman</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★★★★</span></div></div></div>
+        <div class="game-card hidden-game"><div class="game-img-box"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811"></div><div class="game-body"><div class="game-name">Fever Meme</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★★★★</span></div></div></div>
+        <div class="game-card hidden-game"><div class="game-img-box"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg"></div><div class="game-body"><div class="game-name">Superliminal</div><div class="game-score"><span class="who">صالح</span><span class="stars">★★★★</span></div><div class="game-score"><span class="who">الشات</span><span class="stars">★★★</span></div></div></div>
+    </div>
+    <button id="show-more" class="show-more" onclick="toggleGames()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+        عرض المزيد
+    </button>
+</section>
+
+<!-- حساباتي -->
+<section id="my-socials" class="section reveal">
+    <div class="section-head"><span class="section-num">٠٤</span><h2 class="section-title">حساباتي في مواقع التواصل</h2><div class="section-line"></div></div>
+    <div class="socials-grid">
+        <a href="https://kick.com/S4leeh"            class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><span class="social-name">Kick</span><span class="social-desc">بثوث مباشرة</span></a>
+        <a href="https://www.youtube.com/@S4leeh"    class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><span class="social-name">YouTube</span><span class="social-desc">المقاطع الرئيسية</span></a>
+        <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><span class="social-name">Discord</span><span class="social-desc">مجتمع صالح</span></a>
+        <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><span class="social-name">Instagram</span><span class="social-desc">يوميات وحصريات</span></a>
+        <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><span class="social-name">TikTok</span><span class="social-desc">أقوى اللقطات</span></a>
+        <a href="https://x.com/iS4leeh"             class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><span class="social-name">X / Twitter</span><span class="social-desc">أحدث الأخبار</span></a>
+    </div>
+</section>
+
+<!-- مغامرة صالح -->
+<section id="s4leeh-game" class="section reveal">
+    <div class="section-head"><span class="section-num">٠٥</span><h2 class="section-title">مغامرة صالح</h2><div class="section-line"></div></div>
+    <a href="Games.html" class="adventure-card">
+        <div class="adv-icon">🕹️</div>
+        <div class="adv-body">
+            <p>يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول؟</p>
+            <span class="adv-cta">العب الآن 🚀</span>
         </div>
     </a>
+</section>
 
-    <!-- NAV -->
-    <nav class="nav-bar">
-        <a href="#top-page" class="nav-link">أعلى الصفحة</a>
-        <a href="#last-video" class="nav-link">آخر مقطع</a>
-        <a href="#archive-section" class="nav-link">الأرشيف</a>
-        <a href="#games-library" class="nav-link">الألعاب</a>
-        <a href="#my-socials" class="nav-link">حساباتي</a>
-        <a href="#suggestions" class="nav-link">الاقتراحات</a>
-    </nav>
-
-    <!-- HEADER -->
-    <header class="reveal">
-        <div class="logo-wrapper">
-            <div class="logo-ring"></div>
-            <img src="logo.png" class="logo" alt="S4leeh">
-        </div>
-        <h1 class="owner-name">صالح</h1>
-        <p class="bio">
-            صانع محتوى في اليوتيوب و ستريمر في منصة كيك
-            <br>
-            تجدون في الموقع كل مايخصني من مقاطع وبثوث وارشيف للفعاليات وجميع حساباتي
-        </p>
-        <div class="scroll-hint">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </div>
-    </header>
-
-    <!-- STATS -->
-    <section class="stats-grid reveal">
-        <div class="stat-card">
-            <div class="stat-icon">⏳</div>
-            <div class="stat-value" id="exp">...</div>
-            <div class="stat-label">رحلة صناعة المحتوى</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">🔴</div>
-            <div class="stat-value" id="sub-count">...</div>
-            <div class="stat-label">مشترك في يوتيوب</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">🎙️</div>
-            <div class="stat-value" id="live-count">14</div>
-            <div class="stat-label">بث مباشر في 2026</div>
-        </div>
-    </section>
-
-    <!-- LAST VIDEO -->
-    <section id="last-video" class="content-section reveal">
-        <h2 class="section-title">📺 المقطع الأخير في يوتيوب</h2>
-        <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" class="yt-card" target="_blank">
-            <div class="yt-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')">
-                <div class="play-btn"></div>
-            </div>
-            <div class="yt-details"><h2>رمضانيّات مع صالح 🌙 | قارة آسيا مافيها صحراء !! 😂</h2></div>
-        </a>
-    </section>
-
-    <!-- ARCHIVE -->
-    <section id="archive-section" class="archive-container reveal">
-        <h2 class="section-title">📂 الأرشيف</h2>
-        <div class="archive-wrapper">
-            <div class="archive-tabs">
-                <button id="events-tab" class="tab-btn" onclick="toggleMainArchive('events')">🏆 أرشيف الفعاليات</button>
-                <button id="ramadan-tab" class="tab-btn" onclick="toggleMainArchive('ramadan')">🌙 رمضانيّات مع صالح</button>
-                <button id="highlights-tab" class="tab-btn" onclick="toggleMainArchive('highlights')">🎬 البثوث المميزة</button>
-            </div>
-
-            <div id="archive-content-area" class="archive-main-content">
-
-                <!-- EVENTS -->
-                <div id="events-body" class="archive-body">
-                    <div style="display:flex; justify-content:center; margin-bottom:28px;">
-                        <button id="tahadani-main-btn" class="tab-btn" onclick="showTournamentDetails('tahadani-details')">🏆 ثلاثيّات تحداني</button>
-                    </div>
-                    <div id="tahadani-details" class="tournament-details">
-                        <div class="about-info-bar">
-                            <span class="icon">⚡</span>
-                            <p><strong>عن البطولة:</strong> صراع ملحمي يتنافس فيه 8 فرق في عالم "تحدّاني"، حيث تعتمد المواجهات على اختيار المتابعين والفئات المفضلة. يتوج الفائز بجائزة قدرها <strong>150$ و15 لعبة مجانية</strong>.</p>
-                        </div>
-                        <p style="color:var(--gold); font-weight:900; margin-bottom:12px;">👥 نخبة المشاركين (24 مشارك):</p>
-                        <div class="team-grid">
-                            <div class="team-card"><div class="team-title">الفريق الأول</div><div class="team-members">Spitfire57, iDexter89, imRashly</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثاني</div><div class="team-members">PYWQ, BDR1, 7og9</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثالث</div><div class="team-members">IIKhaled77, Raheeb, Mohammd</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الرابع</div><div class="team-members">HIR0, MEDO_DV, Mr8asm</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الخامس</div><div class="team-members">S3eedxx, Q7sa, marions77</div></div>
-                            <div class="team-card"><div class="team-title">الفريق السادس</div><div class="team-members">ex21xe, KhalledHD, MK119</div></div>
-                            <div class="team-card"><div class="team-title">الفريق السابع</div><div class="team-members">3Yazan, llYousf</div></div>
-                            <div class="team-card"><div class="team-title">الفريق الثامن</div><div class="team-members">w9k1, 7ader, ml3bdalah77</div></div>
-                        </div>
-                        <div class="episodes-selector">
-                            <div class="ep-node" onclick="showEp('ep-1', this)">الحلقة الأولى</div>
-                            <div class="ep-node" onclick="showEp('ep-2', this)">الحلقة الثانية</div>
-                            <div class="ep-node" onclick="showEp('ep-3', this)">الحلقة الثالثة</div>
-                            <div class="ep-node" onclick="showEp('ep-4', this)">الحلقة الرابعة</div>
-                        </div>
-                        <div id="ep-display">
-                            <div id="ep-1" class="archive-body active">
-                                <a href="https://youtu.be/43nQ8FCexIg" target="_blank" class="large-ep-card">
-                                    <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/43nQ8FCexIg/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
-                                    <div class="large-ep-details"><h2>ثلاثيات تحداني 🧡 : المباراة الأولى فريق سعيد ضد فريق خالد</h2></div>
-                                </a>
-                            </div>
-                            <div id="ep-2" class="archive-body"><a href="https://youtu.be/vz0qbRaHRA8" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/vz0qbRaHRA8/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات ربع النهائي ، ومعرفة المتأهلين</h2></div></a></div>
-                            <div id="ep-3" class="archive-body"><a href="https://youtu.be/_WCiXkU-G8Y" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/_WCiXkU-G8Y/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: مباريات نصف النهائي والمنافسة حامية 🔥</h2></div></a></div>
-                            <div id="ep-4" class="archive-body"><a href="https://youtu.be/TiD6HoCbIXM" target="_blank" class="large-ep-card"><div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/TiD6HoCbIXM/maxresdefault.jpg')"><div class="large-ep-play"></div></div><div class="large-ep-details"><h2>ثلاثيات تحداني 🧡: النهائي التاريخي 🔥🏆</h2></div></a></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RAMADAN -->
-                <div id="ramadan-body" class="archive-body">
-                    <h3 style="color:var(--gold); font-size:20px; margin-bottom:16px; text-align:center; font-family:'Tajawal',sans-serif;">🌙 رمضانيّات مع صالح</h3>
-                    <div class="episodes-selector" style="border-top:none; padding-top:10px;">
-                        <div class="ep-node active" onclick="showRamadanEp('ramadan-ep-1', this)">الحلقة الأولى</div>
-                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-2', this)">الحلقة الثانية</div>
-                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-3', this)">الحلقة الثالثة</div>
-                        <div class="ep-node" onclick="showRamadanEp('ramadan-ep-4', this)">الحلقة الرابعة</div>
-                    </div>
-                    <div id="ramadan-ep-display">
-                        <div id="ramadan-ep-1" class="archive-body active">
-                            <a href="https://www.youtube.com/watch?v=ZTtfw3A6yTA" target="_blank" class="large-ep-card">
-                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ZTtfw3A6yTA/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
-                                <div class="large-ep-details"><h2>الحلقة الأولى: البصل فاكهة !! 😂</h2></div>
-                            </a>
-                        </div>
-                        <div id="ramadan-ep-2" class="archive-body">
-                            <a href="https://www.youtube.com/watch?v=Ps2wjzV1OAk" target="_blank" class="large-ep-card">
-                                <div class="large-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/Ps2wjzV1OAk/maxresdefault.jpg')"><div class="large-ep-play"></div></div>
-                                <div class="large-ep-details"><h2>الحلقة الثانية: قارة آسيا مافيها صحراء !! 😂</h2></div>
-                            </a>
-                        </div>
-                        <div id="ramadan-ep-3" class="archive-body"><p style="text-align:center; padding:50px; color:#444; font-weight:800; font-size:16px;">الحلقة الثالثة قريباً... ⏳</p></div>
-                        <div id="ramadan-ep-4" class="archive-body"><p style="text-align:center; padding:50px; color:#444; font-weight:800; font-size:16px;">الحلقة الرابعة قريباً... ⏳</p></div>
-                    </div>
-                </div>
-
-                <!-- HIGHLIGHTS -->
-                <div id="highlights-body" class="archive-body">
-                    <p style="text-align:center; padding:60px; color:#3a3a3a; font-weight:800; font-size:16px;">قريباً... يتم العمل على الأرشيف 🏗️</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- GAMES LIBRARY -->
-    <div id="games-library" class="library-container">
-        <h2 class="section-title reveal">🎮 مكتبة ألعاب 2026</h2>
-
-        <h3 class="sub-title reveal">ألعبها حاليًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card">
-                <div class="game-img-wrap">
-                    <img src="https://www.pngkey.com/png/full/152-1529594_mysterybox-zps1bda2e91-mystery-box.png" class="game-img" style="object-fit:contain; background:#111;">
-                </div>
-                <div class="game-info">
-                    <div class="game-name">ألعاب عشوائية</div>
-                    <div class="game-note">🎲 كل بث مفاجأة!</div>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="sub-title reveal">مُخطط لها مستقبلًا</h3>
-        <div class="games-grid reveal">
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1869290/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Supraworld</div><div class="game-note">قريباً 🔜</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2012320/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Parallel Experiment</div><div class="game-note">مع BDR1 🤝</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1269520/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Let me out</div><div class="game-note">قريباً 🔜</div></div></div>
-        </div>
-
-        <h3 class="sub-title reveal">الألعاب اللي لعبناها</h3>
-        <div class="games-grid reveal" id="played-games-grid">
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2206590/header.jpg?t=1750262679" class="game-img"></div><div class="game-info"><div class="game-name">Fateel - فتيل</div><div class="star-row"><span class="who">صالح</span>⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://cdn.arageek.com/magazine//Minecraft.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Minecraft</div><div class="game-note">فوق التقييم 👑</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475" class="game-img"></div><div class="game-info"><div class="game-name">Viewfinder</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://hytale.game/wp-content/uploads/hytale_serveur.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Hytale</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐</div></div></div>
-            <div class="game-card"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/591630/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Candleman</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
-
-            <div class="game-card hidden-game"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3110070/9dcb40dbdcbf02c9a1f16a9c5a656e2994dd1afe/header.jpg?t=1764329811" class="game-img"></div><div class="game-info"><div class="game-name">Fever Meme</div><div class="star-row"><span class="who">صالح</span>⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐⭐</div></div></div>
-            <div class="game-card hidden-game"><div class="game-img-wrap"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1049410/header.jpg" class="game-img"></div><div class="game-info"><div class="game-name">Superliminal</div><div class="star-row"><span class="who">صالح</span>⭐⭐⭐⭐</div><div class="star-row"><span class="who">الشات</span>⭐⭐⭐</div></div></div>
-        </div>
-
-        <button id="show-more-btn" class="show-more-btn reveal" onclick="toggleGames()">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-            عرض المزيد من الألعاب
-        </button>
-    </div>
-
-    <!-- SOCIALS -->
-    <div id="my-socials" class="library-container">
-        <h2 class="section-title reveal">🔗 حساباتي في مواقع التواصل</h2>
-        <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
-        </div>
-    </div>
-
-    <!-- GAME ADVENTURE -->
-    <section id="s4leeh-game" class="content-section reveal">
-        <h2 class="section-title">🏃‍♂️ مغامرة صالح</h2>
-        <a href="Games.html" class="adventure-card">
-            <div class="adventure-emoji">🕹️</div>
-            <div class="adventure-text">
-                <p>يسعى صالح للوصول إلى أبعد نقطة ممكنة، متفاديًا بعض الحواجز من لعبة ماين كرافت بالإضافة إلى شخصيات اللاعبين الأساطير، إلى أي مدى يمكنك الوصول؟</p>
-                <span class="adventure-cta">ابدأ اللعب الآن 🚀</span>
-            </div>
-        </a>
-    </section>
-
-    <!-- SUGGESTIONS -->
-    <section id="suggestions" class="form-box reveal">
-        <div id="suggestion-container">
-            <h2 class="section-title" style="margin-bottom:28px;">💡 ارسل اقتراحك</h2>
-            <form id="suggestion-form" action="https://formspree.io/f/mwvewwew" method="POST" target="_blank">
+<!-- الاقتراحات -->
+<section id="suggestions" class="section reveal">
+    <div class="section-head"><span class="section-num">٠٦</span><h2 class="section-title">ارسل اقتراحك</h2><div class="section-line"></div></div>
+    <div class="form-shell">
+        <div id="form-container">
+            <form id="sug-form" action="https://formspree.io/f/mwvewwew" method="POST" target="_blank">
                 <input type="text" name="_gotcha" class="honey">
-                <div class="form-group"><label>الاسم</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>نوع الاقتراح</label>
+                <div class="fgroup"><label>الاسم</label><input type="text" name="name" required></div>
+                <div class="fgroup"><label>نوع الاقتراح</label>
                     <select name="type">
                         <option value="لعبة جديدة">لعبة جديدة</option>
                         <option value="فكرة مقطع">فكرة مقطع</option>
@@ -1013,212 +437,98 @@
                         <option value="تحسين للموقع">تحسين للموقع</option>
                     </select>
                 </div>
-                <div class="form-group"><label>الاقتراح</label><textarea name="msg" rows="4" required></textarea></div>
-                <button type="submit" class="submit-btn">إرسال الاقتراح 🧡</button>
+                <div class="fgroup"><label>الاقتراح</label><textarea name="msg" rows="4" required></textarea></div>
+                <button type="submit" class="fsubmit">إرسال الاقتراح 🧡</button>
             </form>
         </div>
-        <div id="success-message">تم استلام ملاحظتك بنجاح، شكراً لك! 🧡</div>
-    </section>
+        <div id="success-msg">تم استلام ملاحظتك بنجاح، شكراً لك! 🧡</div>
+    </div>
+</section>
 
-    <footer>
-        <p>© جميع الحقوق محفوظة لـ <b>S4leeh | صالح</b> | 2026</p>
-    </footer>
+<footer><p>© 2026 — <span>صالح</span> · جميع الحقوق محفوظة</p></footer>
 
-    <script>
-        const YT_API_KEY = 'AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI';
-        const CHANNEL_ID = 'UC-Vx0Qf0Rocogs3I9Nz7PDA';
+<script>
+const YT_KEY='AIzaSyBbXUfRr2zA3wrpDenj70-ABLeXJg3b8VI',CH_ID='UC-Vx0Qf0Rocogs3I9Nz7PDA';
 
-        // ======= CURSOR =======
-        const cursor = document.getElementById('s4-cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-        function refreshCursorEvents() {
-            document.querySelectorAll('a, button, input, textarea, select, .ep-node, .game-card, .social-item, .tab-btn').forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-            });
-        }
-        refreshCursorEvents();
+// محمّل الصفحة
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('done'),1400));
 
-        // ======= PARTICLE CANVAS =======
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let W, H;
+// المؤشر
+const cur=document.getElementById('s4-cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+function bindCursor(){document.querySelectorAll('a,button,input,textarea,select,.ep-node,.game-card,.social-item,.tab-btn').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'));});}
+bindCursor();
 
-        function initCanvas() {
-            W = canvas.width = window.innerWidth;
-            H = canvas.height = window.innerHeight;
-        }
+// خلفية الجسيمات
+const cv=document.getElementById('bg-canvas'),cx=cv.getContext('2d');
+let W,H,pts=[];
+class Dot{constructor(){this.init();}init(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.6+.2;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25;this.a=Math.random()*.28+.04;}step(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.init();}draw(){cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fillStyle=`rgba(212,175,55,${this.a})`;cx.fill();}}
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+function frame(){cx.fillStyle='#050505';cx.fillRect(0,0,W,H);pts.forEach(p=>{p.step();p.draw();});requestAnimationFrame(frame);}
+resize();for(let i=0;i<110;i++)pts.push(new Dot());frame();
+window.addEventListener('resize',resize);
 
-        class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * W;
-                this.y = Math.random() * H;
-                this.size = Math.random() * 1.8 + 0.2;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.4 + 0.05;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > W || this.x < 0 || this.y > H || this.y < 0) this.reset();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(212,175,55,${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+// انيميشن ظهور العناصر
+const ro=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 
-        function animate() {
-            ctx.clearRect(0, 0, W, H);
-            // Subtle radial gradient bg
-            const grad = ctx.createRadialGradient(W * 0.5, H * 0.15, 0, W * 0.5, H * 0.15, H * 0.8);
-            grad.addColorStop(0, '#181818');
-            grad.addColorStop(1, '#0a0a0a');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
+// زر الأعلى
+const stb=document.getElementById('scroll-top');
+window.addEventListener('scroll',()=>stb.classList.toggle('show',scrollY>400));
 
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
+// تبديل تبويبات الأرشيف
+let activeTab=null;
+function switchTab(name){
+    document.querySelectorAll('.archive-content').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('.archive-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    if(activeTab===name){activeTab=null;return;}
+    activeTab=name;
+    document.getElementById('content-'+name).classList.add('active');
+    document.getElementById('tab-'+name).classList.add('active');
+    bindCursor();
+}
 
-        initCanvas();
-        for (let i = 0; i < 120; i++) particles.push(new Particle());
-        animate();
-        window.addEventListener('resize', initCanvas);
+// عرض البطولة
+let tahadaniOpen=false;
+function toggleTournament(){
+    tahadaniOpen=!tahadaniOpen;
+    const body=document.getElementById('tahadani-body'),btn=document.getElementById('btn-tahadani');
+    body.style.display=tahadaniOpen?'block':'none';
+    btn.classList.toggle('active',tahadaniOpen);
+    if(tahadaniOpen){const fn=document.querySelector('#content-events .ep-strip .ep-node');showEp('ep','ep-1',fn);}
+    bindCursor();
+}
 
-        // ======= SCROLL REVEAL =======
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.08 });
-        document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+// اختيار الحلقات
+function showEp(prefix,id,node){
+    const strip=node.closest('.ep-strip');
+    strip.querySelectorAll('.ep-node').forEach(n=>n.classList.remove('active'));
+    node.classList.add('active');
+    const section=strip.closest('.archive-content,#tahadani-body');
+    section.querySelectorAll('.ep-display').forEach(d=>d.classList.remove('active'));
+    document.getElementById('ep-'+id).classList.add('active');
+    bindCursor();
+}
 
-        // ======= SCROLL TO TOP =======
-        const scrollTopBtn = document.getElementById('scroll-top');
-        window.addEventListener('scroll', () => {
-            scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-        });
+// عرض المزيد من الألعاب
+function toggleGames(){
+    const hidden=document.querySelectorAll('.hidden-game'),btn=document.getElementById('show-more');
+    const opening=hidden[0].style.display!=='flex';
+    hidden.forEach(g=>g.style.display=opening?'flex':'none');
+    btn.innerHTML=opening?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 15l7-7 7 7"/></svg>إخفاء':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>عرض المزيد';
+    btn.classList.toggle('open',opening);
+    bindCursor();
+}
 
-        // ======= ARCHIVE FUNCTIONS =======
-        function toggleMainArchive(type) {
-            const area = document.getElementById('archive-content-area');
-            const bodies = document.querySelectorAll('.archive-body');
-            const tabs = document.querySelectorAll('.tab-btn');
-            const activeTab = document.getElementById(type + '-tab');
+// الاقتراحات
+document.getElementById('sug-form').onsubmit=()=>setTimeout(()=>{document.getElementById('form-container').style.display='none';document.getElementById('success-msg').style.display='block';},100);
 
-            if (area.style.display === 'block' && activeTab.classList.contains('active')) {
-                area.style.display = 'none';
-                tabs.forEach(t => t.classList.remove('active'));
-            } else {
-                area.style.display = 'block';
-                bodies.forEach(b => b.classList.remove('active'));
-                tabs.forEach(t => t.classList.remove('active'));
-                document.getElementById(type + '-body').classList.add('active');
-                activeTab.classList.add('active');
-                document.getElementById('tahadani-details').classList.remove('active');
-                document.getElementById('tahadani-main-btn').classList.remove('active');
-            }
-            refreshCursorEvents();
-        }
+// الإحصائيات
+function updateExp(){const s=new Date('2022-06-02'),n=new Date();let y=n.getFullYear()-s.getFullYear(),m=n.getMonth()-s.getMonth();if(m<0){y--;m+=12;}document.getElementById('exp').textContent=`${y} سنوات و${m} أشهر`;}
+async function updateSubs(){try{const r=await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CH_ID}&key=${YT_KEY}`),d=await r.json(),n=Number(d.items[0].statistics.subscriberCount);document.getElementById('sub-count').textContent=n>=1000?(n/1000).toFixed(1)+'K':n;}catch{document.getElementById('sub-count').textContent='1.5K';}}
+async function checkKick(){const txt=document.getElementById('live-text'),chip=document.getElementById('chip-text');try{const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://kick.com/api/v1/channels/s4leeh')),d=JSON.parse((await r.json()).contents);if(d.livestream){document.body.classList.add('is-live');txt.textContent='🔥 صالح يبث الآن على Kick — اضغط للمشاهدة!';chip.textContent='مباشر الآن';}else{document.body.classList.remove('is-live');txt.textContent='البث المباشر مغلق حالياً';chip.textContent='غير متصل';}}catch{txt.textContent='تعذّر التحقق من حالة البث';}}
 
-        function showTournamentDetails(id) {
-            const content = document.getElementById(id);
-            const btn = document.getElementById('tahadani-main-btn');
-            content.classList.toggle('active');
-            btn.classList.toggle('active');
-            if (content.classList.contains('active')) showEp('ep-1', document.querySelector('#ep-display .ep-node'));
-            refreshCursorEvents();
-        }
-
-        function showEp(epId, node) {
-            document.querySelectorAll('#ep-display .archive-body').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('#tahadani-details .ep-node').forEach(n => n.classList.remove('active'));
-            document.getElementById(epId).classList.add('active');
-            if (node) node.classList.add('active');
-            refreshCursorEvents();
-        }
-
-        function showRamadanEp(epId, node) {
-            document.querySelectorAll('#ramadan-ep-display .archive-body').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('#ramadan-body .ep-node').forEach(n => n.classList.remove('active'));
-            document.getElementById(epId).classList.add('active');
-            node.classList.add('active');
-            refreshCursorEvents();
-        }
-
-        // ======= GAMES TOGGLE =======
-        function toggleGames() {
-            const hiddenGames = document.querySelectorAll('.hidden-game');
-            const btn = document.getElementById('show-more-btn');
-            const isHidden = hiddenGames[0].style.display === 'none' || hiddenGames[0].style.display === '';
-            hiddenGames.forEach(g => g.style.display = isHidden ? 'flex' : 'none');
-            btn.innerHTML = isHidden
-                ? '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg> إخفاء الألعاب'
-                : '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg> عرض المزيد من الألعاب';
-            btn.classList.toggle('open', isHidden);
-            refreshCursorEvents();
-        }
-
-        // ======= FORM =======
-        document.getElementById('suggestion-form').onsubmit = function() {
-            setTimeout(() => {
-                document.getElementById('suggestion-container').style.display = 'none';
-                document.getElementById('success-message').style.display = 'block';
-            }, 100);
-        };
-
-        // ======= STATS =======
-        function updateStats() {
-            const start = new Date('2022-06-02');
-            const now = new Date();
-            let y = now.getFullYear() - start.getFullYear();
-            let m = now.getMonth() - start.getMonth();
-            if (m < 0) { y--; m += 12; }
-            document.getElementById('exp').innerText = `${y} سنوات و ${m} أشهر`;
-        }
-
-        async function updateYouTubeSubs() {
-            try {
-                const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`);
-                const data = await res.json();
-                const count = Number(data.items[0].statistics.subscriberCount);
-                document.getElementById('sub-count').innerText = count.toLocaleString('ar-SA');
-            } catch (e) {
-                document.getElementById('sub-count').innerText = '1,531';
-            }
-        }
-
-        async function checkKick() {
-            const container = document.getElementById('live-bar-container');
-            const txt = document.getElementById('live-text');
-            try {
-                const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://kick.com/api/v1/channels/s4leeh'));
-                const raw = await res.json();
-                const data = JSON.parse(raw.contents);
-                if (data.livestream) {
-                    document.body.classList.add('is-live');
-                    txt.innerText = '🔥 صالح يبث الآن على Kick — اضغط للمشاهدة!';
-                } else {
-                    document.body.classList.remove('is-live');
-                    txt.innerText = 'البث المباشر مغلق حالياً';
-                }
-            } catch (e) {
-                txt.innerText = 'تعذّر التحقق من حالة البث';
-            }
-        }
-
-        window.onload = () => {
-            updateStats();
-            updateYouTubeSubs();
-            checkKick();
-            setInterval(checkKick, 60000);
-        };
-    </script>
+updateExp();updateSubs();checkKick();setInterval(checkKick,60000);
+</script>
 </body>
 </html>
