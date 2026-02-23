@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>S4leeh | مغامرة صالح</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --gold:#d4af37; --gold2:#f0cc55; --gold-dark:#8f7216;
+  --bg:#050505; --panel:rgba(10,10,10,0.88);
+}
+body {
+  background:var(--bg); color:#fff; overflow:hidden;
+  touch-action:none; user-select:none;
+  font-family:'Cairo',sans-serif;
+  width:100vw; height:100vh;
+}
+
+/* ====== MENU ====== */
+#main-menu {
+  position:relative; width:100%; height:100%;
+  display:flex; flex-direction:column;
+  justify-content:space-between; align-items:center;
+  padding:24px;
+}
+.menu-bg {
+  position:fixed; inset:0; z-index:0;
+  background-image:url('wmremove-transformed.png');
+  background-size:cover; background-position:center;
+}
+.menu-bg::after {
+  content:''; position:absolute; inset:0;
+  background:rgba(0,0,0,0.62);
+}
+.glass {
+  background:rgba(8,8,8,0.88);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,55,0.25);
+  border-radius:18px;
+}
+.glass:hover { border-color:var(--gold); }
+
+/* logo center */
+.logo-block {
+  position:absolute; top:28px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; z-index:10;
+}
+.logo-wrap {
+  position:relative; width:112px; height:112px; margin-bottom:8px;
+}
+.logo-glow {
+  position:absolute; inset:0;
+  background:rgba(212,175,55,0.18);
+  filter:blur(20px); border-radius:50%;
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 50%{ opacity:.4; transform:scale(1.15); } }
+.logo-wrap img {
+  position:relative; width:100%; height:100%; object-fit:contain;
+  filter:drop-shadow(0 0 12px rgba(212,175,55,.5));
+  transition:transform .3s;
+}
+.logo-wrap:hover img { transform:scale(1.06); }
+.logo-title {
+  background:rgba(0,0,0,.8);
+  border:1px solid rgba(212,175,55,.4);
+  padding:4px 22px; border-radius:50px;
+  color:var(--gold); font-weight:900; letter-spacing:3px; font-size:17px;
+}
+
+/* sidebar */
+.sidebar {
+  position:relative; z-index:10;
+  width:100%; max-width:280px;
+  display:flex; flex-direction:column; gap:14px;
+  margin-top:152px; align-self:flex-start;
+}
+@media(min-width:768px){ .sidebar{ margin-top:0; } }
+
+.scores-card, .quests-card { padding:16px; }
+.card-head {
+  display:flex; align-items:center; gap:8px;
+  padding-bottom:10px; margin-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.card-head .mi { color:var(--gold); font-size:16px; }
+.card-head span { font-size:12px; font-weight:700; color:#ddd; }
+
+.score-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 10px; border-radius:10px; margin-bottom:6px;
+}
+.score-row.gold { background:rgba(212,175,55,.1); border:1px solid rgba(212,175,55,.15); }
+.score-rank { font-size:12px; font-weight:900; }
+.score-rank.r1 { color:#fcd34d; }
+.score-rank.r2 { color:#9ca3af; }
+.score-rank.r3 { color:#b45309; }
+.score-val { font-size:18px; font-weight:900; font-family:monospace; }
+
+.quests-card { height:200px; display:flex; flex-direction:column; }
+.quests-scroll { overflow-y:auto; flex:1; padding-right:4px; }
+.quests-scroll::-webkit-scrollbar { width:3px; }
+.quests-scroll::-webkit-scrollbar-thumb { background:var(--gold); border-radius:4px; }
+.quest-item {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.03); margin-bottom:6px; transition:.2s;
+}
+.quest-item.done { background:rgba(34,197,94,.1); border-color:rgba(34,197,94,.25); }
+.quest-text { font-size:11px; color:#ccc; }
+.quest-text.done { color:#4ade80; font-weight:700; }
+.quest-prog { font-size:10px; color:#666; margin-top:2px; }
+.date-tag { font-size:10px; color:#555; font-family:monospace; }
+
+/* start button */
+.start-area {
+  position:relative; z-index:10;
+  display:flex; flex-direction:column; align-items:center;
+  padding-bottom:40px; width:100%;
+}
+.btn-start {
+  position:relative;
+  width:100%; max-width:380px; height:88px;
+  background:linear-gradient(135deg, var(--gold), var(--gold2), var(--gold));
+  background-size:200% 100%;
+  border:2px solid rgba(255,237,168,.6);
+  border-radius:20px; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer;
+  box-shadow:0 8px 0 var(--gold-dark), 0 16px 40px rgba(212,175,55,.25);
+  transition:all .1s; animation:btn-glow 2s ease-in-out infinite;
+}
+@keyframes btn-glow {
+  0%,100%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+}
+.btn-start:active { transform:translateY(8px); box-shadow:0 0 0 var(--gold-dark); }
+.btn-start-main { font-size:30px; font-weight:900; color:#000; }
+.btn-start-sub { font-size:11px; font-weight:700; color:rgba(0,0,0,.6); letter-spacing:2px; }
+.btn-shine {
+  position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:translateX(-100%);
+  animation:shine 2.5s infinite;
+}
+@keyframes shine { 60%,100%{ transform:translateX(200%); } 0%{ transform:translateX(-100%); } }
+.back-link {
+  margin-top:18px; font-size:12px; color:#555; font-weight:700;
+  background:rgba(0,0,0,.5); padding:6px 18px; border-radius:30px;
+  transition:.2s;
+}
+.back-link:hover { color:#fff; }
+
+/* loading overlay */
+#loading-screen {
+  position:fixed; inset:0; z-index:200;
+  background:#050505;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+}
+#loading-screen.hide { opacity:0; pointer-events:none; transition:opacity .5s; }
+.load-logo { width:80px; height:80px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; box-shadow:0 0 30px rgba(212,175,55,.4); animation:spin-in .8s ease; }
+@keyframes spin-in { from{ transform:rotate(-90deg) scale(.5); opacity:0; } to{ transform:rotate(0) scale(1); opacity:1; } }
+.load-text { color:var(--gold); font-weight:900; font-size:15px; letter-spacing:2px; }
+.load-bar-wrap { width:220px; height:3px; background:#1a1a1a; border-radius:3px; overflow:hidden; }
+.load-bar { height:100%; background:linear-gradient(90deg, var(--gold-dark), var(--gold2)); border-radius:3px; width:0%; transition:width .3s; }
+.load-sub { font-size:11px; color:#555; font-weight:700; }
+
+/* ====== GAME INTERFACE ====== */
+#game-ui {
+  display:none; position:fixed; inset:0; z-index:50;
+  background:#0a0a0e;
+  flex-direction:column; align-items:center; justify-content:center;
+}
+.hud {
+  width:100%; max-width:900px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; position:relative; z-index:10;
+}
+.hud-score {
+  background:rgba(0,0,0,.7); border:1px solid rgba(212,175,55,.4);
+  padding:8px 20px; border-radius:12px; backdrop-filter:blur(8px);
+}
+.hud-score .lbl { font-size:11px; color:#777; font-weight:700; }
+.hud-score .val { font-size:24px; font-weight:900; color:var(--gold); font-family:monospace; }
+.hud-speed {
+  background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.08);
+  padding:6px 14px; border-radius:10px; font-size:11px; font-weight:700; color:#555;
+}
+.btn-exit {
+  background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.4);
+  color:#ef4444; width:40px; height:40px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:.2s; font-size:20px;
+}
+.btn-exit:hover { background:rgba(239,68,68,.8); color:#fff; }
+
+canvas {
+  image-rendering:pixelated;
+  border:2px solid rgba(212,175,55,.5);
+  box-shadow:0 0 60px rgba(0,0,0,.9), 0 0 30px rgba(212,175,55,.1);
+  border-radius:14px;
+  max-width:95vw; max-height:60vh;
+}
+
+/* game over overlay */
+#over-overlay {
+  display:none; position:absolute; inset:0; z-index:60;
+  background:rgba(0,0,0,.95); backdrop-filter:blur(6px);
+  flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:24px;
+}
+.over-title { font-size:clamp(32px,6vw,52px); font-weight:900; color:var(--gold); margin-bottom:6px; }
+.over-score { font-size:20px; font-weight:700; margin-bottom:16px; }
+.over-score span { color:var(--gold); font-family:monospace; }
+.over-reason {
+  background:rgba(153,27,27,.35); border:1px solid rgba(239,68,68,.3);
+  color:#fca5a5; padding:8px 24px; border-radius:30px; margin-bottom:28px;
+  font-weight:700; font-size:15px;
+}
+.new-best {
+  color:#4ade80; font-weight:900; font-size:13px; margin-bottom:16px;
+  background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.2);
+  padding:6px 18px; border-radius:20px;
+  display:none;
+}
+.over-btns { display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px; }
+@media(min-width:480px){ .over-btns{ flex-direction:row; } }
+.btn-retry {
+  flex:1; background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000; font-weight:900; padding:14px; border-radius:14px;
+  font-size:17px; cursor:pointer; border:none; font-family:'Cairo',sans-serif;
+  box-shadow:0 6px 0 var(--gold-dark);
+  transition:all .1s;
+}
+.btn-retry:active { transform:translateY(6px); box-shadow:none; }
+.btn-quit {
+  flex:1; background:rgba(30,30,30,1); border:2px solid #333;
+  color:#aaa; font-weight:700; padding:14px; border-radius:14px;
+  font-size:16px; cursor:pointer; font-family:'Cairo',sans-serif; transition:.2s;
+}
+.btn-quit:hover { background:#222; color:#fff; }
+
+/* score pop */
+.score-pop {
+  position:absolute; font-size:20px; font-weight:900; color:var(--gold2);
+  pointer-events:none; animation:pop-up .7s forwards;
+  text-shadow:0 0 10px rgba(212,175,55,.8);
+}
+@keyframes pop-up { 0%{ opacity:1; transform:translateY(0) scale(1.2); } 100%{ opacity:0; transform:translateY(-50px) scale(1); } }
+</style>
+</head>
+<body>
+
+<!-- شاشة التحميل -->
+<div id="loading-screen">
+  <img src="logo.png" class="load-logo" alt="">
+  <div class="load-text">جاري التحميل...</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+  <div class="load-sub" id="load-sub">تحميل الموارد</div>
+</div>
+
+<!-- القائمة الرئيسية -->
+<div id="main-menu">
+  <div class="menu-bg"></div>
+
+  <!-- لوقو وسط -->
+  <div class="logo-block">
+    <div class="logo-wrap"><div class="logo-glow"></div><img src="logo.png" alt="صالح"></div>
+    <div class="logo-title">مغامرة صالح</div>
+  </div>
+
+  <!-- شريط الجانب -->
+  <div class="sidebar">
+    <div class="glass scores-card">
+      <div class="card-head">
+        <span class="material-icons mi">emoji_events</span>
+        <span>أفضل المحاولات</span>
+      </div>
+      <div id="top3-display"></div>
+    </div>
+    <div class="glass quests-card">
+      <div class="card-head">
+        <span class="material-icons mi">assignment</span>
+        <span>مهام اليوم</span>
+        <span class="date-tag" id="date-tag" style="margin-right:auto;"></span>
+      </div>
+      <div class="quests-scroll" id="quests-list"></div>
+    </div>
+  </div>
+
+  <!-- زر البدء -->
+  <div class="start-area">
+    <button class="btn-start" id="start-btn" onclick="startGame()">
+      <div class="btn-shine"></div>
+      <div class="btn-start-main">ابدأ المغامرة</div>
+      <div class="btn-start-sub">اضغط للانطلاق 🚀</div>
+    </button>
+    <a href="index.html" class="back-link">← العودة للصفحة الرئيسية</a>
+  </div>
+</div>
+
+<!-- واجهة اللعبة -->
+<div id="game-ui">
+  <div class="hud">
+    <div class="hud-score">
+      <div class="lbl">النقاط</div>
+      <div class="val" id="score-display">0</div>
+    </div>
+    <div class="hud-speed" id="speed-display">السرعة: 1.0×</div>
+    <div class="btn-exit" onclick="exitGame()">
+      <span class="material-icons" style="font-size:20px;">close</span>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas" width="860" height="420"></canvas>
+
+  <!-- game over -->
+  <div id="over-overlay">
+    <div class="over-title">انتهت المغامرة!</div>
+    <div class="over-score">نقاطك: <span id="final-score">0</span></div>
+    <div class="over-reason" id="death-reason"></div>
+    <div class="new-best" id="new-best">🏆 رقم قياسي جديد!</div>
+    <div class="over-btns">
+      <button class="btn-retry" onclick="resetGame()">مرة أخرى</button>
+      <button class="btn-quit"  onclick="exitGame()">خروج</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STORAGE
+============================================================ */
+let highScores = JSON.parse(localStorage.getItem("s4leehTop3")) || [0,0,0];
+let dailyStats = JSON.parse(localStorage.getItem("s4leehDaily")) || {};
+const todayStr = new Date().toDateString();
+if(dailyStats.date !== todayStr){
+  dailyStats = { date:todayStr, jumps:0, gamesPlayed:0, maxScore:0, creepers:0, zombies:0, skins:0 };
+}
+function saveDaily(){ localStorage.setItem("s4leehDaily", JSON.stringify(dailyStats)); }
+
+/* ============================================================
+   QUESTS
+============================================================ */
+const QUESTS = [
+  { id:0, text:"اقفز 30 مرة",       target:30,   key:"jumps",      type:"cum" },
+  { id:1, text:"وصل سكور 500",      target:500,  key:"maxScore",   type:"single" },
+  { id:2, text:"تجاوز 3 كريبر",     target:3,    key:"creepers",   type:"cum" },
+  { id:3, text:"العب 5 محاولات",    target:5,    key:"gamesPlayed",type:"cum" },
+  { id:4, text:"تجاوز 3 زومبي",     target:3,    key:"zombies",    type:"cum" },
+  { id:5, text:"تجاوز 3 من الشباب", target:3,    key:"skins",      type:"cum" },
+  { id:6, text:"اقفز 100 مرة",      target:100,  key:"jumps",      type:"cum" },
+  { id:7, text:"وصل سكور 1000",     target:1000, key:"maxScore",   type:"single" },
+];
+
+function getDailyQuests(){
+  const d = new Date();
+  const seed = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+  let picked=[], s=seed;
+  while(picked.length < 4){
+    let v = Math.floor((s*9301+49297)%233280) % QUESTS.length;
+    if(!picked.includes(v)) picked.push(v);
+    s++;
+  }
+  return picked.map(i=>QUESTS[i]);
+}
+
+function renderMenu(){
+  // date
+  document.getElementById('date-tag').textContent = new Date().toLocaleDateString('ar-SA');
+
+  // scores
+  const sc = document.getElementById('top3-display');
+  const labels = [{cls:'r1',icon:'🥇'},{cls:'r2',icon:'🥈'},{cls:'r3',icon:'🥉'}];
+  sc.innerHTML = highScores.map((v,i)=>`
+    <div class="score-row ${i===0?'gold':''}">
+      <span class="score-rank ${labels[i].cls}">${labels[i].icon} #${i+1}</span>
+      <span class="score-val">${v}</span>
+    </div>
+  `).join('');
+
+  // quests
+  const qs = document.getElementById('quests-list');
+  qs.innerHTML = getDailyQuests().map(q=>{
+    const cur = Math.min(dailyStats[q.key]||0, q.target);
+    const done = cur >= q.target;
+    return `
+      <div class="quest-item ${done?'done':''}">
+        <div>
+          <div class="quest-text ${done?'done':''}">${q.text}</div>
+          <div class="quest-prog">${cur} / ${q.target}</div>
+        </div>
+        <span class="material-icons" style="font-size:16px;color:${done?'#4ade80':'#333'}">${done?'check_circle':'radio_button_unchecked'}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ============================================================
+   ASSETS LOADING
+============================================================ */
+const assets = {};
+const SKINS = ["ISpitfire57","twpywq","Lonely","Abo7abs","S3eedxx","IRimona","7og9_","KMA77",
+               "Raheeb_","Quack__27","Munirraaa","idexter89","Z4_clown_king","Dream",
+               "iYazan","iK70N","llYousf10","Not_skyhunter"];
+
+const CORE = [
+  { n:"Saleh",  u:"https://minotar.net/armor/body/Saleh/100.png" },
+  { n:"Creeper",u:"https://minotar.net/armor/body/Creeper/100.png" },
+  { n:"Zombie", u:"https://minotar.net/armor/body/Zombie/100.png" },
+];
+
+let totalAssets = CORE.length + SKINS.length;
+let loadedAssets = 0;
+
+function onAssetLoad(){
+  loadedAssets++;
+  const pct = Math.round(loadedAssets/totalAssets*100);
+  document.getElementById('load-bar').style.width = pct+'%';
+  document.getElementById('load-sub').textContent = `${loadedAssets} / ${totalAssets} مورد`;
+  if(loadedAssets >= totalAssets) finishLoading();
+}
+
+function loadImg(n, url){
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload  = onAssetLoad;
+  img.onerror = onAssetLoad; // عدّ حتى لو فشل
+  img.src = url;
+  assets[n] = img;
+}
+
+CORE.forEach(c => loadImg(c.n, c.u));
+SKINS.forEach(s => loadImg('skin_'+s, `https://minotar.net/armor/body/${s}/100.png`));
+
+function finishLoading(){
+  setTimeout(()=>{
+    document.getElementById('loading-screen').classList.add('hide');
+    renderMenu();
+  }, 400);
+}
+
+/* ============================================================
+   CANVAS DRAWING HELPERS — رسم البلوكات يدوياً
+============================================================ */
+function drawDirt(ctx, x, y, s){
+  ctx.fillStyle='#7a4f2a'; ctx.fillRect(x,y,s,s);
+  ctx.fillStyle='#5a3818';
+  for(let i=0;i<6;i++){
+    const bx=x+Math.floor((i*37+13)%s*0.85), by=y+Math.floor((i*53+7)%s*0.85);
+    ctx.fillRect(bx,by,3,2);
+  }
+  ctx.fillStyle='#9c6235';
+  ctx.fillRect(x+2,y+2,4,2); ctx.fillRect(x+s-8,y+4,3,2);
+  ctx.strokeStyle='rgba(0,0,0,.3)'; ctx.lineWidth=1;
+  ctx.strokeRect(x,y,s,s);
+}
+
+function drawStone(ctx, x, y, s){
+  ctx.fillStyle='#8a8a8a'; ctx.fillRect(x,y,s,s);
+  ctx.fillStyle='rgba(0,0,0,.15)';
+  ctx.fillRect(x,y,s/2-1,s/2-1); ctx.fillRect(x+s/2+1,y+s/2+1,s/2-1,s/2-1);
+  ctx.fillStyle='rgba(255,255,255,.1)';
+  ctx.fillRect(x+1,y+1,s/2-2,s/2-2);
+  ctx.strokeStyle='rgba(0,0,0,.4)'; ctx.lineWidth=1; ctx.strokeRect(x,y,s,s);
+  ctx.fillStyle='rgba(0,0,0,.2)';
+  ctx.fillRect(x+s/2-1,y,2,s); ctx.fillRect(x,y+s/2-1,s,2);
+}
+
+function drawCobblestone(ctx, x, y, s){
+  ctx.fillStyle='#6e6e6e'; ctx.fillRect(x,y,s,s);
+  const rects=[[0,0,.5,.33],[.5,0,.5,.5],[0,.33,.3,.67],[.3,.33,.7,.34],[0,.67,1,.33],[.7,.5,.3,.17]];
+  rects.forEach(r=>{
+    ctx.fillStyle=`rgba(0,0,0,${Math.random()*.08+.08})`;
+    ctx.fillRect(x+r[0]*s, y+r[1]*s, r[2]*s, r[3]*s);
+  });
+  ctx.strokeStyle='rgba(0,0,0,.5)'; ctx.lineWidth=1; ctx.strokeRect(x,y,s,s);
+}
+
+function drawLava(ctx, x, y, s, frame){
+  const t = frame*0.04;
+  const grad = ctx.createLinearGradient(x,y,x,y+s);
+  grad.addColorStop(0,'#ff6a00'); grad.addColorStop(.5,'#ff3d00'); grad.addColorStop(1,'#cc2200');
+  ctx.fillStyle=grad; ctx.fillRect(x,y,s,s);
+  // lava bubble animation
+  ctx.fillStyle='rgba(255,160,0,.6)';
+  for(let i=0;i<3;i++){
+    const bx=x+((Math.sin(t+i*2.1)*0.4+0.5)*s);
+    const by=y+((Math.sin(t*0.7+i*1.5)*0.4+0.5)*s);
+    ctx.beginPath(); ctx.arc(bx,by,3,0,Math.PI*2); ctx.fill();
+  }
+  ctx.strokeStyle='rgba(0,0,0,.4)'; ctx.lineWidth=1; ctx.strokeRect(x,y,s,s);
+}
+
+function drawGrassBlock(ctx, x, y, w, h){
+  // dirt base
+  ctx.fillStyle='#7a4f2a'; ctx.fillRect(x,y+h*0.2,w,h*0.8);
+  // grass top
+  ctx.fillStyle='#2d7a1a'; ctx.fillRect(x,y,w,h*0.22);
+  ctx.fillStyle='#3a9620'; ctx.fillRect(x,y,w,h*0.1);
+}
+
+/* ============================================================
+   PARTICLES
+============================================================ */
+let particles = [];
+function spawnDust(px, py, count=5, col='#c8a830'){
+  for(let i=0;i<count;i++){
+    particles.push({
+      x:px, y:py, vx:(Math.random()-.5)*3, vy:-(Math.random()*2+.5),
+      life:1, color:col, size:Math.random()*4+2
+    });
+  }
+}
+function updateParticles(){
+  particles = particles.filter(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.vy+=0.1; p.life-=0.06;
+    return p.life>0;
+  });
+}
+function drawParticles(ctx){
+  particles.forEach(p=>{
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, p.size, p.size);
+  });
+  ctx.globalAlpha = 1;
+}
+
+/* ============================================================
+   STARS
+============================================================ */
+const STARS = Array.from({length:80}, ()=>({
+  x:Math.random()*860, y:Math.random()*200,
+  r:Math.random()*1.5+.3,
+  blink:Math.random()*Math.PI*2
+}));
+
+function drawSky(ctx, frame){
+  // gradient sky
+  const sk = ctx.createLinearGradient(0,0,0,290);
+  sk.addColorStop(0,'#050510'); sk.addColorStop(1,'#0e0e25');
+  ctx.fillStyle=sk; ctx.fillRect(0,0,860,340);
+
+  // stars
+  STARS.forEach(s=>{
+    const a=0.4+Math.sin(frame*.02+s.blink)*0.3;
+    ctx.globalAlpha=a; ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+  });
+  ctx.globalAlpha=1;
+
+  // moon
+  const mx=720, my=55;
+  ctx.fillStyle='#f5f0d8'; ctx.beginPath(); ctx.arc(mx,my,26,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#e8e0c0'; ctx.beginPath(); ctx.arc(mx+8,my,5,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#e8e0c0'; ctx.beginPath(); ctx.arc(mx-10,my+10,3,0,Math.PI*2); ctx.fill();
+
+  // moon glow
+  const mg=ctx.createRadialGradient(mx,my,0,mx,my,50);
+  mg.addColorStop(0,'rgba(245,240,216,.06)'); mg.addColorStop(1,'transparent');
+  ctx.fillStyle=mg; ctx.beginPath(); ctx.arc(mx,my,50,0,Math.PI*2); ctx.fill();
+}
+
+function drawGround(ctx){
+  const GROUND=340;
+  // soil
+  ctx.fillStyle='#3d2208'; ctx.fillRect(0,GROUND,860,80);
+  // draw dirt blocks along ground
+  for(let bx=0;bx<860;bx+=32){
+    drawDirt(ctx,bx,GROUND,32);
+  }
+  // grass strip
+  ctx.fillStyle='#2d7a1a'; ctx.fillRect(0,GROUND,860,10);
+  ctx.fillStyle='#3a9620'; ctx.fillRect(0,GROUND,860,4);
+  // slight inner shadow
+  ctx.fillStyle='rgba(0,0,0,.18)'; ctx.fillRect(0,GROUND+4,860,6);
+}
+
+/* ============================================================
+   GAME CORE
+============================================================ */
+const canvas = document.getElementById('gameCanvas');
+const ctx    = canvas.getContext('2d', {alpha:false});
+ctx.imageSmoothingEnabled = false;
+
+const GROUND = 340;
+const BLOCK_TYPES = ['dirt','stone','cobble','lava'];
+
+let gameState = 'MENU';
+let score, baseSpeed, frame, nextSpawn;
+let obstacles, pops;
+
+const player = { x:80, y:0, w:70, h:98, vy:0, onGround:true };
+
+// حساب السرعة الفعلية حسب السكور
+function calcSpeed(sc){
+  return 5.5 + Math.min(sc / 400, 6); // تصاعد تدريجي سقفه 11.5
+}
+
+function resetGame(){
+  score=0; frame=0; obstacles=[]; pops=[]; particles=[];
+  player.y = GROUND - player.h;
+  player.vy=0; player.onGround=true;
+  nextSpawn = 90;
+  document.getElementById('over-overlay').style.display='none';
+  document.getElementById('score-display').textContent='0';
+  document.getElementById('speed-display').textContent='السرعة: 1.0×';
+  gameState='PLAY';
+  dailyStats.gamesPlayed++;
+  saveDaily();
+  requestAnimationFrame(loop);
+}
+
+function doJump(){
+  if(player.onGround && gameState==='PLAY'){
+    player.vy = -19; player.onGround=false;
+    spawnDust(player.x+player.w/2, player.y+player.h, 6);
+    dailyStats.jumps++;
+    saveDaily();
+  }
+}
+
+document.addEventListener('keydown', e=>{
+  if((e.code==='Space'||e.code==='ArrowUp') && gameState==='PLAY'){
+    e.preventDefault(); doJump();
+  }
+  if(e.code==='KeyR' && gameState==='OVER') resetGame();
+});
+window.addEventListener('touchstart', e=>{
+  if(gameState==='PLAY' && e.target.tagName!=='BUTTON' && e.target.tagName!=='A'){
+    e.preventDefault(); doJump();
+  }
+},{passive:false});
+
+/* ============================================================
+   SPAWN
+============================================================ */
+function spawn(){
+  const spd = calcSpeed(score);
+  const rand = Math.random();
+  let o = { x:canvas.width+80, passed:false, spdMul:1 };
+
+  if(rand < 0.30){
+    // mob Creeper or Zombie
+    const mob = Math.random()>.5?'Creeper':'Zombie';
+    o.kind='mob'; o.mob=mob;
+    o.img=assets[mob]; o.w=68; o.h=98; o.y=GROUND-98;
+    o.name=mob;
+  } else if(rand < 0.62){
+    // block drawn manually
+    const btype = BLOCK_TYPES[Math.floor(Math.random()*BLOCK_TYPES.length)];
+    o.kind='block'; o.btype=btype;
+    o.w=56; o.h=56; o.y=GROUND-56;
+    o.name = btype==='lava'?'اللافا': btype==='dirt'?'التراب': btype==='stone'?'الحجر':'الحجر الخشن';
+    // occasionally stack 2 blocks
+    if(Math.random()<0.25){
+      o.h=112; o.y=GROUND-112;
+    }
+  } else {
+    // skin
+    const sk = SKINS[Math.floor(Math.random()*SKINS.length)];
+    const simg = assets['skin_'+sk];
+    o.kind='skin'; o.img= (simg && simg.complete && simg.naturalWidth)?simg:assets['Creeper'];
+    o.w=68; o.h=98; o.y=GROUND-98; o.name=sk;
+  }
+  obstacles.push(o);
+
+  // Gap depends on current speed — faster = more gap
+  const minGap = 55 + spd*3;
+  const extraGap = Math.random()*70;
+  nextSpawn = frame + Math.round(minGap + extraGap);
+}
+
+/* ============================================================
+   DRAW OBSTACLE
+============================================================ */
+function drawObstacle(o){
+  if(o.kind==='block'){
+    const blockH = 56;
+    if(o.h > 56){
+      // 2 stacked blocks
+      drawBlock(o.btype, o.x, o.y, o.w, blockH);
+      drawBlock(o.btype, o.x, o.y+blockH, o.w, blockH);
+    } else {
+      drawBlock(o.btype, o.x, o.y, o.w, o.h);
+    }
+  } else {
+    if(o.img && o.img.complete && o.img.naturalWidth>0){
+      ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
+    } else {
+      // fallback: draw a coloured rectangle
+      ctx.fillStyle = o.kind==='skin'?'#7c3aed':'#15803d';
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+    }
+  }
+}
+
+function drawBlock(type, x, y, w, h){
+  const s = Math.min(w,h);
+  if(type==='dirt')      drawDirt(ctx,x,y,s);
+  else if(type==='stone') drawStone(ctx,x,y,s);
+  else if(type==='cobble') drawCobblestone(ctx,x,y,s);
+  else if(type==='lava')  drawLava(ctx,x,y,s,frame);
+  // if h != w (stacked), fill the rest
+  if(h>s){ ctx.fillStyle='#4a3020'; ctx.fillRect(x,y+s,w,h-s); }
+}
+
+/* ============================================================
+   MAIN LOOP
+============================================================ */
+let lastFrameTime=0;
+function loop(ts){
+  if(gameState!=='PLAY') return;
+  frame++;
+
+  const spd = calcSpeed(score);
+
+  // sky + ground
+  drawSky(ctx, frame);
+  drawGround(ctx);
+
+  // player physics
+  player.vy += 0.92;
+  player.y  += player.vy;
+  if(player.y >= GROUND-player.h){
+    if(!player.onGround) spawnDust(player.x+player.w/2, GROUND, 4, '#5a3818');
+    player.y  = GROUND-player.h;
+    player.vy = 0;
+    player.onGround = true;
+  }
+
+  // draw player shadow
+  ctx.fillStyle='rgba(0,0,0,.25)';
+  ctx.beginPath();
+  ctx.ellipse(player.x+player.w/2, GROUND+4, player.w/2.5, 5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // draw player
+  if(assets['Saleh'] && assets['Saleh'].complete && assets['Saleh'].naturalWidth>0){
+    // slight lean forward when jumping
+    if(!player.onGround){
+      ctx.save();
+      ctx.translate(player.x+player.w/2, player.y+player.h/2);
+      ctx.rotate(0.08);
+      ctx.drawImage(assets['Saleh'], -player.w/2, -player.h/2, player.w, player.h);
+      ctx.restore();
+    } else {
+      ctx.drawImage(assets['Saleh'], player.x, player.y, player.w, player.h);
+    }
+  } else {
+    ctx.fillStyle='#d4af37';
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+  }
+
+  // spawn
+  if(frame >= nextSpawn) spawn();
+
+  // obstacles
+  for(let i=obstacles.length-1;i>=0;i--){
+    const o=obstacles[i];
+    o.x -= spd;
+    drawObstacle(o);
+
+    // passed
+    if(!o.passed && o.x+o.w < player.x){
+      o.passed=true;
+      const gain=14;
+      score+=gain;
+      if(score>dailyStats.maxScore){ dailyStats.maxScore=score; }
+      if(o.kind==='mob'){
+        if(o.mob==='Creeper') dailyStats.creepers++;
+        if(o.mob==='Zombie')  dailyStats.zombies++;
+      }
+      if(o.kind==='skin') dailyStats.skins++;
+      saveDaily();
+      // score popup
+      pops.push({x:player.x+player.w, y:player.y-10, val:'+'+gain, life:1});
+    }
+
+    // collision — slightly forgiving box
+    const pad=10;
+    if(player.x+pad < o.x+o.w-pad &&
+       player.x+player.w-pad > o.x+pad &&
+       player.y+pad < o.y+o.h-10 &&
+       player.y+player.h-10 > o.y+pad){
+      gameOver(o.name);
+      return;
+    }
+    if(o.x < -200) obstacles.splice(i,1);
+  }
+
+  // particles
+  updateParticles(); drawParticles(ctx);
+
+  // score pops
+  pops = pops.filter(p=>p.life>0);
+  pops.forEach(p=>{
+    p.y-=1; p.life-=0.05;
+    ctx.globalAlpha=p.life;
+    ctx.fillStyle='#f0cc55';
+    ctx.font='bold 18px Cairo';
+    ctx.fillText(p.val, p.x, p.y);
+  });
+  ctx.globalAlpha=1;
+
+  // HUD updates
+  document.getElementById('score-display').textContent=score;
+  const mul = (spd/5.5).toFixed(1);
+  document.getElementById('speed-display').textContent=`السرعة: ${mul}×`;
+
+  requestAnimationFrame(loop);
+}
+
+/* ============================================================
+   GAME OVER
+============================================================ */
+function gameOver(killer){
+  gameState='OVER';
+  spawnDust(player.x+player.w/2, player.y+player.h, 12, '#ef4444');
+
+  const isNew = score > highScores[0];
+  highScores.push(score);
+  highScores.sort((a,b)=>b-a);
+  highScores = highScores.slice(0,3);
+  localStorage.setItem("s4leehTop3", JSON.stringify(highScores));
+
+  document.getElementById('final-score').textContent=score;
+  document.getElementById('death-reason').textContent='سبب السقوط: '+killer;
+  document.getElementById('new-best').style.display = isNew?'block':'none';
+  document.getElementById('over-overlay').style.display='flex';
+  document.getElementById('over-overlay').style.flexDirection='column';
+  document.getElementById('over-overlay').style.alignItems='center';
+  document.getElementById('over-overlay').style.justifyContent='center';
+}
+
+/* ============================================================
+   NAV
+============================================================ */
+function startGame(){
+  document.getElementById('main-menu').style.display='none';
+  document.getElementById('game-ui').style.display='flex';
+  document.getElementById('game-ui').style.flexDirection='column';
+  document.getElementById('game-ui').style.alignItems='center';
+  document.getElementById('game-ui').style.justifyContent='center';
+  resetGame();
+}
+
+function exitGame(){
+  gameState='MENU';
+  document.getElementById('game-ui').style.display='none';
+  document.getElementById('main-menu').style.display='flex';
+  document.getElementById('over-overlay').style.display='none';
+  renderMenu();
+}
+</script>
+</body>
+</html>
