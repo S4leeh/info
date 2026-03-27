@@ -7,14 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #050505; /* خلفية داكنة جداً */
-            --widget-bg: #111111; /* خلفية الجدول */
-            
-            /* ألوان المتسابقين */
-            --khalid-color: #00bfff; /* أزرق نيون */
-            --raheeb-color: #00ff44; /* أخضر زمردي */
-            
-            --step-bg: #222; /* لون المربعات الفارغة */
+            --bg-color: #050505;
+            --widget-bg: #111111;
+            --khalid-color: #00bfff;
+            --raheeb-color: #00ff44;
+            --step-bg: #222;
             --text-main: #ffffff;
             --border-color: #333;
         }
@@ -31,7 +28,6 @@
             overflow: hidden;
         }
 
-        /* منطقة العرض للبث */
         .stream-display {
             flex: 1;
             width: 100%;
@@ -42,7 +38,6 @@
             padding: 20px;
         }
 
-        /* إطار الجدول المدمج */
         .arena-widget {
             width: 90%;
             max-width: 850px;
@@ -52,23 +47,33 @@
             border: 3px solid var(--border-color);
             box-shadow: 0 15px 40px rgba(0,0,0,0.7);
             overflow: hidden;
-            position: relative; /* مهم جداً لتحديد موقع رسالة الفوز */
+            position: relative;
         }
 
-        /* عنوان التحدي */
-        .challenge-title {
+        /* حاوية الهوية (الشعار + العنوان) */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(255, 255, 255, 0.03);
             border-bottom: 2px solid var(--border-color);
-            padding: 25px;
-            text-align: center;
-            margin: 0;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: var(--text-main);
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
+            padding: 20px;
+            gap: 25px;
         }
 
-        /* محتوى الجدول */
+        .brand-logo {
+            height: 70px; /* حجم الشعار */
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.3));
+        }
+
+        .challenge-title {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
         .arena-content {
             padding: 40px;
         }
@@ -102,40 +107,44 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* حالات التفعيل */
         .active-khalid { background: var(--khalid-color); box-shadow: 0 0 25px var(--khalid-color); border: none; }
         .active-raheeb { background: var(--raheeb-color); box-shadow: 0 0 25px var(--raheeb-color); border: none; }
 
-        /* طبقة رسالة النتيجة في المنتصف */
+        /* حقوق الموقع بشكل هادئ */
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            font-size: 0.8rem;
+            color: #444;
+            font-weight: bold;
+        }
+
         #result-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); /* خلفية داكنة نصف شفافة */
+            background-color: rgba(0, 0, 0, 0.92);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            opacity: 0; /* مخفية في البداية */
+            opacity: 0;
             visibility: hidden;
             transition: all 0.5s ease;
         }
 
-        #result-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        #result-overlay.show { opacity: 1; visibility: visible; }
 
         #result-text {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 900;
             text-align: center;
             padding: 20px;
         }
 
-        /* لوحة التحكم (للقص في OBS) */
         .control-panel {
             width: 100%;
             background: #000;
@@ -162,37 +171,34 @@
         .btn-reset { background: #333; color: #fff; }
 
         .admin-btn:hover { transform: translateY(-3px); opacity: 0.9; }
-        .admin-btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
 
     <div class="stream-display">
-        
         <div class="arena-widget">
-            <h1 class="challenge-title">من الأكثر مهارة في ماين كرافت؟</h1>
+            <div class="header-container">
+                <img src="logo.png" alt="S4leeh Logo" class="brand-logo">
+                <h1 class="challenge-title">من الأكثر مهارة في ماين كرافت؟</h1>
+            </div>
             
             <div class="arena-content">
                 <div class="player-row">
                     <div class="name-tag" style="color: var(--khalid-color);">خالد</div>
                     <div class="steps-wrapper" id="khalid-track">
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
+                        <div class="step-box"></div><div class="step-box"></div><div class="step-box"></div><div class="step-box"></div>
                     </div>
                 </div>
 
                 <div class="player-row">
                     <div class="name-tag" style="color: var(--raheeb-color);">رهيب</div>
                     <div class="steps-wrapper" id="raheeb-track">
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
-                        <div class="step-box"></div>
+                        <div class="step-box"></div><div class="step-box"></div><div class="step-box"></div><div class="step-box"></div>
                     </div>
                 </div>
             </div>
+
+            <div class="watermark">s4leeh.com</div>
 
             <div id="result-overlay">
                 <div id="result-text"></div>
@@ -212,21 +218,18 @@
 
         function addPoint(player) {
             if (gameFinished) return;
-
             scores[player]++;
             updateDisplay();
             checkRules();
         }
 
         function updateDisplay() {
-            // تحديث مربعات خالد
             const kSteps = document.querySelectorAll('#khalid-track .step-box');
             kSteps.forEach((box, i) => {
                 if (i < scores.khalid) box.classList.add('active-khalid');
                 else box.classList.remove('active-khalid');
             });
 
-            // تحديث مربعات رهيب
             const rSteps = document.querySelectorAll('#raheeb-track .step-box');
             rSteps.forEach((box, i) => {
                 if (i < scores.raheeb) box.classList.add('active-raheeb');
@@ -237,33 +240,23 @@
         function checkRules() {
             const overlay = document.getElementById('result-overlay');
             const text = document.getElementById('result-text');
-            let message = "";
-            let color = "";
-
-            // 1. قاعدة التعادل (2-2)
+            
             if (scores.khalid === 2 && scores.raheeb === 2) {
-                message = "تعادل عادل! ⚔️";
-                color = "#aaaaaa";
-                gameFinished = true;
-            } 
-            // 2. قاعدة فوز خالد (الوصول لـ 3)
-            else if (scores.khalid === 3) {
-                message = "خالد هو الأمهر! 👑";
-                color = "var(--khalid-color)";
-                gameFinished = true;
+                showResult("تعادل عادل! ⚔️", "#aaaaaa");
+            } else if (scores.khalid === 3) {
+                showResult("خالد هو الأمهر! 👑", "var(--khalid-color)");
+            } else if (scores.raheeb === 3) {
+                showResult("رهيب هو الأمهر! 👑", "var(--raheeb-color)");
             }
-            // 3. قاعدة فوز رهيب (الوصول لـ 3)
-            else if (scores.raheeb === 3) {
-                message = "رهيب هو الأمهر! 👑";
-                color = "var(--raheeb-color)";
-                gameFinished = true;
-            }
+        }
 
-            if (gameFinished) {
-                text.innerText = message;
-                text.style.color = color;
-                overlay.classList.add('show');
-            }
+        function showResult(msg, color) {
+            const overlay = document.getElementById('result-overlay');
+            const text = document.getElementById('result-text');
+            text.innerText = msg;
+            text.style.color = color;
+            overlay.classList.add('show');
+            gameFinished = true;
         }
 
         function resetChallenge() {
