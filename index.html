@@ -156,6 +156,15 @@
         footer p { color: #888; font-size: 14px; font-weight: 700; }
         footer b { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
+        /* إضافة تنسيقات المربع الصغير الخاص بقسم مهارات ماين كرافت */
+        .square-ep-card { width: 220px; height: 220px; background: var(--card-bg); border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); text-decoration: none; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
+        .square-ep-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
+        .square-ep-thumbnail { width: 100%; flex-grow: 1; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
+        .square-ep-thumbnail .play-btn { width: 50px; height: 50px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
+        .square-ep-thumbnail .play-btn::after { content: ''; border-style: solid; border-width: 8px 0 8px 14px; border-color: transparent transparent transparent white; margin-left: 4px; }
+        .square-ep-details { padding: 12px 10px; text-align: center; height: 60px; display: flex; align-items: center; justify-content: center; background: var(--card-bg); border-top: 1px solid var(--border-color); }
+        .square-ep-details h2 { color: #fff; font-size: 13px; font-weight: 800; margin: 0; line-height: 1.4; }
+
         @media (max-width: 900px) {
             .stats-grid { grid-template-columns: 1fr; }
             .socials-grid { grid-template-columns: repeat(3, 1fr); }
@@ -313,7 +322,17 @@
                 </div>
 
                 <div id="highlights-body" class="archive-body">
-                    <p style="text-align:center; padding:40px; color:#666; font-weight:800;">قريباً... يتم العمل على الأرشيف 🏗️</p>
+                    <h3 style="color:var(--gold); font-size:22px; margin-bottom:20px; text-align:center;">مهارات ماين كرافت</h3>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <a href="https://youtu.be/ppRtXR88jZM?si=zbZRKF4hi4eB-Js7" target="_blank" class="square-ep-card">
+                            <div class="square-ep-thumbnail" style="background-image: url('https://img.youtube.com/vi/ppRtXR88jZM/maxresdefault.jpg')">
+                                <div class="play-btn"></div>
+                            </div>
+                            <div class="square-ep-details">
+                                <h2>خالد ضد رهيب</h2>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -455,7 +474,7 @@
         });
 
         function refreshCursorEvents() {
-            const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card, .social-item';
+            const hoverTags = 'a, button, input, textarea, select, .ep-node, .game-card, .social-item, .square-ep-card';
             document.querySelectorAll(hoverTags).forEach(item => {
                 item.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
                 item.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
