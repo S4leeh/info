@@ -135,11 +135,35 @@
         .show-more-btn { display: block; margin: 30px auto 0; padding: 12px 35px; background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .show-more-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold-glow); }
 
-        .socials-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
+        .socials-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto 80px; padding: 0 20px; }
         .social-item { background: rgba(26, 26, 26, 0.8); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; backdrop-filter: blur(5px); }
         .social-item img { width: 30px; filter: invert(1); margin-bottom: 10px; }
-        .social-item div { color: #fff; font-weight: 800; font-size: 13px; }
-        .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; }
+        .social-item div { color: #fff; font-weight: 800; font-size: 13px; transition: 0.3s; }
+        .social-item span { color: #666; font-size: 10px; display: block; margin-top: 5px; transition: 0.3s; }
+
+        /* تأثيرات الألوان والارتفاع عند تمرير الماوس على حسابات التواصل */
+        .social-item:hover { transform: translateY(-8px); }
+        .social-item.kick:hover { background: var(--kick-green); border-color: var(--kick-green); box-shadow: 0 0 20px rgba(83, 252, 24, 0.4); }
+        .social-item.kick:hover div, .social-item.kick:hover span { color: #000; }
+        .social-item.kick:hover img { filter: invert(0); }
+
+        .social-item.twitch:hover { background: #9146FF; border-color: #9146FF; box-shadow: 0 0 20px rgba(145, 70, 255, 0.4); }
+        .social-item.twitch:hover span, .social-item.twitch:hover div { color: #fff; }
+
+        .social-item.youtube:hover { background: #FF0000; border-color: #FF0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
+        .social-item.youtube:hover span, .social-item.youtube:hover div { color: #fff; }
+
+        .social-item.discord:hover { background: #5865F2; border-color: #5865F2; box-shadow: 0 0 20px rgba(88, 101, 242, 0.4); }
+        .social-item.discord:hover span, .social-item.discord:hover div { color: #fff; }
+
+        .social-item.instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: #e1306c; box-shadow: 0 0 20px rgba(225, 48, 108, 0.4); }
+        .social-item.instagram:hover span, .social-item.instagram:hover div { color: #fff; }
+
+        .social-item.tiktok:hover { background: #000; border-color: #25F4EE; box-shadow: 0 0 20px rgba(37, 244, 238, 0.4); }
+        .social-item.tiktok:hover span, .social-item.tiktok:hover div { color: #fff; }
+
+        .social-item.x:hover { background: #000; border-color: #fff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+        .social-item.x:hover span, .social-item.x:hover div { color: #fff; }
 
         .form-box { max-width: 600px; margin: 0 auto 60px; background: rgba(26, 26, 26, 0.8); padding: 35px; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.3s; position: relative; backdrop-filter: blur(10px); }
         .form-box:hover { border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); }
@@ -391,12 +415,13 @@
     <div id="my-socials" class="library-container">
         <h2 class="reveal" style="text-align:center; color:var(--gold); margin-bottom:30px; font-weight:800;">🔗 حساباتي في مواقع التواصل</h2>
         <div class="socials-grid reveal">
-            <a href="https://kick.com/S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
-            <a href="https://www.youtube.com/@S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
-            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
-            <a href="https://www.instagram.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
-            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
-            <a href="https://x.com/iS4leeh" class="social-item" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
+            <a href="https://www.youtube.com/@S4leeh" class="social-item youtube" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg"><div>YouTube</div><span>المقاطع الرئيسية</span></a>
+            <a href="https://kick.com/S4leeh" class="social-item kick" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kick.svg"><div>Kick</div><span>بثوث مباشرة</span></a>
+            <a href="https://discord.com/invite/YQ8aBxMznV" class="social-item discord" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg"><div>Discord</div><span>مجتمع صالح</span></a>
+            <a href="https://www.instagram.com/iS4leeh" class="social-item instagram" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg"><div>Instagram</div><span>يوميات وحصريات</span></a>
+            <a href="https://www.tiktok.com/@KICK.S4leeh" class="social-item tiktok" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg"><div>TikTok</div><span>أقوى اللقطات</span></a>
+            <a href="https://twitch.tv/S4leeh" class="social-item twitch" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/twitch.svg"><div>Twitch</div><span>منصة تويتش</span></a>
+            <a href="https://x.com/iS4leeh" class="social-item x" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg"><div>X / Twitter</div><span>أحدث الأخبار</span></a>
         </div>
     </div>
 
@@ -549,16 +574,13 @@
             refreshCursorEvents();
         }
         
-        // تم تعديل دالة تبديل الألعاب لتخفي وتظهر البطاقات مباشرة في الشبكة
         function toggleGames() {
             const hiddenGames = document.querySelectorAll('.hidden-game');
             const btn = document.getElementById('show-more-btn');
             
-            // التحقق من حالة أول عنصر مخفي
             const isHidden = hiddenGames[0].style.display === "none";
 
             hiddenGames.forEach(game => {
-                // نعيد العرض إلى flex لأن البطاقات مصممة كـ flex في الـ CSS
                 game.style.display = isHidden ? "flex" : "none";
             });
 
